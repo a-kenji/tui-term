@@ -1,0 +1,50 @@
+name: "ci"
+# Should be run every time
+
+on:
+  workflow_dispatch: # allows manual triggering
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  editor-config:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: cachix/install-nix-action@v21
+      with:
+        extra_nix_config: |
+          access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+    - uses: cachix/cachix-action@v11
+      with:
+        name: kenji
+        # If you chose API tokens for write access OR if you have a private cache
+        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+    - name: "install editorconfig-checker"
+      run: nix develop .#editorConfigShell
+    - name: Checking EditorConfig
+      run: |
+        cat "$HOME/changed_files" | xargs -r editorconfig-checker -disable-indent-size
+    - if: ${{ failure() }}
+      run: |
+        printf "::error :: Hey! It looks like your changes don't follow our editorconfig settings.\nRead https://editorconfig.org/#download to configure your editor so you never see this error again."
+
+  lychee:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: cachix/install-nix-action@v21
+      with:
+        extra_nix_config: |
+          access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+    - uses: cachix/cachix-action@v11
+      with:
+        name: kenji
+        # If you chose API tokens for write access OR if you have a private cache
+        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+    - name: "lychee"
+      run: nix develop .#lintShell --command lychee -- *.md

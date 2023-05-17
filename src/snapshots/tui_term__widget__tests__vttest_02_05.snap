@@ -1,0 +1,29 @@
+---
+source: src/widget.rs
+expression: view
+---
+"12345678901234567890123456789012345678901234567890123456789012345678901234567890"
+"123456789012345678901234567890123456789012345678901                             "
+"  This is 132 column mode, dark background.                                     "
+"   This is 132 column mode, dark background.                                    "
+"    This is 132 column mode, dark background.                                   "
+"     This is 132 column mode, dark background.                                  "
+"      This is 132 column mode, dark background.                                 "
+"       This is 132 column mode, dark background.                                "
+"        This is 132 column mode, dark background.                               "
+"         This is 132 column mode, dark background.                              "
+"          This is 132 column mode, dark background.                             "
+"           This is 132 column mode, dark background.                            "
+"            This is 132 column mode, dark background.                           "
+"             This is 132 column mode, dark background.                          "
+"              This is 132 column mode, dark background.                         "
+"               This is 132 column mode, dark background.                        "
+"                This is 132 column mode, dark background.                       "
+"                 This is 132 column mode, dark background.                      "
+"                  This is 132 column mode, dark background.                     "
+"                   This is 132 column mode, dark background.Push <RETURN>       "
+"                                                                                "
+"                                                                                "
+"                                                                                "
+"                                                                                "
+

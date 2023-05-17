@@ -1,0 +1,42 @@
+# Workflow, consisting of jobs that only need to be run,
+# once `*nix`, or `flake.lock`, or `rust-toolchain.toml` files change
+name: "nix develop"
+
+on:
+  workflow_dispatch: # allows manual triggering
+  pull_request:
+    branches: [ main ]
+    paths:
+      - '**.nix'
+      - 'flake.lock'
+      - 'flake.nix'
+      - 'rust-toolchain.toml'
+  push:
+    branches: [ main ]
+    paths:
+      - '**.nix'
+      - 'flake.lock'
+      - 'flake.nix'
+      - 'rust-toolchain.toml'
+
+jobs:
+  develop:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0 # Nix Flakes doesn't work on shallow clones
+    - uses: cachix/install-nix-action@v21
+      with:
+        extra_nix_config: |
+          access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+    - uses: cachix/cachix-action@v11
+      with:
+        name: kenji
+        # If you chose API tokens for write access OR if you have a private cache
+        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+    - name: 'nix develop --command "echo hello"'
+      run: nix develop -Lvv
+    - name: "ldd version"
+      run: nix develop -Lvv --command ldd --version

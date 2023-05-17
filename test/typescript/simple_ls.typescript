@@ -1,0 +1,8 @@
+[30m[m[2 q[?2004l[?1004l]0;tui-term on  main [!?⇡] [30m[m Cargo.lock     [38;5;4m[1m docs[0m         LICENSE              [38;5;4m[1m test[0m
+ Cargo.toml     [38;5;4m[1m examples[0m     README.md             typescript
+ CHANGELOG.md    flake.lock   rust-toolchain.toml  [38;5;4m[1m wezterm[0m
+ cliff.toml      flake.nix   [38;5;4m[1m src[0m                  
+ committed.toml   justfile    [38;5;4m[1m target[0m               
+[2 q[?1004h[2m⏎[m                                                                               ⏎ [K[?2004h]0;tui-term on  main [!?⇡] [30m[m[J[1;36mtui-term[0m on [1;35m main[0m [1;31m[!?⇡][0m via [1;34m❄️ pure (tui-term-env)[0m [K
+[1;32m❯[0m [K[C[C[2 q
+[30m[m[30m[m[?2004l
