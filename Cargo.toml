@@ -1,0 +1,24 @@
+[package]
+name = "tui-term"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+ratatui = "0.20.1"
+termwiz = "0.20.0"
+vte = "0.11.0"
+vtparse = "0.6.2"
+
+
+[dev-dependencies]
+insta = "1.29.0"
+criterion = "0.4.0"
+# iai = "0.1.1"
+
+[profile.dev.package.insta]
+opt-level = 3
+[profile.dev.package.similar]
+opt-level = 3
+
