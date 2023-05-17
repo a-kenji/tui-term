@@ -20,4 +20,4 @@ Cargo.lock
 /Cargo.lock
 
 ./result
-./direnv/*
+./.direnv/*
