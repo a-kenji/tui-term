@@ -14,6 +14,10 @@ use crossterm::{
 use portable_pty::{CommandBuilder, NativePtySystem, PtySize, PtySystem};
 use ratatui::{backend::CrosstermBackend, widgets::Widget, Terminal};
 use std::sync::mpsc::channel;
+use termwiz::{
+    caps::Capabilities,
+    terminal::{buffered::BufferedTerminal, SystemTerminal, UnixTerminal},
+};
 use tui_term::PseudoTerm;
 
 fn main() -> std::io::Result<()> {
@@ -24,6 +28,10 @@ fn main() -> std::io::Result<()> {
     execute!(stdout, EnterAlternateScreen, EnableMouseCapture)?;
     let backend = CrosstermBackend::new(stdout);
     let mut terminal = Terminal::new(backend)?;
+
+    let mut buffered_terminal =
+        BufferedTerminal::new(UnixTerminal::new(Capabilities::new_from_env().unwrap()).unwrap())
+            .unwrap();
 
     let pty_system = NativePtySystem::default();
     let cwd = std::env::current_dir().unwrap();
@@ -70,7 +78,7 @@ fn main() -> std::io::Result<()> {
     let mut parser = termwiz::escape::parser::Parser::new();
     let actions = parser.parse_as_vec(output.as_bytes());
 
-    let pseudo_term = PseudoTerm::new(&actions);
+    let pseudo_term = PseudoTerm::new(&actions, &buffered_terminal);
     terminal
         .draw(|f| {
             f.render_widget(pseudo_term, f.size());
