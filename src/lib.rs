@@ -42,15 +42,15 @@ impl Widget for PseudoTerm<'_> {
                     termwiz::escape::ControlCode::Bell => todo!(),
                     termwiz::escape::ControlCode::Backspace => todo!(),
                     termwiz::escape::ControlCode::HorizontalTab => {
-                        col += 1;
+                        // Move to next tab character
                     }
                     termwiz::escape::ControlCode::LineFeed => {
-                        col = 0;
+                        row += 1;
                     }
                     termwiz::escape::ControlCode::VerticalTab => todo!(),
                     termwiz::escape::ControlCode::FormFeed => todo!(),
                     termwiz::escape::ControlCode::CarriageReturn => {
-                        row += 1;
+                        col = 0;
                     }
                     termwiz::escape::ControlCode::ShiftOut => todo!(),
                     termwiz::escape::ControlCode::ShiftIn => todo!(),

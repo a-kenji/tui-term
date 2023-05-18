@@ -1,8 +1,14 @@
-use std::io::{self, stdout, Write};
+use core::time;
+use std::{
+    io::{self, stdout, Write},
+    thread,
+};
 
 use crossterm::{
-    event, execute,
+    event::{self, DisableMouseCapture, EnableMouseCapture},
+    execute,
     style::{Color, Print, ResetColor, SetBackgroundColor, SetForegroundColor},
+    terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
     ExecutableCommand, Result,
 };
 use portable_pty::{CommandBuilder, NativePtySystem, PtySize, PtySystem};
@@ -13,6 +19,9 @@ use tui_term::PseudoTerm;
 fn main() -> std::io::Result<()> {
     let mut stdout = io::stdout();
     execute!(stdout, ResetColor)?;
+    enable_raw_mode()?;
+    let mut stdout = io::stdout();
+    execute!(stdout, EnterAlternateScreen, EnableMouseCapture)?;
     let backend = CrosstermBackend::new(stdout);
     let mut terminal = Terminal::new(backend)?;
 
@@ -48,7 +57,8 @@ fn main() -> std::io::Result<()> {
     }
 
     // Wait for the child to complete
-    println!("child status: {:?}", child.wait().unwrap());
+    // println!("child status: {:?}", child.wait().unwrap());
+    let _child_exit_status = child.wait().unwrap();
 
     drop(pair.master);
 
@@ -74,6 +84,15 @@ fn main() -> std::io::Result<()> {
     //     .execute(Print("Styled text here."))?
     //     .execute(ResetColor)?;
 
+    // restore terminal
+    thread::sleep(time::Duration::from_secs(5));
+    disable_raw_mode()?;
+    execute!(
+        terminal.backend_mut(),
+        LeaveAlternateScreen,
+        DisableMouseCapture
+    )?;
+    terminal.show_cursor()?;
     println!();
     println!();
     println!("{:?}", actions);
