@@ -19,5 +19,5 @@ Cargo.lock
 /target
 /Cargo.lock
 
-./result
-./.direnv/*
+/result
+/.direnv/*
