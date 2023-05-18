@@ -1,4 +1,4 @@
-use std::io::{stdout, Write};
+use std::io::{self, stdout, Write};
 
 use crossterm::{
     event, execute,
@@ -6,17 +6,15 @@ use crossterm::{
     ExecutableCommand, Result,
 };
 use portable_pty::{CommandBuilder, NativePtySystem, PtySize, PtySystem};
+use ratatui::{backend::CrosstermBackend, widgets::Widget, Terminal};
 use std::sync::mpsc::channel;
+use tui_term::PseudoTerm;
 
 fn main() -> std::io::Result<()> {
-    // using the macro
-    execute!(
-        stdout(),
-        SetForegroundColor(Color::Blue),
-        SetBackgroundColor(Color::Red),
-        Print("Styled text here."),
-        ResetColor
-    )?;
+    let mut stdout = io::stdout();
+    execute!(stdout, ResetColor)?;
+    let backend = CrosstermBackend::new(stdout);
+    let mut terminal = Terminal::new(backend)?;
 
     let pty_system = NativePtySystem::default();
     let cwd = std::env::current_dir().unwrap();
@@ -55,20 +53,29 @@ fn main() -> std::io::Result<()> {
     drop(pair.master);
 
     let output = rx.recv().unwrap();
-    for c in output.escape_debug() {
-        print!("{}", c);
-    }
+    // for c in output.escape_debug() {
+    //     print!("{}", c);
+    // }
 
     let mut parser = termwiz::escape::parser::Parser::new();
     let actions = parser.parse_as_vec(output.as_bytes());
 
-    // or using functions
-    stdout()
-        .execute(SetForegroundColor(Color::Blue))?
-        .execute(SetBackgroundColor(Color::Red))?
-        .execute(Print("Styled text here."))?
-        .execute(ResetColor)?;
+    let pseudo_term = PseudoTerm::new(&actions);
+    terminal
+        .draw(|f| {
+            f.render_widget(pseudo_term, f.size());
+        })
+        .unwrap();
 
+    // or using functions
+    // std::io::stdout()
+    //     .execute(SetForegroundColor(Color::Blue))?
+    //     .execute(SetBackgroundColor(Color::Red))?
+    //     .execute(Print("Styled text here."))?
+    //     .execute(ResetColor)?;
+
+    println!();
+    println!();
     println!("{:?}", actions);
     Ok(())
 }
