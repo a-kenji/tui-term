@@ -4,6 +4,10 @@ version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[workspace]
+members = [
+    "bench",
+]
 
 [dependencies]
 # ratatui = "0.20.1"
@@ -30,3 +34,5 @@ opt-level = 3
 [profile.dev.package.similar]
 opt-level = 3
 
+[profile.bench]
+lto = "thin"

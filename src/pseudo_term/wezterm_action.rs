@@ -17,14 +17,31 @@ impl Widget for PseudoTerm<'_> {
     fn render(self, area: Rect, buf: &mut Buffer) {
         // let mut row = area.height;
         // let mut col = area.width;
-        let mut row = area.height;
-        let mut col = area.width;
+        let mut row = 0;
+        let mut col = 0;
+        let max_width = buf.area.width;
+        let max_height = buf.area.height;
+
+        let advance_col = |col: &mut u16| {
+            if *col < max_width {
+                *col += 1;
+            }
+        };
+
+        let advance_row = |row: &mut u16| {
+            if *row < max_height {
+                *row += 1;
+            }
+        };
+
+        advance_row(&mut row);
+        advance_col(&mut col);
 
         for action in self.actions {
             match action {
                 Action::Print(char) => {
                     buf.get_mut(col, row).set_char(*char);
-                    col += 1;
+                    advance_col(&mut col);
                 }
                 Action::PrintString(string) => {
                     for char in string.chars() {
@@ -45,7 +62,7 @@ impl Widget for PseudoTerm<'_> {
                         // Move to next tab character
                     }
                     termwiz::escape::ControlCode::LineFeed => {
-                        row += 1;
+                        advance_row(&mut row);
                     }
                     termwiz::escape::ControlCode::VerticalTab => todo!(),
                     termwiz::escape::ControlCode::FormFeed => todo!(),
@@ -53,7 +70,9 @@ impl Widget for PseudoTerm<'_> {
                         col = 0;
                     }
                     termwiz::escape::ControlCode::ShiftOut => todo!(),
-                    termwiz::escape::ControlCode::ShiftIn => todo!(),
+                    termwiz::escape::ControlCode::ShiftIn => {
+                        // todo!(),
+                    }
                     termwiz::escape::ControlCode::DataLinkEscape => todo!(),
                     termwiz::escape::ControlCode::DeviceControlOne => todo!(),
                     termwiz::escape::ControlCode::DeviceControlTwo => todo!(),
@@ -137,8 +156,10 @@ mod tests {
     #[test]
     fn simple_ls() {
         let backend = TestBackend::new(80, 24);
+        let simple_ls = include_bytes!("../../test/typescript/simple_ls.typescript");
         let mut terminal = Terminal::new(backend).unwrap();
-        let actions = vec![];
+        let mut parser = termwiz::escape::parser::Parser::new();
+        let actions = parser.parse_as_vec(simple_ls);
         let pseudo_term = PseudoTerm::new(&actions);
         terminal
             .draw(|f| {
