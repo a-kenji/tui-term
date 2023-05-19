@@ -133,4 +133,19 @@ mod tests {
         let view = terminal.backend().to_string();
         insta::assert_snapshot!(view);
     }
+
+    #[test]
+    fn simple_ls() {
+        let backend = TestBackend::new(80, 24);
+        let mut terminal = Terminal::new(backend).unwrap();
+        let actions = vec![];
+        let pseudo_term = PseudoTerm::new(&actions);
+        terminal
+            .draw(|f| {
+                f.render_widget(pseudo_term, f.size());
+            })
+            .unwrap();
+        let view = terminal.backend().to_string();
+        insta::assert_snapshot!(view);
+    }
 }
