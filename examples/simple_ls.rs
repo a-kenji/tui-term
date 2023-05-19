@@ -1,4 +1,5 @@
 use core::time;
+use std::os::fd::AsRawFd;
 use std::{
     io::{self, stdout, Write},
     thread,
@@ -14,9 +15,10 @@ use crossterm::{
 use portable_pty::{CommandBuilder, NativePtySystem, PtySize, PtySystem};
 use ratatui::{backend::CrosstermBackend, widgets::Widget, Terminal};
 use std::sync::mpsc::channel;
+use termwiz::terminal::ScreenSize;
 use termwiz::{
     caps::Capabilities,
-    terminal::{buffered::BufferedTerminal, SystemTerminal, UnixTerminal},
+    terminal::{buffered::BufferedTerminal, SystemTerminal, Terminal as WizTerminal, UnixTerminal},
 };
 use tui_term::PseudoTerm;
 
@@ -51,33 +53,60 @@ fn main() -> std::io::Result<()> {
     drop(pair.slave);
 
     let (tx, rx) = channel();
-    let mut reader = pair.master.try_clone_reader().unwrap();
+    // let mut reader = pair.master.try_clone_reader().unwrap();
+    // let reader_fd = pair.master.as_raw_fd().unwrap();
+    // let writer_fd = pair.master.as_raw_fd().unwrap();
+    let reader = pair.master;
+
+    let mut buffered_terminal = BufferedTerminal::new(
+        UnixTerminal::new_with(
+            Capabilities::new_from_env().unwrap(),
+            &reader.as_raw_fd().unwrap(),
+            &reader.as_raw_fd().unwrap(),
+            // &std::io::stdout(),
+        )
+        .unwrap(),
+    )
+    .unwrap();
+    let size = ScreenSize {
+        rows: 40,
+        cols: 80,
+        xpixel: 0,
+        ypixel: 0,
+    };
+    buffered_terminal.terminal().set_screen_size(size).unwrap();
+
     std::thread::spawn(move || {
         // Consume the output from the child
         let mut s = String::new();
-        reader.read_to_string(&mut s).unwrap();
+        // reader.read_to_string(&mut s).unwrap();
         tx.send(s).unwrap();
     });
 
-    {
-        // Drop writer on purpose
-        let _writer = pair.master.take_writer().unwrap();
-    }
+    // {
+    //     // Drop writer on purpose
+    //     let _writer = pair.master.take_writer().unwrap();
+    // }
 
     // Wait for the child to complete
     // println!("child status: {:?}", child.wait().unwrap());
-    let _child_exit_status = child.wait().unwrap();
+    let child_exit_status = child.wait().unwrap();
 
-    drop(pair.master);
+    // drop(pair.master);
 
     let output = rx.recv().unwrap();
-    // for c in output.escape_debug() {
-    //     print!("{}", c);
-    // }
+    for c in output.escape_debug() {
+        print!("{}", c);
+    }
 
     let mut parser = termwiz::escape::parser::Parser::new();
     let actions = parser.parse_as_vec(output.as_bytes());
 
+    let waker = buffered_terminal.terminal().waker();
+    waker.wake().unwrap();
+    buffered_terminal.repaint().unwrap();
+    buffered_terminal.flush().unwrap();
+    buffered_terminal.repaint().unwrap();
     let pseudo_term = PseudoTerm::new(&actions, &buffered_terminal);
     terminal
         .draw(|f| {
@@ -85,15 +114,8 @@ fn main() -> std::io::Result<()> {
         })
         .unwrap();
 
-    // or using functions
-    // std::io::stdout()
-    //     .execute(SetForegroundColor(Color::Blue))?
-    //     .execute(SetBackgroundColor(Color::Red))?
-    //     .execute(Print("Styled text here."))?
-    //     .execute(ResetColor)?;
-
     // restore terminal
-    thread::sleep(time::Duration::from_secs(5));
+    thread::sleep(time::Duration::from_secs(3));
     disable_raw_mode()?;
     execute!(
         terminal.backend_mut(),
@@ -104,5 +126,9 @@ fn main() -> std::io::Result<()> {
     println!();
     println!();
     println!("{:?}", actions);
+    println!("Has changes: {:?}", &buffered_terminal.has_changes(0));
+    println!("Get changes: {:?}", &buffered_terminal.get_changes(0));
+    println!("Child Exit: {:?}", child_exit_status);
+    // println!("Screen cells: {:?}", &buffered_terminal.screen_cells());
     Ok(())
 }

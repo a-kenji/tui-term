@@ -10,6 +10,7 @@ ratatui = "0.20.1"
 termwiz = "0.20.0"
 vte = "0.11.0"
 vtparse = "0.6.2"
+wezterm-term = {path = "./wezterm/term" }
 
 [dev-dependencies]
 
