@@ -1,6 +1,5 @@
 # Benchmarks
+Run with:
 ```
-cargo bench --benches
+cargo bench
 ```
-
-TODO: decouple from parsing
