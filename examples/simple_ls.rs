@@ -20,7 +20,7 @@ use termwiz::{
     caps::Capabilities,
     terminal::{buffered::BufferedTerminal, SystemTerminal, Terminal as WizTerminal, UnixTerminal},
 };
-use tui_term::PseudoTerm;
+use tui_term::pseudo_term::wezterm_action::PseudoTerm;
 
 fn main() -> std::io::Result<()> {
     let mut stdout = io::stdout();
@@ -107,7 +107,7 @@ fn main() -> std::io::Result<()> {
     buffered_terminal.repaint().unwrap();
     buffered_terminal.flush().unwrap();
     buffered_terminal.repaint().unwrap();
-    let pseudo_term = PseudoTerm::new(&actions, &buffered_terminal);
+    let pseudo_term = PseudoTerm::new(&actions);
     terminal
         .draw(|f| {
             f.render_widget(pseudo_term, f.size());

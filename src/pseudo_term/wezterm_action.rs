@@ -2,16 +2,14 @@ use ratatui::buffer::Buffer;
 use ratatui::layout::Rect;
 use ratatui::widgets::Widget;
 use termwiz::escape::Action;
-use termwiz::surface::Surface;
 
 pub struct PseudoTerm<'a> {
     actions: &'a Vec<Action>,
-    surface: &'a Surface,
 }
 
 impl<'a> PseudoTerm<'a> {
-    pub fn new(actions: &'a Vec<Action>, surface: &'a Surface) -> Self {
-        PseudoTerm { actions, surface }
+    pub fn new(actions: &'a Vec<Action>) -> Self {
+        PseudoTerm { actions }
     }
 }
 
@@ -19,14 +17,8 @@ impl Widget for PseudoTerm<'_> {
     fn render(self, area: Rect, buf: &mut Buffer) {
         // let mut row = area.height;
         // let mut col = area.width;
-        let mut row = 0;
-        let mut col = 0;
-
-        let surface = self.surface;
-
-        if surface.has_changes(0) {
-            panic!("Surface has changes!");
-        }
+        let mut row = area.height;
+        let mut col = area.width;
 
         for action in self.actions {
             match action {
@@ -122,10 +114,23 @@ impl Widget for PseudoTerm<'_> {
 
 #[cfg(test)]
 mod tests {
+    use ratatui::backend::TestBackend;
+    use ratatui::Terminal;
+
     use super::*;
 
     #[test]
-    fn simple_ls_output() {
+    fn empty_actions() {
+        let backend = TestBackend::new(80, 24);
+        let mut terminal = Terminal::new(backend).unwrap();
         let actions = vec![];
+        let pseudo_term = PseudoTerm::new(&actions);
+        terminal
+            .draw(|f| {
+                f.render_widget(pseudo_term, f.size());
+            })
+            .unwrap();
+        let view = terminal.backend().to_string();
+        insta::assert_snapshot!(view);
     }
 }

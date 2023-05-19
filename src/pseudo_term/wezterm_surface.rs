@@ -35,6 +35,6 @@ mod tests {
 
     #[test]
     fn simple_ls_output() {
-        let actions = vec![];
+        // let actions = vec![];
     }
 }
