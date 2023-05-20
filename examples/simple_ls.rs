@@ -20,7 +20,7 @@ use termwiz::{
     caps::Capabilities,
     terminal::{buffered::BufferedTerminal, SystemTerminal, Terminal as WizTerminal, UnixTerminal},
 };
-use tui_term::pseudo_term::wezterm_action::PseudoTerm;
+use tui_term::pseudo_term::termwiz_action::PseudoTerm;
 
 fn main() -> std::io::Result<()> {
     let mut stdout = io::stdout();

@@ -3,7 +3,7 @@ use once_cell::sync::Lazy;
 use ratatui::backend::TestBackend;
 use ratatui::Terminal;
 use termwiz::escape::Action;
-use tui_term::pseudo_term::wezterm_action::PseudoTerm;
+use tui_term::pseudo_term::termwiz_action::PseudoTerm;
 
 static SIMPLE_LS_ACTIONS: Lazy<Vec<Action>> = Lazy::new(|| {
     let simple_ls = include_bytes!("../test/typescript/simple_ls.typescript");

@@ -11,13 +11,11 @@ edition = "2021"
 
 [dependencies]
 once_cell = "1.17.1"
-# ratatui = "0.20.1"
 ratatui = { git = "https://github.com/tui-rs-revival/ratatui"}
 
 termwiz = "0.20.0"
 vte = "0.11.0"
 vtparse = "0.6.2"
-wezterm-term = {path = "./wezterm/term" }
 
 [dev-dependencies]
 criterion = "0.4.0"

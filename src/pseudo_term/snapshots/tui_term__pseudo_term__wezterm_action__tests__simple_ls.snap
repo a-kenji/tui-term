@@ -1,9 +1,7 @@
 ---
 source: src/pseudo_term/wezterm_action.rs
-assertion_line: 170
 expression: view
 ---
-"                                                                                "
 " Cargo.lock      docs         LICENSE               test                    "
 " Cargo.toml      examples     README.md             typescript              "
 " CHANGELOG.md    flake.lock   rust-toolchain.toml   wezterm                 "
@@ -11,6 +9,7 @@ expression: view
 " commited.toml   justfile     target                                         "
 "tui-term on  main [!?⇡] via ❄️ pure (tui-term-env)                             "
 "❯                                                                               "
+"                                                                                "
 "                                                                                "
 "                                                                                "
 "                                                                                "
