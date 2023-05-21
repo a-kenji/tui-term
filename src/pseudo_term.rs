@@ -10,18 +10,32 @@ pub mod termwiz_action;
 
 #[derive(Default, Debug)]
 pub struct PseudoTermState {
+    area: Rect,
+    buf_area: Rect,
+
     fg: Option<termwiz::color::ColorSpec>,
     bg: Option<termwiz::color::ColorSpec>,
     cursor_style: Option<CursorShape>,
     dec_private_mode: Option<DecPrivateMode>,
     title: Option<String>,
     cursor: (u16, u16),
+
+    dec_auto_wrap: bool,
 }
 
 impl PseudoTermState {
     // The default entrypoint
     fn handle_actions(&mut self, actions: &Vec<Action>, area: Rect, buf: &mut Buffer) {
         println!("buf area: {:?}, area: {area:?}", buf.area);
+        println!(
+            "area right: {:?}, area left: {:?}",
+            area.right(),
+            area.left()
+        );
+
+        self.area = area;
+        self.buf_area = buf.area;
+
         for action in actions {
             println!(
                 "action: {:?}, row: {}, col: {}",
@@ -32,14 +46,12 @@ impl PseudoTermState {
             match action {
                 Action::Print(char) => {
                     buf.get_mut(self.col(), self.row()).set_char(*char);
-                    let cols = self.col();
-                    self.set_col(cols + 1);
+                    self.advance_col();
                 }
                 Action::PrintString(string) => {
                     for char in string.chars() {
                         buf.get_mut(self.col(), self.row()).set_char(char);
-                        let cols = self.col();
-                        self.set_col(cols + 1);
+                        self.advance_col();
                     }
                 }
                 Action::Control(control) => {
@@ -74,8 +86,7 @@ impl PseudoTermState {
     fn handle_csi_mode(&mut self, mode: &Mode, _area: Rect, _buf: &mut Buffer) {
         match mode {
             Mode::SetDecPrivateMode(mode) => {
-                println!("mode: {:?}", mode);
-                // TODO: implement
+                self.handle_csi_mode_set_deq_private_mode(mode, _area, _buf)
             }
             Mode::ResetDecPrivateMode(_) => {
                 // TODO: implement
@@ -260,6 +271,59 @@ impl PseudoTermState {
             ControlCode::APC => todo!(),
         }
     }
+    fn handle_csi_mode_set_deq_private_mode(
+        &mut self,
+        mode: &DecPrivateMode,
+        _area: Rect,
+        _buf: &mut Buffer,
+    ) {
+        match mode {
+            DecPrivateMode::Code(dec_private_mode) => {
+                match dec_private_mode {
+                    termwiz::escape::csi::DecPrivateModeCode::ApplicationCursorKeys => todo!(),
+                    termwiz::escape::csi::DecPrivateModeCode::DecAnsiMode => todo!(),
+                    termwiz::escape::csi::DecPrivateModeCode::Select132Columns => todo!(),
+                    termwiz::escape::csi::DecPrivateModeCode::SmoothScroll => todo!(),
+                    termwiz::escape::csi::DecPrivateModeCode::ReverseVideo => todo!(),
+                    termwiz::escape::csi::DecPrivateModeCode::OriginMode => todo!(),
+                    termwiz::escape::csi::DecPrivateModeCode::AutoWrap => {
+                        self.dec_auto_wrap = true;
+                    }
+                    termwiz::escape::csi::DecPrivateModeCode::AutoRepeat => todo!(),
+                    termwiz::escape::csi::DecPrivateModeCode::StartBlinkingCursor => todo!(),
+                    termwiz::escape::csi::DecPrivateModeCode::ShowCursor => todo!(),
+                    termwiz::escape::csi::DecPrivateModeCode::ReverseWraparound => todo!(),
+                    termwiz::escape::csi::DecPrivateModeCode::LeftRightMarginMode => todo!(),
+                    termwiz::escape::csi::DecPrivateModeCode::SixelDisplayMode => todo!(),
+                    termwiz::escape::csi::DecPrivateModeCode::MouseTracking => todo!(),
+                    termwiz::escape::csi::DecPrivateModeCode::HighlightMouseTracking => todo!(),
+                    termwiz::escape::csi::DecPrivateModeCode::ButtonEventMouse => todo!(),
+                    termwiz::escape::csi::DecPrivateModeCode::AnyEventMouse => todo!(),
+                    termwiz::escape::csi::DecPrivateModeCode::FocusTracking => {
+                        // TODO: this should be handled by the terminal
+                    }
+                    termwiz::escape::csi::DecPrivateModeCode::Utf8Mouse => todo!(),
+                    termwiz::escape::csi::DecPrivateModeCode::SGRMouse => todo!(),
+                    termwiz::escape::csi::DecPrivateModeCode::SGRPixelsMouse => todo!(),
+                    termwiz::escape::csi::DecPrivateModeCode::XTermMetaSendsEscape => todo!(),
+                    termwiz::escape::csi::DecPrivateModeCode::XTermAltSendsEscape => todo!(),
+                    termwiz::escape::csi::DecPrivateModeCode::SaveCursor => todo!(),
+                    termwiz::escape::csi::DecPrivateModeCode::ClearAndEnableAlternateScreen => todo!(),
+                    termwiz::escape::csi::DecPrivateModeCode::EnableAlternateScreen => todo!(),
+                    termwiz::escape::csi::DecPrivateModeCode::OptEnableAlternateScreen => todo!(),
+                    termwiz::escape::csi::DecPrivateModeCode::BracketedPaste => {
+                        // TODO: this should be handled by the terminal
+                    }
+                    termwiz::escape::csi::DecPrivateModeCode::UsePrivateColorRegistersForEachGraphic => todo!(),
+                    termwiz::escape::csi::DecPrivateModeCode::SynchronizedOutput => todo!(),
+                    termwiz::escape::csi::DecPrivateModeCode::MinTTYApplicationEscapeKeyMode => todo!(),
+                    termwiz::escape::csi::DecPrivateModeCode::SixelScrollsRight => todo!(),
+                    termwiz::escape::csi::DecPrivateModeCode::Win32InputMode => todo!(),
+                }
+            }
+            DecPrivateMode::Unspecified(_) => todo!(),
+        }
+    }
     fn handle_operating_system_command(
         &mut self,
         operating_system_command: &OperatingSystemCommand,
@@ -314,5 +378,20 @@ impl PseudoTermState {
     }
     fn set_row(&mut self, row: u16) {
         self.cursor.0 = row;
+    }
+    fn advance_col(&mut self) {
+        if self.dec_auto_wrap && self.col() >= self.area.right() - 1 {
+            self.advance_row();
+            self.cursor.1 = 0;
+        } else {
+            self.cursor.1 += 1;
+        }
+    }
+    fn advance_row(&mut self) {
+        if self.row() >= self.area.bottom() - 1 {
+            println!("Buttom reached");
+        } else {
+            self.cursor.0 += 1;
+        }
     }
 }
