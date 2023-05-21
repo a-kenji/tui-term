@@ -89,7 +89,52 @@ impl PseudoTermState {
                 intermediate,
                 control,
             } => todo!(),
-            Esc::Code(_) => todo!(),
+            Esc::Code(code) => match code {
+                termwiz::escape::EscCode::FullReset => todo!(),
+                termwiz::escape::EscCode::Index => todo!(),
+                termwiz::escape::EscCode::NextLine => todo!(),
+                termwiz::escape::EscCode::CursorPositionLowerLeft => todo!(),
+                termwiz::escape::EscCode::HorizontalTabSet => {
+                    // TODO: implement
+                }
+                termwiz::escape::EscCode::ReverseIndex => todo!(),
+                termwiz::escape::EscCode::SingleShiftG2 => todo!(),
+                termwiz::escape::EscCode::SingleShiftG3 => todo!(),
+                termwiz::escape::EscCode::StartOfGuardedArea => todo!(),
+                termwiz::escape::EscCode::EndOfGuardedArea => todo!(),
+                termwiz::escape::EscCode::StartOfString => todo!(),
+                termwiz::escape::EscCode::ReturnTerminalId => todo!(),
+                termwiz::escape::EscCode::StringTerminator => todo!(),
+                termwiz::escape::EscCode::PrivacyMessage => todo!(),
+                termwiz::escape::EscCode::ApplicationProgramCommand => todo!(),
+                termwiz::escape::EscCode::TmuxTitle => todo!(),
+                termwiz::escape::EscCode::DecBackIndex => todo!(),
+                termwiz::escape::EscCode::DecSaveCursorPosition => todo!(),
+                termwiz::escape::EscCode::DecRestoreCursorPosition => todo!(),
+                termwiz::escape::EscCode::DecApplicationKeyPad => todo!(),
+                termwiz::escape::EscCode::DecNormalKeyPad => todo!(),
+                termwiz::escape::EscCode::DecLineDrawingG0 => todo!(),
+                termwiz::escape::EscCode::UkCharacterSetG0 => todo!(),
+                termwiz::escape::EscCode::AsciiCharacterSetG0 => todo!(),
+                termwiz::escape::EscCode::DecLineDrawingG1 => todo!(),
+                termwiz::escape::EscCode::UkCharacterSetG1 => todo!(),
+                termwiz::escape::EscCode::AsciiCharacterSetG1 => todo!(),
+                termwiz::escape::EscCode::DecScreenAlignmentDisplay => todo!(),
+                termwiz::escape::EscCode::DecDoubleHeightTopHalfLine => todo!(),
+                termwiz::escape::EscCode::DecDoubleHeightBottomHalfLine => todo!(),
+                termwiz::escape::EscCode::DecSingleWidthLine => todo!(),
+                termwiz::escape::EscCode::DecDoubleWidthLine => todo!(),
+                termwiz::escape::EscCode::ApplicationModeArrowUpPress => todo!(),
+                termwiz::escape::EscCode::ApplicationModeArrowDownPress => todo!(),
+                termwiz::escape::EscCode::ApplicationModeArrowRightPress => todo!(),
+                termwiz::escape::EscCode::ApplicationModeArrowLeftPress => todo!(),
+                termwiz::escape::EscCode::ApplicationModeHomePress => todo!(),
+                termwiz::escape::EscCode::ApplicationModeEndPress => todo!(),
+                termwiz::escape::EscCode::F1Press => todo!(),
+                termwiz::escape::EscCode::F2Press => todo!(),
+                termwiz::escape::EscCode::F3Press => todo!(),
+                termwiz::escape::EscCode::F4Press => todo!(),
+            },
         }
     }
     fn handle_csi_mode(&mut self, mode: &Mode, _area: Rect, _buf: &mut Buffer) {
@@ -165,11 +210,13 @@ impl PseudoTermState {
             Cursor::BackwardTabulation(_) => todo!(),
             Cursor::TabulationClear(tabulation_clear) => match tabulation_clear {
                 termwiz::escape::csi::TabulationClear::ClearCharacterTabStopAtActivePosition => {
-                    todo!()
+                    // TODO: implement
                 }
-                termwiz::escape::csi::TabulationClear::ClearLineTabStopAtActiveLine => todo!(),
+                termwiz::escape::csi::TabulationClear::ClearLineTabStopAtActiveLine => {
+                    // TODO: implement
+                }
                 termwiz::escape::csi::TabulationClear::ClearCharacterTabStopsAtActiveLine => {
-                    todo!()
+                    // TODO: implement
                 }
                 termwiz::escape::csi::TabulationClear::ClearAllCharacterTabStops => {
                     // TODO: implement

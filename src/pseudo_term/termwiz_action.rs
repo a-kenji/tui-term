@@ -29,6 +29,20 @@ mod tests {
 
     use super::*;
 
+    fn snapshot_typescript(stream: &[u8]) -> String {
+        let backend = TestBackend::new(80, 24);
+        let mut terminal = Terminal::new(backend).unwrap();
+        let mut parser = termwiz::escape::parser::Parser::new();
+        let actions = parser.parse_as_vec(stream);
+        let pseudo_term = PseudoTerm::new(&actions);
+        terminal
+            .draw(|f| {
+                f.render_widget(pseudo_term, f.size());
+            })
+            .unwrap();
+        terminal.backend().to_string()
+    }
+
     #[test]
     fn empty_actions() {
         let backend = TestBackend::new(80, 24);
@@ -46,50 +60,26 @@ mod tests {
 
     #[test]
     fn simple_ls() {
-        let backend = TestBackend::new(80, 24);
-        let simple_ls = include_bytes!("../../test/typescript/simple_ls.typescript");
-        let mut terminal = Terminal::new(backend).unwrap();
-        let mut parser = termwiz::escape::parser::Parser::new();
-        let actions = parser.parse_as_vec(simple_ls);
-        let pseudo_term = PseudoTerm::new(&actions);
-        terminal
-            .draw(|f| {
-                f.render_widget(pseudo_term, f.size());
-            })
-            .unwrap();
-        let view = terminal.backend().to_string();
+        let stream = include_bytes!("../../test/typescript/simple_ls.typescript");
+        let view = snapshot_typescript(stream);
         insta::assert_snapshot!(view);
     }
     #[test]
     fn vttest_02_01() {
-        let backend = TestBackend::new(80, 24);
-        let simple_ls = include_bytes!("../../test/typescript/vttest_02_01.typescript");
-        let mut terminal = Terminal::new(backend).unwrap();
-        let mut parser = termwiz::escape::parser::Parser::new();
-        let actions = parser.parse_as_vec(simple_ls);
-        let pseudo_term = PseudoTerm::new(&actions);
-        terminal
-            .draw(|f| {
-                f.render_widget(pseudo_term, f.size());
-            })
-            .unwrap();
-        let view = terminal.backend().to_string();
+        let stream = include_bytes!("../../test/typescript/vttest_02_01.typescript");
+        let view = snapshot_typescript(stream);
         insta::assert_snapshot!(view);
     }
     #[test]
     fn vttest_02_02() {
-        let backend = TestBackend::new(80, 24);
-        let simple_ls = include_bytes!("../../test/typescript/vttest_02_02.typescript");
-        let mut terminal = Terminal::new(backend).unwrap();
-        let mut parser = termwiz::escape::parser::Parser::new();
-        let actions = parser.parse_as_vec(simple_ls);
-        let pseudo_term = PseudoTerm::new(&actions);
-        terminal
-            .draw(|f| {
-                f.render_widget(pseudo_term, f.size());
-            })
-            .unwrap();
-        let view = terminal.backend().to_string();
+        let stream = include_bytes!("../../test/typescript/vttest_02_02.typescript");
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
+    #[test]
+    fn vttest_02_03() {
+        let stream = include_bytes!("../../test/typescript/vttest_02_03.typescript");
+        let view = snapshot_typescript(stream);
         insta::assert_snapshot!(view);
     }
 }
