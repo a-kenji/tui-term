@@ -58,6 +58,7 @@
       devInputs = [
         rustToolchainDevTOML
         pkgs.just
+        pkgs.lychee
 
         pkgs.cargo-deny
         pkgs.cargo-bloat
@@ -154,33 +155,33 @@
           buildInputs = fmtInputs;
         };
       };
-      packages = {
-        default =
-          (
-            pkgs.makeRustPlatform {
-              inherit cargo rustc;
-            }
-          )
-          .buildRustPackage {
-            cargoDepsName = name;
-            GIT_DATE = gitDate;
-            GIT_REV = gitRev;
-            doCheck = false;
-            inherit
-              name
-              version
-              src
-              stdenv
-              nativeBuildInputs
-              buildInputs
-              cargoLock
-              ;
-          };
-      };
-      apps.default = {
-        type = "app";
-        program = "${packages.default}/bin/${name}";
-      };
+      # packages = {
+      #   default =
+      #     (
+      #       pkgs.makeRustPlatform {
+      #         inherit cargo rustc;
+      #       }
+      #     )
+      #     .buildRustPackage {
+      #       cargoDepsName = name;
+      #       GIT_DATE = gitDate;
+      #       GIT_REV = gitRev;
+      #       doCheck = false;
+      #       inherit
+      #         name
+      #         version
+      #         src
+      #         stdenv
+      #         nativeBuildInputs
+      #         buildInputs
+      #         cargoLock
+      #         ;
+      #     };
+      # };
+      # apps.default = {
+      #   type = "app";
+      #   program = "${packages.default}/bin/${name}";
+      # };
       formatter = pkgs.alejandra;
     });
 }

@@ -21,14 +21,14 @@ pub struct PseudoTermState {
 impl PseudoTermState {
     // The default entrypoint
     fn handle_actions(&mut self, actions: &Vec<Action>, area: Rect, buf: &mut Buffer) {
-        // println!("buf area: {:?}, area: {area:?}", buf.area);
+        println!("buf area: {:?}, area: {area:?}", buf.area);
         for action in actions {
-            // println!(
-            //     "action: {:?}, row: {}, col: {}",
-            //     action,
-            //     self.row(),
-            //     self.col()
-            // );
+            println!(
+                "action: {:?}, row: {}, col: {}",
+                action,
+                self.row(),
+                self.col()
+            );
             match action {
                 Action::Print(char) => {
                     buf.get_mut(self.col(), self.row()).set_char(*char);
@@ -73,7 +73,8 @@ impl PseudoTermState {
     }
     fn handle_csi_mode(&mut self, mode: &Mode, _area: Rect, _buf: &mut Buffer) {
         match mode {
-            Mode::SetDecPrivateMode(_) => {
+            Mode::SetDecPrivateMode(mode) => {
+                println!("mode: {:?}", mode);
                 // TODO: implement
             }
             Mode::ResetDecPrivateMode(_) => {

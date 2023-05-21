@@ -9,22 +9,23 @@ alias rr := run-release
 alias cw := cargo-watch
 
 clippy:
-	cargo clippy --all-targets --all-features
+    cargo clippy --all-targets --all-features
 actionlint:
-	nix develop .#actionlintShell --command actionlint
+    nix develop .#actionlintShell --command actionlint
 deny:
-	cargo deny check
+    cargo deny check
 cargo-test:
-	cargo test
+    cargo test
 lint:
-	nix flake check
-	typos
+    nix flake check
+    typos
+    lychee *.md
 run:
-	cargo run
+    cargo run
 build:
-	cargo build
+    cargo build
 run-release:
-	cargo run --release
+    cargo run --release
 
 doc:
     cargo doc --open --offline
