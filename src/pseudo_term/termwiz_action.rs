@@ -82,4 +82,16 @@ mod tests {
         let view = snapshot_typescript(stream);
         insta::assert_snapshot!(view);
     }
+    #[test]
+    fn vttest_02_04() {
+        let stream = include_bytes!("../../test/typescript/vttest_02_04.typescript");
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
+    #[test]
+    fn vttest_02_05() {
+        let stream = include_bytes!("../../test/typescript/vttest_02_05.typescript");
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
 }
