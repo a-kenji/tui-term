@@ -2,7 +2,7 @@ use ratatui::buffer::Buffer;
 use ratatui::layout::Rect;
 use termwiz::cell::Intensity;
 use termwiz::escape::csi::{Cursor, DecPrivateMode, Edit, Mode, Sgr};
-use termwiz::escape::{Action, ControlCode, OperatingSystemCommand, CSI};
+use termwiz::escape::{Action, ControlCode, Esc, OperatingSystemCommand, CSI};
 use termwiz::surface::CursorShape;
 
 pub mod state;
@@ -26,23 +26,23 @@ pub struct PseudoTermState {
 impl PseudoTermState {
     // The default entrypoint
     fn handle_actions(&mut self, actions: &Vec<Action>, area: Rect, buf: &mut Buffer) {
-        // println!("buf area: {:?}, area: {area:?}", buf.area);
-        // println!(
-        //     "area right: {:?}, area left: {:?}",
-        //     area.right(),
-        //     area.left()
-        // );
+        println!("buf area: {:?}, area: {area:?}", buf.area);
+        println!(
+            "area right: {:?}, area left: {:?}",
+            area.right(),
+            area.left()
+        );
 
         self.area = area;
         self.buf_area = buf.area;
 
         for action in actions {
-            // println!(
-            //     "action: {:?}, row: {}, col: {}",
-            //     action,
-            //     self.row(),
-            //     self.col()
-            // );
+            println!(
+                "action: {:?}, row: {}, col: {}",
+                action,
+                self.row(),
+                self.col()
+            );
             match action {
                 Action::Print(char) => {
                     buf.get_mut(self.col(), self.row()).set_char(*char);
@@ -62,7 +62,7 @@ impl PseudoTermState {
                     self.handle_operating_system_command(operating_system_command, area, buf)
                 }
                 Action::CSI(csi) => self.handle_csi(csi, area, buf),
-                Action::Esc(_) => todo!(),
+                Action::Esc(esc) => self.handle_esc(esc, area, buf),
                 Action::Sixel(_) => todo!(),
                 Action::XtGetTcap(_) => todo!(),
                 Action::KittyImage(_) => todo!(),
@@ -81,6 +81,15 @@ impl PseudoTermState {
             CSI::Keyboard(_) => todo!(),
             CSI::SelectCharacterPath(_, _) => todo!(),
             CSI::Unspecified(_) => todo!(),
+        }
+    }
+    fn handle_esc(&mut self, esc: &Esc, _area: Rect, _buf: &mut Buffer) {
+        match esc {
+            Esc::Unspecified {
+                intermediate,
+                control,
+            } => todo!(),
+            Esc::Code(_) => todo!(),
         }
     }
     fn handle_csi_mode(&mut self, mode: &Mode, _area: Rect, _buf: &mut Buffer) {
@@ -154,7 +163,20 @@ impl PseudoTermState {
     fn handle_csi_cursor(&mut self, cursor: &Cursor, _area: Rect, _buf: &mut Buffer) {
         match cursor {
             Cursor::BackwardTabulation(_) => todo!(),
-            Cursor::TabulationClear(_) => todo!(),
+            Cursor::TabulationClear(tabulation_clear) => match tabulation_clear {
+                termwiz::escape::csi::TabulationClear::ClearCharacterTabStopAtActivePosition => {
+                    todo!()
+                }
+                termwiz::escape::csi::TabulationClear::ClearLineTabStopAtActiveLine => todo!(),
+                termwiz::escape::csi::TabulationClear::ClearCharacterTabStopsAtActiveLine => {
+                    todo!()
+                }
+                termwiz::escape::csi::TabulationClear::ClearAllCharacterTabStops => {
+                    // TODO: implement
+                }
+                termwiz::escape::csi::TabulationClear::ClearAllLineTabStops => todo!(),
+                termwiz::escape::csi::TabulationClear::ClearAllTabStops => todo!(),
+            },
             Cursor::CharacterAbsolute(_) => todo!(),
             Cursor::CharacterPositionAbsolute(_) => todo!(),
             Cursor::CharacterPositionBackward(_) => todo!(),
@@ -208,7 +230,11 @@ impl PseudoTermState {
             ControlCode::Acknowledge => todo!(),
             ControlCode::Bell => todo!(),
             ControlCode::Backspace => todo!(),
-            ControlCode::HorizontalTab => todo!(),
+            ControlCode::HorizontalTab => {
+                // TODO: implement
+                // Move cursor to next tab stop
+                // Need to save tab stops
+            }
             ControlCode::LineFeed => {
                 let row = self.row();
                 self.set_row(row + 1);

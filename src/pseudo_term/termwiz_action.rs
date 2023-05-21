@@ -76,4 +76,20 @@ mod tests {
         let view = terminal.backend().to_string();
         insta::assert_snapshot!(view);
     }
+    #[test]
+    fn vttest_02_02() {
+        let backend = TestBackend::new(80, 24);
+        let simple_ls = include_bytes!("../../test/typescript/vttest_02_02.typescript");
+        let mut terminal = Terminal::new(backend).unwrap();
+        let mut parser = termwiz::escape::parser::Parser::new();
+        let actions = parser.parse_as_vec(simple_ls);
+        let pseudo_term = PseudoTerm::new(&actions);
+        terminal
+            .draw(|f| {
+                f.render_widget(pseudo_term, f.size());
+            })
+            .unwrap();
+        let view = terminal.backend().to_string();
+        insta::assert_snapshot!(view);
+    }
 }
