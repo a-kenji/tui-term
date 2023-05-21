@@ -23,7 +23,7 @@ insta = "1.29.0"
 # iai = "0.1.1"
 
 # for examples
-crossterm = "0.23"
+crossterm = "0.26"
 portable-pty = "0.8.1"
 
 [profile.dev.package.insta]
