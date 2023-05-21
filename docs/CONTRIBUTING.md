@@ -1,8 +1,18 @@
 
 
 # How to 
+Make sure that cols and rows are (80, 24)
+```
+tput lines;tput cols
+```
+Record your session with
 ```
 script
+```
+
+The recorded `script` session should have the correct lines and cols specified:
+```
+Script started on *** [TERM="tmux-256color" TTY="/dev/pts/3" COLUMNS="80" LINES="24"]
 ```
 
 # References
