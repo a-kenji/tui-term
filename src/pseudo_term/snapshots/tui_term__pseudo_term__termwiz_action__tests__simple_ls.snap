@@ -6,7 +6,7 @@ expression: view
 " Cargo.toml      examples     README.md             typescript              "
 " CHANGELOG.md    flake.lock   rust-toolchain.toml   wezterm                 "
 " cliff.toml      flake.nix    src                                            "
-" commited.toml   justfile     target                                         "
+" committed.toml   justfile     target                                        "
 "tui-term on  main [!?⇡] via ❄️ pure (tui-term-env)                             "
 "❯                                                                               "
 "                                                                                "
