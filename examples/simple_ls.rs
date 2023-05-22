@@ -1,25 +1,16 @@
 use core::time;
-use std::os::fd::AsRawFd;
-use std::{
-    io::{self, stdout, Write},
-    thread,
-};
+use std::{io, thread};
 
 use crossterm::{
-    event::{self, DisableMouseCapture, EnableMouseCapture},
+    event::{DisableMouseCapture, EnableMouseCapture},
     execute,
-    style::{Color, Print, ResetColor, SetBackgroundColor, SetForegroundColor},
+    style::ResetColor,
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
-    ExecutableCommand, Result,
 };
 use portable_pty::{CommandBuilder, NativePtySystem, PtySize, PtySystem};
-use ratatui::{backend::CrosstermBackend, widgets::Widget, Terminal};
+use ratatui::widgets::{Block, Borders};
+use ratatui::{backend::CrosstermBackend, Terminal};
 use std::sync::mpsc::channel;
-use termwiz::terminal::ScreenSize;
-use termwiz::{
-    caps::Capabilities,
-    terminal::{buffered::BufferedTerminal, SystemTerminal, Terminal as WizTerminal, UnixTerminal},
-};
 use tui_term::pseudo_term::termwiz_action::PseudoTerm;
 
 fn main() -> std::io::Result<()> {
@@ -30,10 +21,6 @@ fn main() -> std::io::Result<()> {
     execute!(stdout, EnterAlternateScreen, EnableMouseCapture)?;
     let backend = CrosstermBackend::new(stdout);
     let mut terminal = Terminal::new(backend)?;
-
-    let mut buffered_terminal =
-        BufferedTerminal::new(UnixTerminal::new(Capabilities::new_from_env().unwrap()).unwrap())
-            .unwrap();
 
     let pty_system = NativePtySystem::default();
     let cwd = std::env::current_dir().unwrap();
@@ -49,37 +36,16 @@ fn main() -> std::io::Result<()> {
         })
         .unwrap();
     let mut child = pair.slave.spawn_command(cmd).unwrap();
-    let pid = child.process_id().map(|i| i as i32).unwrap_or(-1);
+    let _pid = child.process_id().map(|i| i as i32).unwrap_or(-1);
     drop(pair.slave);
 
     let (tx, rx) = channel();
-    // let mut reader = pair.master.try_clone_reader().unwrap();
-    // let reader_fd = pair.master.as_raw_fd().unwrap();
-    // let writer_fd = pair.master.as_raw_fd().unwrap();
-    let reader = pair.master;
-
-    let mut buffered_terminal = BufferedTerminal::new(
-        UnixTerminal::new_with(
-            Capabilities::new_from_env().unwrap(),
-            &reader.as_raw_fd().unwrap(),
-            &reader.as_raw_fd().unwrap(),
-            // &std::io::stdout(),
-        )
-        .unwrap(),
-    )
-    .unwrap();
-    let size = ScreenSize {
-        rows: 40,
-        cols: 80,
-        xpixel: 0,
-        ypixel: 0,
-    };
-    buffered_terminal.terminal().set_screen_size(size).unwrap();
+    let mut reader = pair.master.try_clone_reader().unwrap();
 
     std::thread::spawn(move || {
         // Consume the output from the child
         let mut s = String::new();
-        // reader.read_to_string(&mut s).unwrap();
+        reader.read_to_string(&mut s).unwrap();
         tx.send(s).unwrap();
     });
 
@@ -89,24 +55,20 @@ fn main() -> std::io::Result<()> {
     // }
 
     // Wait for the child to complete
-    // println!("child status: {:?}", child.wait().unwrap());
     let child_exit_status = child.wait().unwrap();
 
-    // drop(pair.master);
+    drop(pair.master);
 
     let output = rx.recv().unwrap();
-    for c in output.escape_debug() {
-        print!("{}", c);
-    }
-
     let mut parser = termwiz::escape::parser::Parser::new();
     let actions = parser.parse_as_vec(output.as_bytes());
 
-    let waker = buffered_terminal.terminal().waker();
-    waker.wake().unwrap();
-    buffered_terminal.repaint().unwrap();
-    buffered_terminal.flush().unwrap();
-    buffered_terminal.repaint().unwrap();
+    let block = Block::default().borders(Borders::ALL);
+    terminal
+        .draw(|f| {
+            f.render_widget(block, f.size());
+        })
+        .unwrap();
     let pseudo_term = PseudoTerm::new(&actions);
     terminal
         .draw(|f| {
@@ -115,7 +77,7 @@ fn main() -> std::io::Result<()> {
         .unwrap();
 
     // restore terminal
-    thread::sleep(time::Duration::from_secs(3));
+    thread::sleep(time::Duration::from_secs(4));
     disable_raw_mode()?;
     execute!(
         terminal.backend_mut(),
@@ -123,12 +85,6 @@ fn main() -> std::io::Result<()> {
         DisableMouseCapture
     )?;
     terminal.show_cursor()?;
-    println!();
-    println!();
-    println!("{:?}", actions);
-    println!("Has changes: {:?}", &buffered_terminal.has_changes(0));
-    println!("Get changes: {:?}", &buffered_terminal.get_changes(0));
-    println!("Child Exit: {:?}", child_exit_status);
-    // println!("Screen cells: {:?}", &buffered_terminal.screen_cells());
+    println!("Exit status: {child_exit_status}");
     Ok(())
 }

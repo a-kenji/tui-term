@@ -26,23 +26,23 @@ pub struct PseudoTermState {
 impl PseudoTermState {
     // The default entrypoint
     fn handle_actions(&mut self, actions: &Vec<Action>, area: Rect, buf: &mut Buffer) {
-        println!("buf area: {:?}, area: {area:?}", buf.area);
-        println!(
-            "area right: {:?}, area left: {:?}",
-            area.right(),
-            area.left()
-        );
+        // println!("buf area: {:?}, area: {area:?}", buf.area);
+        // println!(
+        //     "area right: {:?}, area left: {:?}",
+        //     area.right(),
+        //     area.left()
+        // );
 
         self.area = area;
         self.buf_area = buf.area;
 
         for action in actions {
-            println!(
-                "action: {:?}, row: {}, col: {}",
-                action,
-                self.row(),
-                self.col()
-            );
+            // println!(
+            //     "action: {:?}, row: {}, col: {}",
+            //     action,
+            //     self.row(),
+            //     self.col()
+            // );
             match action {
                 Action::Print(char) => {
                     buf.get_mut(self.col(), self.row()).set_char(*char);
