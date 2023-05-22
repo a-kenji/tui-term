@@ -1,0 +1,30 @@
+---
+source: src/pseudo_term/termwiz_action.rs
+assertion_line: 77
+expression: view
+---
+"*************                                                                   "
+"      *     *     *     *     *     *     *     *     *     *     *     *     * "
+"                                                                                "
+"Test of TAB setting/resetting. These two lines                                  "
+"should look the same. Push <RETURN>                                             "
+"                                                                                "
+"                                                                                "
+"                                                                                "
+"                                                                                "
+"                                                                                "
+"                                                                                "
+"                                                                                "
+"                                                                                "
+"                                                                                "
+"                                                                                "
+"                                                                                "
+"                                                                                "
+"                                                                                "
+"                                                                                "
+"                                                                                "
+"                                                                                "
+"                                                                                "
+"                                                                                "
+"                                                                                "
+
