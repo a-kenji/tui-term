@@ -4,12 +4,12 @@ use ratatui::widgets::{Block, Widget};
 use vt100::Screen;
 
 pub struct PseudoTerm<'a> {
-    screen: &'a Vec<Screen>,
+    screen: &'a Screen,
     block: Option<Block<'a>>,
 }
 
 impl<'a> PseudoTerm<'a> {
-    pub fn new(screen: &'a Vec<Screen>) -> Self {
+    pub fn new(screen: &'a Screen) -> Self {
         PseudoTerm {
             screen,
             block: None,
@@ -19,52 +19,53 @@ impl<'a> PseudoTerm<'a> {
 
 impl Widget for PseudoTerm<'_> {
     fn render(self, area: Rect, buf: &mut Buffer) {
-        let mut state = PseudoTermState::default();
+        crate::state::handle_screen(self.screen, &area, buf);
     }
 }
 
 #[cfg(test)]
 mod tests {
-    // use ratatui::backend::TestBackend;
-    // use ratatui::Terminal;
-    //
-    // use super::*;
+    use ratatui::backend::TestBackend;
+    use ratatui::Terminal;
 
-    // fn snapshot_typescript(stream: &[u8]) -> String {
-    //     let backend = TestBackend::new(80, 24);
-    //     let mut terminal = Terminal::new(backend).unwrap();
-    //     let mut parser = termwiz::escape::parser::Parser::new();
-    //     let actions = parser.parse_as_vec(stream);
-    //     let pseudo_term = PseudoTerm::new(&actions);
-    //     terminal
-    //         .draw(|f| {
-    //             f.render_widget(pseudo_term, f.size());
-    //         })
-    //         .unwrap();
-    //     terminal.backend().to_string()
-    // }
-    //
-    // #[test]
-    // fn empty_actions() {
-    //     let backend = TestBackend::new(80, 24);
-    //     let mut terminal = Terminal::new(backend).unwrap();
-    //     let actions = vec![];
-    //     let pseudo_term = PseudoTerm::new(&actions);
-    //     terminal
-    //         .draw(|f| {
-    //             f.render_widget(pseudo_term, f.size());
-    //         })
-    //         .unwrap();
-    //     let view = terminal.backend().to_string();
-    //     insta::assert_snapshot!(view);
-    // }
-    //
-    // #[test]
-    // fn simple_ls() {
-    //     let stream = include_bytes!("../../test/typescript/simple_ls.typescript");
-    //     let view = snapshot_typescript(stream);
-    //     insta::assert_snapshot!(view);
-    // }
+    use super::*;
+
+    fn snapshot_typescript(stream: &[u8]) -> String {
+        let backend = TestBackend::new(80, 24);
+        let mut terminal = Terminal::new(backend).unwrap();
+        let mut parser = vt100::Parser::new(24, 80, 0);
+        parser.process(stream);
+        let pseudo_term = PseudoTerm::new(parser.screen());
+        terminal
+            .draw(|f| {
+                f.render_widget(pseudo_term, f.size());
+            })
+            .unwrap();
+        terminal.backend().to_string()
+    }
+
+    #[test]
+    fn empty_actions() {
+        let backend = TestBackend::new(80, 24);
+        let mut terminal = Terminal::new(backend).unwrap();
+        let mut parser = vt100::Parser::new(24, 80, 0);
+        parser.process(b" ");
+        let pseudo_term = PseudoTerm::new(parser.screen());
+        terminal
+            .draw(|f| {
+                f.render_widget(pseudo_term, f.size());
+            })
+            .unwrap();
+        let view = terminal.backend().to_string();
+        insta::assert_snapshot!(view);
+    }
+
+    #[test]
+    fn simple_ls() {
+        let stream = include_bytes!("../test/typescript/simple_ls.typescript");
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
     // #[test]
     // fn vttest_02_01() {
     //     let stream = include_bytes!("../../test/typescript/vttest_02_01.typescript");

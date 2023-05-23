@@ -11,7 +11,7 @@ use portable_pty::{CommandBuilder, NativePtySystem, PtySize, PtySystem};
 use ratatui::widgets::{Block, Borders};
 use ratatui::{backend::CrosstermBackend, layout::Rect, Terminal};
 use std::sync::mpsc::channel;
-use tui_term::pseudo_term::termwiz_action::PseudoTerm;
+use tui_term::widget::PseudoTerm;
 
 fn main() -> std::io::Result<()> {
     let mut stdout = io::stdout();
@@ -41,6 +41,7 @@ fn main() -> std::io::Result<()> {
 
     let (tx, rx) = channel();
     let mut reader = pair.master.try_clone_reader().unwrap();
+    let mut parser = vt100::Parser::new(24, 80, 0);
 
     std::thread::spawn(move || {
         // Consume the output from the child
@@ -60,26 +61,25 @@ fn main() -> std::io::Result<()> {
     drop(pair.master);
 
     let output = rx.recv().unwrap();
-    let mut parser = termwiz::escape::parser::Parser::new();
-    let actions = parser.parse_as_vec(output.as_bytes());
+    parser.process(output.as_bytes());
 
-    let term_area = Rect::new(0, 0, 80, 24);
+    // let term_area = Rect::new(0, 0, 80, 24);
+    let pseudo_term = PseudoTerm::new(parser.screen());
 
-    let block = Block::default().borders(Borders::ALL);
+    // let block = Block::default().borders(Borders::ALL);
+    // terminal
+    //     .draw(|f| {
+    //         f.render_widget(block, f.size());
+    //     })
+    //     .unwrap();
+    // terminal
+    //     .draw(|f| {
+    //         f.render_widget(ratatui::widgets::Clear, term_area);
+    //     })
+    //     .unwrap();
     terminal
         .draw(|f| {
-            f.render_widget(block, f.size());
-        })
-        .unwrap();
-    let pseudo_term = PseudoTerm::new(&actions);
-    terminal
-        .draw(|f| {
-            f.render_widget(ratatui::widgets::Clear, term_area);
-        })
-        .unwrap();
-    terminal
-        .draw(|f| {
-            f.render_widget(pseudo_term, term_area);
+            f.render_widget(pseudo_term, f.size());
         })
         .unwrap();
 
