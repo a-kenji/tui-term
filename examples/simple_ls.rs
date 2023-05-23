@@ -24,7 +24,7 @@ fn main() -> std::io::Result<()> {
 
     let pty_system = NativePtySystem::default();
     let cwd = std::env::current_dir().unwrap();
-    let mut cmd = CommandBuilder::new("ls");
+    let mut cmd = CommandBuilder::new("lsd");
     cmd.cwd(cwd);
 
     let pair = pty_system
