@@ -9,7 +9,7 @@ use crossterm::{
 };
 use portable_pty::{CommandBuilder, NativePtySystem, PtySize, PtySystem};
 use ratatui::widgets::{Block, Borders};
-use ratatui::{backend::CrosstermBackend, Terminal};
+use ratatui::{backend::CrosstermBackend, layout::Rect, Terminal};
 use std::sync::mpsc::channel;
 use tui_term::pseudo_term::termwiz_action::PseudoTerm;
 
@@ -63,6 +63,8 @@ fn main() -> std::io::Result<()> {
     let mut parser = termwiz::escape::parser::Parser::new();
     let actions = parser.parse_as_vec(output.as_bytes());
 
+    let term_area = Rect::new(0, 0, 80, 24);
+
     let block = Block::default().borders(Borders::ALL);
     terminal
         .draw(|f| {
@@ -72,7 +74,12 @@ fn main() -> std::io::Result<()> {
     let pseudo_term = PseudoTerm::new(&actions);
     terminal
         .draw(|f| {
-            f.render_widget(pseudo_term, f.size());
+            f.render_widget(ratatui::widgets::Clear, term_area);
+        })
+        .unwrap();
+    terminal
+        .draw(|f| {
+            f.render_widget(pseudo_term, term_area);
         })
         .unwrap();
 
@@ -86,5 +93,6 @@ fn main() -> std::io::Result<()> {
     )?;
     terminal.show_cursor()?;
     println!("Exit status: {child_exit_status}");
+    println!("Area: {:?}", terminal.size());
     Ok(())
 }
