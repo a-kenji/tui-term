@@ -96,18 +96,18 @@ mod tests {
         let view = snapshot_typescript(stream);
         insta::assert_snapshot!(view);
     }
-    // #[test]
-    // fn vttest_02_06() {
-    //     let stream = include_bytes!("../../test/typescript/vttest_02_06.typescript");
-    //     let view = snapshot_typescript(stream);
-    //     insta::assert_snapshot!(view);
-    // }
-    // #[test]
-    // fn vttest_02_07() {
-    //     let stream = include_bytes!("../../test/typescript/vttest_02_07.typescript");
-    //     let view = snapshot_typescript(stream);
-    //     insta::assert_snapshot!(view);
-    // }
+    #[test]
+    fn vttest_02_06() {
+        let stream = include_bytes!("../test/typescript/vttest_02_06.typescript");
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
+    #[test]
+    fn vttest_02_07() {
+        let stream = include_bytes!("../test/typescript/vttest_02_07.typescript");
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
     // #[test]
     // fn vttest_02_08() {
     //     let stream = include_bytes!("../../test/typescript/vttest_02_08.typescript");
