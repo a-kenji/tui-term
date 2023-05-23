@@ -36,7 +36,6 @@ fn main() -> std::io::Result<()> {
         })
         .unwrap();
     let mut child = pair.slave.spawn_command(cmd).unwrap();
-    let _pid = child.process_id().map(|i| i as i32).unwrap_or(-1);
     drop(pair.slave);
 
     let (tx, rx) = channel();
@@ -50,10 +49,10 @@ fn main() -> std::io::Result<()> {
         tx.send(s).unwrap();
     });
 
-    // {
-    //     // Drop writer on purpose
-    //     let _writer = pair.master.take_writer().unwrap();
-    // }
+    {
+        // Drop writer on purpose
+        let _writer = pair.master.take_writer().unwrap();
+    }
 
     // Wait for the child to complete
     let child_exit_status = child.wait().unwrap();
