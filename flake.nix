@@ -66,6 +66,7 @@
         pkgs.cargo-flamegraph
         pkgs.cargo-diet
         pkgs.cargo-modules
+        pkgs.cargo-tarpaulin
         pkgs.cargo-nextest
         pkgs.cargo-dist
         pkgs.cargo-public-api
