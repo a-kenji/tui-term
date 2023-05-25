@@ -1,11 +1,13 @@
 use ratatui::buffer::Buffer;
 use ratatui::layout::Rect;
+use ratatui::style::Style;
 use ratatui::widgets::{Block, Widget};
 use vt100::Screen;
 
 pub struct PseudoTerm<'a> {
     screen: &'a Screen,
     block: Option<Block<'a>>,
+    style: Option<Style>,
 }
 
 impl<'a> PseudoTerm<'a> {
@@ -13,7 +15,16 @@ impl<'a> PseudoTerm<'a> {
         PseudoTerm {
             screen,
             block: None,
+            style: None,
         }
+    }
+    pub fn block(mut self, block: Block<'a>) -> Self {
+        self.block = Some(block);
+        self
+    }
+    pub fn style(mut self, style: Style) -> Self {
+        self.style = Some(style);
+        self
     }
 }
 
