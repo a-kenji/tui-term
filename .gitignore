@@ -19,5 +19,7 @@ Cargo.lock
 /target
 /Cargo.lock
 
+tarpaulin-report.html
+
 /result
 /.direnv/*
