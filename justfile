@@ -16,10 +16,14 @@ deny:
     cargo deny check
 cargo-test:
     cargo test
+cargo-diet:
+    nix develop .#lintShell --command cargo diet
+cargo-bloat:
+    nix develop .#lintShell --command cargo bloat
 lint:
     nix flake check
-    typos
-    lychee *.md
+    nix develop .#lintShell --command typos
+    nix develop .#lintShell --command lychee *.md
 run:
     cargo run
 build:

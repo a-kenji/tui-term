@@ -47,43 +47,32 @@
       rustc = rustToolchainTOML;
       cargo = rustToolchainTOML;
 
-      buildInputs = [
-        pkgs.installShellFiles
-        pkgs.sqlite
-        pkgs.openssl
-      ];
-      nativeBuildInputs = [
-        pkgs.pkg-config
-      ];
       devInputs = [
         rustToolchainDevTOML
         pkgs.just
-        pkgs.lychee
-
-        pkgs.cargo-deny
-        pkgs.cargo-bloat
         pkgs.cargo-watch
-        pkgs.cargo-flamegraph
-        pkgs.cargo-diet
-        pkgs.cargo-modules
-        pkgs.cargo-tarpaulin
-        pkgs.cargo-nextest
-        pkgs.cargo-dist
-        pkgs.cargo-public-api
-        pkgs.cargo-unused-features
 
         # snapshot testing
         pkgs.cargo-insta
 
-        pkgs.openssl # for `cargo xtask`
-
-        # database cli
-        pkgs.diesel-cli
-        # tokio tui
-        pkgs.tokio-console
-
+        #alternative linker
+        pkgs.llvmPackages.bintools
+        pkgs.mold
+        pkgs.clang
+      ];
+      lintInputs = [
         pkgs.reuse
+        pkgs.lychee
 
+        pkgs.cargo-deny
+        pkgs.cargo-bloat
+        pkgs.cargo-flamegraph
+        pkgs.cargo-diet
+        pkgs.cargo-modules
+        pkgs.cargo-tarpaulin
+        pkgs.cargo-dist
+        pkgs.cargo-public-api
+        pkgs.cargo-unused-features
         (pkgs.symlinkJoin {
           name = "cargo-udeps-wrapped";
           paths = [pkgs.cargo-udeps];
@@ -115,10 +104,6 @@
             ]}
           '';
         })
-        #alternative linker
-        pkgs.llvmPackages.bintools
-        pkgs.mold
-        pkgs.clang
       ];
       shellInputs = [
         pkgs.shellcheck
@@ -135,16 +120,32 @@
       actionlintInputs = [
         pkgs.actionlint
       ];
-    in rec {
+      buildExample = example:
+        (
+          pkgs.makeRustPlatform {
+            inherit cargo rustc;
+          }
+        )
+        .buildRustPackage {
+          cargoDepsName = example;
+          GIT_DATE = gitDate;
+          GIT_REV = gitRev;
+          doCheck = false;
+          inherit
+            name
+            version
+            src
+            stdenv
+            cargoLock
+            ;
+        };
+    in {
       devShells = {
         default = (pkgs.mkShell.override {inherit stdenv;}) {
-          buildInputs = shellInputs ++ fmtInputs ++ devInputs ++ buildInputs ++ nativeBuildInputs;
+          buildInputs = shellInputs ++ fmtInputs ++ devInputs;
           inherit name;
           RUST_BACKTRACE = true;
           RUSTFLAGS = "-C linker=clang -C link-arg=-fuse-ld=${pkgs.mold}/bin/mold -C target-cpu=native";
-          shellHook = ''
-            export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${pkgs.lib.makeLibraryPath buildInputs}"
-          '';
         };
         editorConfigShell = pkgs.mkShell {
           buildInputs = editorConfigInputs;
@@ -155,30 +156,11 @@
         fmtShell = pkgs.mkShell {
           buildInputs = fmtInputs;
         };
+        lintShell = pkgs.mkShell {
+          buildInputs = lintInputs;
+        };
       };
-      # packages = {
-      #   default =
-      #     (
-      #       pkgs.makeRustPlatform {
-      #         inherit cargo rustc;
-      #       }
-      #     )
-      #     .buildRustPackage {
-      #       cargoDepsName = name;
-      #       GIT_DATE = gitDate;
-      #       GIT_REV = gitRev;
-      #       doCheck = false;
-      #       inherit
-      #         name
-      #         version
-      #         src
-      #         stdenv
-      #         nativeBuildInputs
-      #         buildInputs
-      #         cargoLock
-      #         ;
-      #     };
-      # };
+      packages.simple-ls-example = buildExample "simple-ls";
       # apps.default = {
       #   type = "app";
       #   program = "${packages.default}/bin/${name}";
