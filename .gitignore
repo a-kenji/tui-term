@@ -17,7 +17,7 @@ Cargo.lock
 # Added by cargo
 
 /target
-/Cargo.lock
+# /Cargo.lock
 
 tarpaulin-report.html
 

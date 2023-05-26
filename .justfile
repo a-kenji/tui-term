@@ -8,18 +8,27 @@ alias b := build
 alias rr := run-release
 alias cw := cargo-watch
 
+default:
+    @just --choose
+
 clippy:
     cargo clippy --all-targets --all-features
+
 actionlint:
     nix develop .#actionlintShell --command actionlint
+
 deny:
     cargo deny check
+
 cargo-test:
     cargo test
+
 cargo-diet:
     nix develop .#lintShell --command cargo diet
+
 cargo-bloat:
     nix develop .#lintShell --command cargo bloat
+
 lint:
     nix flake check
     nix develop .#lintShell --command typos
