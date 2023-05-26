@@ -2,6 +2,7 @@
 name = "tui-term"
 version = "0.1.0"
 edition = "2021"
+include = ["src/**/*", "LICENSE", "README.md", "CHANGELOG.md"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 # [workspace]
@@ -12,9 +13,6 @@ edition = "2021"
 [dependencies]
 ratatui = { git = "https://github.com/tui-rs-revival/ratatui"}
 vt100 = "0.15.2"
-
-# if we end up needing to parse ourselves
-termwiz = "0.20.0"
 
 [dev-dependencies]
 criterion = "0.4.0"
@@ -38,3 +36,8 @@ lto = "thin"
 [[bench]]
 name = "benches"
 harness = false
+
+# if we end up needing to parse ourselves
+# from Vec<Action>
+# termwiz = "0.20.0"
+
