@@ -26,7 +26,7 @@ There is a lint target in the `justfile`, that can be run with:
 just lint
 ```
 
-## How to record tests
+## How to record `script` tests
 Make sure that cols and rows are (80, 24)
 ```
 tput lines;tput cols
