@@ -1,8 +1,27 @@
 [package]
 name = "tui-term"
+description = "A pseudoterminal widget for ratatui"
 version = "0.1.0"
+authors = ["Alexander Kenji Berthold <aks.kenji@protonmail.com>" ]
 edition = "2021"
 include = ["src/**/*", "LICENSE", "README.md", "CHANGELOG.md"]
+license = "MIT"
+
+readme = "README.md"
+repository = "https://github.com/a-kenji/tui-term"
+
+rust-version = "1.65.0"
+
+
+keywords = [
+    "tui",
+    "terminal",
+    "ratatui",
+    "tty",
+    "multiplexer",
+]
+
+categories = ["command-line-interface", "command-line-utilities"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 # [workspace]
@@ -17,11 +36,10 @@ vt100 = "0.15.2"
 [dev-dependencies]
 criterion = "0.4.0"
 insta = "1.29.0"
-# iai = "0.1.1"
+once_cell = "1.17.1"
 
 # for examples
 crossterm = "0.26"
-once_cell = "1.17.1"
 portable-pty = "0.8.1"
 pty-process = "0.3.0"
 
@@ -40,4 +58,3 @@ harness = false
 # if we end up needing to parse ourselves
 # from Vec<Action>
 # termwiz = "0.20.0"
-
