@@ -34,7 +34,7 @@ ratatui = { git = "https://github.com/tui-rs-revival/ratatui"}
 vt100 = "0.15.2"
 
 [dev-dependencies]
-criterion = "0.4.0"
+criterion = "0.5.1"
 insta = "1.29.0"
 once_cell = "1.17.1"
 
