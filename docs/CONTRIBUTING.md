@@ -1,6 +1,32 @@
+# Contributing
+Thank you for considering to contribute.
+You are invited to contribute new features, fixes or updates, large or small.
+We are always happy to receive contributions and attempt to process them in a timely manner.
 
+## Issues
+To get an overview of what can be worked on, please take a look at the [issues](https://github.com/a-kenji/tui-term/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc).
 
-# How to 
+## How to get tools 
+For your convenience you only need one tool to contribute to `tui-term`: `nix`.
+You can drop into a development shell with:
+```
+nix develop
+```
+or use `direnv`:
+```
+cat .envrc && direnv allow
+```
+
+If you want to set the environment manually, the rust-toolchain version
+that will be assumed is referenced inside `rust-toolchain.toml`.
+
+## Steps
+There is a lint target in the `justfile`, that can be run with:
+```
+just lint
+```
+
+## How to record tests
 Make sure that cols and rows are (80, 24)
 ```
 tput lines;tput cols
