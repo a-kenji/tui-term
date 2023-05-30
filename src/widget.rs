@@ -30,6 +30,15 @@ impl<'a> PseudoTerm<'a> {
 
 impl Widget for PseudoTerm<'_> {
     fn render(self, area: Rect, buf: &mut Buffer) {
+        let area = match self.block {
+            Some(b) => {
+                let inner_area = b.inner(area);
+                b.render(area, buf);
+                inner_area
+            }
+            None => area,
+        };
+
         crate::state::handle_screen(self.screen, &area, buf);
     }
 }

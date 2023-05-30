@@ -8,10 +8,15 @@ use crossterm::{
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
 use portable_pty::{CommandBuilder, NativePtySystem, PtySize, PtySystem};
-use ratatui::widgets::{Block, Borders};
+use ratatui::{
+    backend::Backend,
+    widgets::{Block, Borders, Paragraph},
+    Frame,
+};
 use ratatui::{backend::CrosstermBackend, layout::Rect, Terminal};
 use std::sync::mpsc::channel;
 use tui_term::widget::PseudoTerm;
+use vt100::Screen;
 
 fn main() -> std::io::Result<()> {
     let mut stdout = io::stdout();
@@ -62,25 +67,7 @@ fn main() -> std::io::Result<()> {
     let output = rx.recv().unwrap();
     parser.process(output.as_bytes());
 
-    // let term_area = Rect::new(0, 0, 80, 24);
-    let pseudo_term = PseudoTerm::new(parser.screen());
-
-    // let block = Block::default().borders(Borders::ALL);
-    // terminal
-    //     .draw(|f| {
-    //         f.render_widget(block, f.size());
-    //     })
-    //     .unwrap();
-    // terminal
-    //     .draw(|f| {
-    //         f.render_widget(ratatui::widgets::Clear, term_area);
-    //     })
-    //     .unwrap();
-    terminal
-        .draw(|f| {
-            f.render_widget(pseudo_term, f.size());
-        })
-        .unwrap();
+    terminal.draw(|f| ui(f, parser.screen()))?;
 
     // restore terminal
     thread::sleep(time::Duration::from_secs(4));
@@ -92,6 +79,30 @@ fn main() -> std::io::Result<()> {
     )?;
     terminal.show_cursor()?;
     println!("Exit status: {child_exit_status}");
-    println!("Area: {:?}", terminal.size());
     Ok(())
+}
+
+fn ui<B: Backend>(f: &mut Frame<B>, screen: &Screen) {
+    let chunks = ratatui::layout::Layout::default()
+        .direction(ratatui::layout::Direction::Vertical)
+        .margin(1)
+        .constraints(
+            [
+                ratatui::layout::Constraint::Percentage(50),
+                ratatui::layout::Constraint::Percentage(50),
+                ratatui::layout::Constraint::Min(2),
+            ]
+            .as_ref(),
+        )
+        .split(f.size());
+    let block = Block::default()
+        .borders(Borders::ALL)
+        .title("[ Running: ls ]");
+    let pseudo_term = PseudoTerm::new(screen).block(block);
+    f.render_widget(pseudo_term, chunks[1]);
+    let block = Block::default().borders(Borders::ALL);
+    f.render_widget(block, f.size());
+    let explanation = "Press q to exit";
+    let explanation = Paragraph::new(explanation);
+    f.render_widget(explanation, chunks[2]);
 }

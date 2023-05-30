@@ -7,6 +7,8 @@ use vt100::Screen;
 pub fn handle_screen(screen: &Screen, area: &Rect, buf: &mut Buffer) {
     let cols = area.width;
     let rows = area.height;
+    let col_start = area.x;
+    let row_start = area.y;
 
     // The [`Screen`] is made out of rows of cells
     for row in 0..rows {
@@ -16,7 +18,7 @@ pub fn handle_screen(screen: &Screen, area: &Rect, buf: &mut Buffer) {
                     let fg = screen_cell.fgcolor();
                     let bg = screen_cell.bgcolor();
 
-                    let cell = buf.get_mut(col, row);
+                    let cell = buf.get_mut(col + col_start, row + row_start);
                     cell.set_symbol(&screen_cell.contents());
                     let fg: Color = fg.into();
                     cell.set_fg(fg.into());
@@ -31,6 +33,7 @@ pub fn handle_screen(screen: &Screen, area: &Rect, buf: &mut Buffer) {
 /// Represents a foreground or back ground color for cells.
 /// Intermediate translation layer between
 /// [`vt100::Screen`] and [`ratatui::style::Color`]
+#[allow(dead_code)]
 enum Color {
     Reset,
     Black,
