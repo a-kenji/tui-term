@@ -59,18 +59,16 @@ fn main() -> std::io::Result<()> {
         let parser = parser.clone();
         std::thread::spawn(move || {
             // Consume the output from the child
+            // Can't read the full buffer, since that would wait for EOF
             let mut buf = [0u8; 8192];
             loop {
                 let size = reader.read(&mut buf).unwrap();
                 if size == 0 {
                     break;
                 }
-
-                // reader.read_to_string(&mut s).unwrap();
                 if !buf.is_empty() {
                     let mut parser = parser.write().unwrap();
                     parser.process(&buf);
-                    // panic!();
                 }
             }
         });
@@ -130,6 +128,7 @@ fn ui<B: Backend>(f: &mut Frame<B>, screen: &Screen) {
             .as_ref(),
         )
         .split(f.size());
+    // TODO: find a good continuuous test cmd
     let title = Line::from("[ Running: ls ]");
     let block = Block::default()
         .borders(Borders::ALL)
@@ -139,10 +138,7 @@ fn ui<B: Backend>(f: &mut Frame<B>, screen: &Screen) {
     f.render_widget(pseudo_term, chunks[1]);
     let block = Block::default().borders(Borders::ALL);
     f.render_widget(block, f.size());
-    let explanation = format!(
-        "Press q to exit, Alternate Screen: {}",
-        screen.alternate_screen()
-    );
+    let explanation = "Press q to exit".to_string();
     let explanation = Paragraph::new(explanation)
         .style(Style::default().add_modifier(Modifier::BOLD | Modifier::REVERSED))
         .alignment(Alignment::Center);
