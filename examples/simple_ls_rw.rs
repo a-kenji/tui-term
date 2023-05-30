@@ -48,9 +48,8 @@ fn main() -> std::io::Result<()> {
     let mut child = pair.slave.spawn_command(cmd).unwrap();
     drop(pair.slave);
 
-    let (tx, rx) = channel();
     let mut reader = pair.master.try_clone_reader().unwrap();
-    let mut parser = Arc::new(RwLock::new(vt100::Parser::new(24, 80, 0)));
+    let parser = Arc::new(RwLock::new(vt100::Parser::new(24, 80, 0)));
 
     {
         let parser = parser.clone();
@@ -62,7 +61,6 @@ fn main() -> std::io::Result<()> {
                 let mut parser = parser.write().unwrap();
                 parser.process(s.as_bytes());
             }
-            tx.send(s).unwrap();
         });
     }
 
