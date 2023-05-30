@@ -1,7 +1,7 @@
 use ratatui::buffer::Buffer;
 use ratatui::layout::Rect;
 use ratatui::style::Style;
-use ratatui::widgets::{Block, Widget};
+use ratatui::widgets::{Block, Clear, Widget};
 use vt100::Screen;
 
 use crate::state;
@@ -36,6 +36,7 @@ impl<'a> PseudoTerm<'a> {
 
 impl Widget for PseudoTerm<'_> {
     fn render(self, area: Rect, buf: &mut Buffer) {
+        Clear.render(area, buf);
         let area = match &self.block {
             Some(b) => {
                 let inner_area = b.inner(area);

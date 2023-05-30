@@ -26,6 +26,7 @@ use ratatui::{backend::CrosstermBackend, Terminal};
 use tui_term::widget::PseudoTerm;
 use vt100::Screen;
 
+#[derive(Debug)]
 struct Size {
     cols: u16,
     rows: u16,
@@ -47,8 +48,8 @@ fn main() -> std::io::Result<()> {
     cmd.cwd(cwd);
 
     let size = Size {
-        cols: terminal.size().unwrap().width,
-        rows: terminal.size().unwrap().height,
+        cols: terminal.size().unwrap().height,
+        rows: terminal.size().unwrap().width,
     };
 
     let pair = pty_system
@@ -111,6 +112,7 @@ fn main() -> std::io::Result<()> {
         DisableMouseCapture
     )?;
     terminal.show_cursor()?;
+    println!("{size:?}");
     Ok(())
 }
 
