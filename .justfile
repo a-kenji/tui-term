@@ -30,9 +30,12 @@ cargo-bloat:
     nix develop .#lintShell --command cargo bloat
 
 lint:
-    nix flake check
+    nix develop .#lintShell --command cargo diet
+    nix develop .#lintShell --command cargo bloat
+    nix develop .#lintShell --command cargo deny check licences
     nix develop .#lintShell --command typos
     nix develop .#lintShell --command lychee *.md
+    nix flake check
 run:
     cargo run
 build:
