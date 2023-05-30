@@ -1,8 +1,7 @@
-use core::time;
-use std::{io, thread};
+use std::io;
 
 use crossterm::{
-    event::{DisableMouseCapture, EnableMouseCapture},
+    event::{self, DisableMouseCapture, EnableMouseCapture, Event, KeyCode, KeyEventKind},
     execute,
     style::ResetColor,
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
@@ -32,7 +31,7 @@ fn main() -> std::io::Result<()> {
 
     let pty_system = NativePtySystem::default();
     let cwd = std::env::current_dir().unwrap();
-    let mut cmd = CommandBuilder::new("lsd");
+    let mut cmd = CommandBuilder::new("ls");
     cmd.cwd(cwd);
 
     let pair = pty_system
@@ -70,10 +69,9 @@ fn main() -> std::io::Result<()> {
     let output = rx.recv().unwrap();
     parser.process(output.as_bytes());
 
-    terminal.draw(|f| ui(f, parser.screen()))?;
+    run(&mut terminal, parser.screen())?;
 
     // restore terminal
-    thread::sleep(time::Duration::from_secs(4));
     disable_raw_mode()?;
     execute!(
         terminal.backend_mut(),
@@ -83,6 +81,20 @@ fn main() -> std::io::Result<()> {
     terminal.show_cursor()?;
     println!("Exit status: {child_exit_status}");
     Ok(())
+}
+
+fn run<B: Backend>(terminal: &mut Terminal<B>, screen: &Screen) -> io::Result<()> {
+    loop {
+        terminal.draw(|f| ui(f, screen))?;
+
+        if let Event::Key(key) = event::read()? {
+            if key.kind == KeyEventKind::Press {
+                if let KeyCode::Char('q') = key.code {
+                    return Ok(());
+                }
+            }
+        }
+    }
 }
 
 fn ui<B: Backend>(f: &mut Frame<B>, screen: &Screen) {
