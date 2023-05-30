@@ -15,7 +15,6 @@ use crossterm::{
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
 use portable_pty::{CommandBuilder, NativePtySystem, PtySize, PtySystem};
-use ratatui::text::Line;
 use ratatui::{
     backend::Backend,
     layout::Alignment,
@@ -26,6 +25,11 @@ use ratatui::{
 use ratatui::{backend::CrosstermBackend, Terminal};
 use tui_term::widget::PseudoTerm;
 use vt100::Screen;
+
+struct Size {
+    cols: u16,
+    rows: u16,
+}
 
 fn main() -> std::io::Result<()> {
     let mut stdout = io::stdout();
@@ -42,10 +46,15 @@ fn main() -> std::io::Result<()> {
     let mut cmd = CommandBuilder::new(shell);
     cmd.cwd(cwd);
 
+    let size = Size {
+        cols: terminal.size().unwrap().width,
+        rows: terminal.size().unwrap().height,
+    };
+
     let pair = pty_system
         .openpty(PtySize {
-            rows: 24,
-            cols: 80,
+            rows: size.rows,
+            cols: size.cols,
             pixel_width: 0,
             pixel_height: 0,
         })
@@ -174,26 +183,20 @@ fn ui<B: Backend>(f: &mut Frame<B>, screen: &Screen) {
         .margin(1)
         .constraints(
             [
-                ratatui::layout::Constraint::Percentage(0),
                 ratatui::layout::Constraint::Percentage(100),
                 ratatui::layout::Constraint::Min(1),
             ]
             .as_ref(),
         )
         .split(f.size());
-    // TODO: find a good continuuous test cmd
-    let title = Line::from("[ Running: ls ]");
     let block = Block::default()
         .borders(Borders::ALL)
-        .title(title)
         .style(Style::default().add_modifier(Modifier::BOLD));
     let pseudo_term = PseudoTerm::new(screen).block(block);
-    f.render_widget(pseudo_term, chunks[1]);
-    let block = Block::default().borders(Borders::ALL);
-    f.render_widget(block, f.size());
+    f.render_widget(pseudo_term, chunks[0]);
     let explanation = "Press q to exit".to_string();
     let explanation = Paragraph::new(explanation)
         .style(Style::default().add_modifier(Modifier::BOLD | Modifier::REVERSED))
         .alignment(Alignment::Center);
-    f.render_widget(explanation, chunks[2]);
+    f.render_widget(explanation, chunks[1]);
 }
