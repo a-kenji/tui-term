@@ -10,10 +10,13 @@ use crossterm::{
 use portable_pty::{CommandBuilder, NativePtySystem, PtySize, PtySystem};
 use ratatui::{
     backend::Backend,
+    layout::Alignment,
+    style::{Modifier, Style},
+    text::{Line, Text},
     widgets::{Block, Borders, Paragraph},
     Frame,
 };
-use ratatui::{backend::CrosstermBackend, layout::Rect, Terminal};
+use ratatui::{backend::CrosstermBackend, Terminal};
 use std::sync::mpsc::channel;
 use tui_term::widget::PseudoTerm;
 use vt100::Screen;
@@ -90,19 +93,23 @@ fn ui<B: Backend>(f: &mut Frame<B>, screen: &Screen) {
             [
                 ratatui::layout::Constraint::Percentage(50),
                 ratatui::layout::Constraint::Percentage(50),
-                ratatui::layout::Constraint::Min(2),
+                ratatui::layout::Constraint::Min(1),
             ]
             .as_ref(),
         )
         .split(f.size());
+    let title = Line::from("[ Running: ls ]");
     let block = Block::default()
         .borders(Borders::ALL)
-        .title("[ Running: ls ]");
+        .title(title)
+        .style(Style::default().add_modifier(Modifier::BOLD));
     let pseudo_term = PseudoTerm::new(screen).block(block);
     f.render_widget(pseudo_term, chunks[1]);
     let block = Block::default().borders(Borders::ALL);
     f.render_widget(block, f.size());
     let explanation = "Press q to exit";
-    let explanation = Paragraph::new(explanation);
+    let explanation = Paragraph::new(explanation)
+        .style(Style::default().add_modifier(Modifier::BOLD | Modifier::REVERSED))
+        .alignment(Alignment::Center);
     f.render_widget(explanation, chunks[2]);
 }
