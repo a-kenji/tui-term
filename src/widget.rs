@@ -44,7 +44,6 @@ impl Widget for PseudoTerm<'_> {
             }
             None => area,
         };
-
         state::handle(&self, &area, buf);
     }
 }
@@ -52,6 +51,7 @@ impl Widget for PseudoTerm<'_> {
 #[cfg(test)]
 mod tests {
     use ratatui::backend::TestBackend;
+    use ratatui::widgets::Borders;
     use ratatui::Terminal;
 
     use super::*;
@@ -92,6 +92,24 @@ mod tests {
         let view = snapshot_typescript(stream);
         insta::assert_snapshot!(view);
     }
+    #[test]
+    fn simple_ls_with_block() {
+        let stream = include_bytes!("../test/typescript/simple_ls.typescript");
+        let backend = TestBackend::new(100, 24);
+        let mut terminal = Terminal::new(backend).unwrap();
+        let mut parser = vt100::Parser::new(24, 80, 0);
+        parser.process(stream);
+        let block = Block::default().borders(Borders::ALL).title("ls");
+        let pseudo_term = PseudoTerm::new(parser.screen()).block(block);
+        terminal
+            .draw(|f| {
+                f.render_widget(pseudo_term, f.size());
+            })
+            .unwrap();
+        let view = terminal.backend().to_string();
+        insta::assert_snapshot!(view);
+    }
+
     #[test]
     fn vttest_02_01() {
         let stream = include_bytes!("../test/typescript/vttest_02_01.typescript");

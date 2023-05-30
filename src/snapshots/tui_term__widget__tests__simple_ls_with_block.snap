@@ -1,0 +1,29 @@
+---
+source: src/widget.rs
+expression: view
+---
+"┌ls────────────────────────────────────────────────────────────────────────────────────────────────┐"
+"│ Cargo.lock      docs         LICENSE               test                                      │"
+"│ Cargo.toml      examples     README.md             typescript                                │"
+"│ CHANGELOG.md    flake.lock   rust-toolchain.toml   wezterm                                   │"
+"│ cliff.toml      flake.nix    src                                                              │"
+"│ committed.toml   justfile     target                                                          │"
+"│tui-term on  main [!?⇡] via ❄️ pure (tui-term-env)                                                │"
+"│❯                                                                                                 │"
+"│                                                                                                  │"
+"│                                                                                                  │"
+"│                                                                                                  │"
+"│                                                                                                  │"
+"│                                                                                                  │"
+"│                                                                                                  │"
+"│                                                                                                  │"
+"│                                                                                                  │"
+"│                                                                                                  │"
+"│                                                                                                  │"
+"│                                                                                                  │"
+"│                                                                                                  │"
+"│                                                                                                  │"
+"│                                                                                                  │"
+"│                                                                                                  │"
+"└──────────────────────────────────────────────────────────────────────────────────────────────────┘"
+
