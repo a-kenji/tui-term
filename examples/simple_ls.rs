@@ -8,11 +8,11 @@ use crossterm::{
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
 use portable_pty::{CommandBuilder, NativePtySystem, PtySize, PtySystem};
+use ratatui::text::Line;
 use ratatui::{
     backend::Backend,
     layout::Alignment,
     style::{Modifier, Style},
-    text::{Line, Text},
     widgets::{Block, Borders, Paragraph},
     Frame,
 };
