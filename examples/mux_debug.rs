@@ -137,7 +137,7 @@ fn run<B: Backend>(
                                 sender.send(Bytes::from(input.to_string())).unwrap()
                             }
                             KeyCode::Backspace => {
-                                sender.send(Bytes::from(127.to_string())).unwrap();
+                                sender.send(Bytes::from_static(b"127")).unwrap();
                             }
                             KeyCode::Enter => sender.send(Bytes::from('\n'.to_string())).unwrap(),
                             KeyCode::Left => todo!(),
