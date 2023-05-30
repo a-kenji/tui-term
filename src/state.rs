@@ -1,14 +1,16 @@
 use ratatui::buffer::Buffer;
 use ratatui::layout::Rect;
-use vt100::Screen;
+
+use crate::widget::PseudoTerm;
 
 /// Draw the [`Screen`] to the [`Buffer`],
 /// area is the designated area that the consumer provides
-pub fn handle_screen(screen: &Screen, area: &Rect, buf: &mut Buffer) {
+pub fn handle(term: &PseudoTerm, area: &Rect, buf: &mut Buffer) {
     let cols = area.width;
     let rows = area.height;
     let col_start = area.x;
     let row_start = area.y;
+    let screen = term.screen();
 
     // The [`Screen`] is made out of rows of cells
     for row in 0..rows {
@@ -30,7 +32,7 @@ pub fn handle_screen(screen: &Screen, area: &Rect, buf: &mut Buffer) {
     }
 }
 
-/// Represents a foreground or back ground color for cells.
+/// Represents a foreground or background color for cells.
 /// Intermediate translation layer between
 /// [`vt100::Screen`] and [`ratatui::style::Color`]
 #[allow(dead_code)]

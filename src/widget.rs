@@ -4,6 +4,8 @@ use ratatui::style::Style;
 use ratatui::widgets::{Block, Widget};
 use vt100::Screen;
 
+use crate::state;
+
 pub struct PseudoTerm<'a> {
     screen: &'a Screen,
     block: Option<Block<'a>>,
@@ -26,6 +28,10 @@ impl<'a> PseudoTerm<'a> {
         self.style = Some(style);
         self
     }
+
+    pub fn screen(&self) -> &Screen {
+        self.screen
+    }
 }
 
 impl Widget for PseudoTerm<'_> {
@@ -39,7 +45,7 @@ impl Widget for PseudoTerm<'_> {
             None => area,
         };
 
-        crate::state::handle_screen(self.screen, &area, buf);
+        state::handle(&self, &area, buf);
     }
 }
 
