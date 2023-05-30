@@ -48,8 +48,8 @@ fn main() -> std::io::Result<()> {
     cmd.cwd(cwd);
 
     let size = Size {
-        cols: terminal.size().unwrap().height,
-        rows: terminal.size().unwrap().width,
+        cols: terminal.size().unwrap().width,
+        rows: terminal.size().unwrap().height,
     };
 
     let pair = pty_system
