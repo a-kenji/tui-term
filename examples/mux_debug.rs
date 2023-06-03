@@ -1,15 +1,12 @@
 use std::{
     io,
-    sync::{
-        mpsc::{channel, Sender},
-        Arc, RwLock,
-    },
+    sync::{mpsc::Sender, Arc, RwLock},
     time::Duration,
 };
 
 use bytes::Bytes;
 use crossterm::{
-    event::{self, DisableMouseCapture, EnableMouseCapture, Event, KeyCode, KeyEventKind},
+    event::{self, DisableMouseCapture, Event, KeyCode, KeyEventKind, KeyModifiers},
     execute,
     style::ResetColor,
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
@@ -37,7 +34,7 @@ fn main() -> std::io::Result<()> {
     execute!(stdout, ResetColor)?;
     enable_raw_mode()?;
     let mut stdout = io::stdout();
-    execute!(stdout, EnterAlternateScreen, EnableMouseCapture)?;
+    execute!(stdout, EnterAlternateScreen)?;
     let backend = CrosstermBackend::new(stdout);
     let mut terminal = Terminal::new(backend)?;
 
@@ -94,12 +91,13 @@ fn main() -> std::io::Result<()> {
     // Drop writer on purpose
     std::thread::spawn(move || {
         let mut writer = pair.master.take_writer().unwrap();
-        loop {
-            let bytes = rx.recv().unwrap();
-            writer.write_all(&bytes).unwrap();
+        while let Ok(bytes) = rx.recv() {
+            if writer.write_all(&bytes).is_err() {
+                // Handle write error
+                break;
+            }
         }
-        // TODO: drop explicitly
-        // drop(pair.master);
+        drop(pair.master);
     });
 
     run(&mut terminal, parser, tx)?;
@@ -133,14 +131,20 @@ fn run<B: Backend>(
                     if key.kind == KeyEventKind::Press {
                         match key.code {
                             KeyCode::Char('q') => return Ok(()),
+                            KeyCode::Char('l') if key.modifiers.contains(KeyModifiers::CONTROL) => {
+                                // Trigger clear function here
+                                println!("Ctrl+L pressed - Clear function triggered");
+                            }
                             KeyCode::Char(input) => {
                                 sender.send(Bytes::from(input.to_string())).unwrap()
                             }
                             KeyCode::Backspace => {
-                                sender.send(Bytes::from_static(b"127")).unwrap();
+                                sender.send(Bytes::from_static(&[8])).unwrap();
                             }
-                            KeyCode::Enter => sender.send(Bytes::from('\n'.to_string())).unwrap(),
-                            KeyCode::Left => todo!(),
+                            KeyCode::Enter => sender.send(Bytes::from_static(b"\n")).unwrap(),
+                            KeyCode::Left => {
+                                sender.send(Bytes::from("Hello, world!")).unwrap();
+                            }
                             KeyCode::Right => todo!(),
                             KeyCode::Up => todo!(),
                             KeyCode::Down => todo!(),

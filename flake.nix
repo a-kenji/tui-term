@@ -2,6 +2,7 @@
   description = "tui-term - a pseudoterminal widget for ratatui";
 
   inputs.nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+  inputs.nixpkgs-outdated.url = "github:nixos/nixpkgs/nixos-22.11";
 
   inputs.rust-overlay = {
     url = "github:oxalica/rust-overlay";
@@ -12,12 +13,14 @@
   outputs = {
     self,
     nixpkgs,
+    nixpkgs-outdated,
     flake-utils,
     rust-overlay,
   }:
     flake-utils.lib.eachDefaultSystem
     (system: let
       pkgs = nixpkgs.legacyPackages.${system};
+      outdated-pkgs = nixpkgs-outdated.legacyPackages.${system};
       stdenv =
         if pkgs.stdenv.isLinux
         then pkgs.stdenvAdapters.useMoldLinker pkgs.stdenv
@@ -54,6 +57,7 @@
 
         # snapshot testing
         pkgs.cargo-insta
+        outdated-pkgs.valgrind
 
         #alternative linker
         pkgs.llvmPackages.bintools

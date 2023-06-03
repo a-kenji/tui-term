@@ -31,7 +31,8 @@ categories = ["command-line-interface", "command-line-utilities"]
 
 [dependencies]
 ratatui = { git = "https://github.com/tui-rs-revival/ratatui"}
-vt100 = "0.15.2"
+# vt100 = "0.15.2"
+vt100 = {version = "0.1.1", package = "mprocs-vt100"}
 
 [dev-dependencies]
 criterion = "0.5.1"
@@ -43,6 +44,7 @@ bytes = "1.4.0"
 crossterm = "0.26"
 portable-pty = "0.8.1"
 pty-process = "0.3.0"
+iai = "0.1.1"
 
 [profile.dev.package.insta]
 opt-level = 3

@@ -230,4 +230,15 @@ fn criterion_benchmark(c: &mut Criterion) {
 }
 
 criterion_group!(benches, criterion_benchmark);
-criterion_main!(benches);
+// criterion_main!(benches);
+
+iai::main!(
+    simple_ls,
+    vttest_02_01,
+    vttest_02_02,
+    vttest_02_03,
+    vttest_02_04,
+    vttest_02_05,
+    vttest_02_06,
+    vttest_02_07
+);
