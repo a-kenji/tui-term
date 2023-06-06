@@ -1,9 +1,6 @@
 use std::{
     io,
-    sync::{
-        mpsc::{channel, Sender},
-        Arc, RwLock,
-    },
+    sync::{mpsc::Sender, Arc, RwLock},
     time::Duration,
 };
 
