@@ -30,6 +30,12 @@ pub fn handle(term: &PseudoTerm, area: &Rect, buf: &mut Buffer) {
             }
         }
     }
+
+    if !screen.hide_cursor() {
+        let (c_col, c_row) = screen.cursor_position();
+        let c_cell = buf.get_mut(c_col + col_start, c_row + row_start);
+        c_cell.set_symbol("█");
+    }
 }
 
 /// Represents a foreground or background color for cells.

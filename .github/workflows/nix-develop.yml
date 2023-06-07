@@ -1,0 +1,49 @@
+# Workflow, consisting of jobs that only need to be run,
+# once `*nix`, or `flake.lock`, or `rust-toolchain.toml` files change
+name: "nix develop"
+
+on:
+  workflow_dispatch: # allows manual triggering
+  pull_request:
+    branches: [ main ]
+    paths:
+      - '**.nix'
+      - 'flake.lock'
+      - 'flake.nix'
+      - 'rust-toolchain.toml'
+  push:
+    branches: [ main ]
+    paths:
+      - '**.nix'
+      - 'flake.lock'
+      - 'flake.nix'
+      - 'rust-toolchain.toml'
+
+jobs:
+  develop:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0 # Nix Flakes doesn't work on shallow clones
+    - uses: cachix/install-nix-action@v21
+      with:
+        extra_nix_config: |
+          access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+    - name: 'nix develop --command "echo hello"'
+      run: nix develop
+    - name: "ldd version"
+      run: nix develop --command ldd --version
+
+  treefmt:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: cachix/install-nix-action@v21
+      with:
+        extra_nix_config: |
+          access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+    - name: "treefmt"
+      run: nix develop .#fmtShell --command treefmt --fail-on-change --config-file ./.treefmt.toml --tree-root ./.

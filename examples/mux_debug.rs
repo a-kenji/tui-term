@@ -130,9 +130,9 @@ fn run<B: Backend>(
                     if key.kind == KeyEventKind::Press {
                         match key.code {
                             KeyCode::Char('q') => return Ok(()),
-                            KeyCode::Char(input) => {
-                                sender.send(Bytes::from(input.to_string())).unwrap()
-                            }
+                            KeyCode::Char(input) => sender
+                                .send(Bytes::from(input.to_string().into_bytes()))
+                                .unwrap(),
                             KeyCode::Backspace => {
                                 sender.send(Bytes::from_static(b"127")).unwrap();
                             }
@@ -177,6 +177,7 @@ fn run<B: Backend>(
 }
 
 fn ui<B: Backend>(f: &mut Frame<B>, screen: &Screen) {
+    f.render_widget(ratatui::widgets::Clear, f.size());
     let chunks = ratatui::layout::Layout::default()
         .direction(ratatui::layout::Direction::Vertical)
         .margin(1)

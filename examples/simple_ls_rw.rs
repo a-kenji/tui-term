@@ -19,7 +19,6 @@ use ratatui::{
     Frame,
 };
 use ratatui::{backend::CrosstermBackend, Terminal};
-use std::sync::mpsc::channel;
 use tui_term::widget::PseudoTerm;
 use vt100::Screen;
 
