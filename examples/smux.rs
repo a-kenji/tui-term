@@ -253,8 +253,12 @@ async fn close_active_pane(
 ) -> io::Result<()> {
     if let Some(active_index) = active_pane {
         let _pane = panes.remove(*active_index);
-        // pane.master.shutdown()?;
-        *active_pane = None;
+        // TODO: shutdown pane correctly
+        if !panes.is_empty() {
+            let remaining_panes = panes.len();
+            let new_active_index = *active_index % remaining_panes;
+            *active_pane = Some(new_active_index);
+        }
     }
     Ok(())
 }
