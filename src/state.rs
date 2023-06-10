@@ -1,5 +1,6 @@
 use ratatui::buffer::Buffer;
 use ratatui::layout::Rect;
+use ratatui::style::{Modifier, Style};
 
 use crate::widget::PseudoTerm;
 
@@ -26,6 +27,23 @@ pub fn handle(term: &PseudoTerm, area: &Rect, buf: &mut Buffer) {
                     cell.set_fg(fg.into());
                     let bg: Color = bg.into();
                     cell.set_bg(bg.into());
+                    let mut style = Style::default();
+                    if screen_cell.bold() {
+                        style = style.add_modifier(Modifier::BOLD);
+                    }
+                    if screen_cell.italic() {
+                        style = style.add_modifier(Modifier::ITALIC);
+                    }
+                    if screen_cell.italic() {
+                        style = style.add_modifier(Modifier::ITALIC);
+                    }
+                    if screen_cell.underline() {
+                        style = style.add_modifier(Modifier::UNDERLINED);
+                    }
+                    if screen_cell.inverse() {
+                        style = style.add_modifier(Modifier::REVERSED);
+                    }
+                    cell.set_style(style);
                 }
             }
         }
