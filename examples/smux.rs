@@ -206,6 +206,7 @@ impl PtyPane {
 async fn handle_pane_key_event(pane: &mut PtyPane, key: &KeyEvent) -> bool {
     let input_bytes = match key.code {
         KeyCode::Char(ch) => {
+            let mut send = vec![ch as u8];
             if key.modifiers == KeyModifiers::CONTROL {
                 match ch {
                     'n' => {
@@ -216,10 +217,14 @@ async fn handle_pane_key_event(pane: &mut PtyPane, key: &KeyEvent) -> bool {
                         // Close the pane
                         return false;
                     }
+                    'l' => {
+                        send = vec![27, 91, 50, 74];
+                    }
+
                     _ => {}
                 }
             }
-            vec![ch as u8]
+            send
         }
         KeyCode::Enter => vec![b'\n'],
         KeyCode::Backspace => vec![8],
@@ -227,6 +232,15 @@ async fn handle_pane_key_event(pane: &mut PtyPane, key: &KeyEvent) -> bool {
         KeyCode::Right => vec![27, 91, 67],
         KeyCode::Up => vec![27, 91, 65],
         KeyCode::Down => vec![27, 91, 66],
+        KeyCode::Tab => vec![9],
+        KeyCode::Home => vec![27, 91, 72],
+        KeyCode::End => vec![27, 91, 70],
+        KeyCode::PageUp => vec![27, 91, 53, 126],
+        KeyCode::PageDown => vec![27, 91, 54, 126],
+        KeyCode::BackTab => vec![27, 91, 90],
+        KeyCode::Delete => vec![27, 91, 51, 126],
+        KeyCode::Insert => vec![27, 91, 50, 126],
+        KeyCode::Esc => vec![27],
         _ => return true,
     };
 
