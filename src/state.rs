@@ -11,17 +11,27 @@ pub fn handle(term: &PseudoTerm, area: &Rect, buf: &mut Buffer) {
     let rows = area.height;
     let col_start = area.x;
     let row_start = area.y;
+    let area_cols = area.width + area.x;
+    let area_rows = area.height + area.y;
     let screen = term.screen();
 
     // The [`Screen`] is made out of rows of cells
     for row in 0..rows {
         for col in 0..cols {
+            let buf_col = col + col_start;
+            let buf_row = row + row_start;
+
+            if buf_row > area_rows || buf_col > area_cols {
+                // Skip writing outside the area
+                continue;
+            }
+
             if let Some(screen_cell) = screen.cell(row, col) {
                 if screen_cell.has_contents() {
                     let fg = screen_cell.fgcolor();
                     let bg = screen_cell.bgcolor();
 
-                    let cell = buf.get_mut(col + col_start, row + row_start);
+                    let cell = buf.get_mut(buf_col, buf_row);
                     cell.set_symbol(&screen_cell.contents());
                     let fg: Color = fg.into();
                     cell.set_fg(fg.into());
@@ -51,12 +61,14 @@ pub fn handle(term: &PseudoTerm, area: &Rect, buf: &mut Buffer) {
 
     if !screen.hide_cursor() {
         let (c_row, c_col) = screen.cursor_position();
-        let c_cell = buf.get_mut(c_col + col_start, c_row + row_start);
-        if screen.cell(c_row, c_col).is_some() {
-            let bg: Color = Color::Gray;
-            c_cell.set_bg(bg.into());
-        } else {
-            c_cell.set_symbol("█");
+        if c_row < area_rows && c_col < area_cols {
+            let c_cell = buf.get_mut(c_col + col_start, c_row + row_start);
+            if screen.cell(c_row, c_col).is_some() {
+                let bg: Color = Color::Gray;
+                c_cell.set_bg(bg.into());
+            } else {
+                c_cell.set_symbol("█");
+            }
         }
     }
 }

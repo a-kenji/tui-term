@@ -157,6 +157,24 @@ mod tests {
         let view = terminal.backend().to_string();
         insta::assert_snapshot!(view);
     }
+    #[test]
+    fn boundary_rows_overshot_no_panic() {
+        let stream = include_bytes!("../test/typescript/simple_ls.typescript");
+        // Make the backend on purpose much smaller
+        let backend = TestBackend::new(80, 4);
+        let mut terminal = Terminal::new(backend).unwrap();
+        let mut parser = vt100::Parser::new(24, 80, 0);
+        parser.process(stream);
+        let pseudo_term = PseudoTerm::new(parser.screen());
+        terminal
+            .draw(|f| {
+                f.render_widget(pseudo_term, f.size());
+            })
+            .unwrap();
+        terminal.backend().to_string();
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
 
     #[test]
     fn simple_ls() {
