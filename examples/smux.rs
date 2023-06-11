@@ -1,6 +1,8 @@
 use std::{
+    fmt, fs,
     io::{self, BufWriter, Read, Write},
-    sync::{Arc, RwLock},
+    path::PathBuf,
+    sync::{Arc, Mutex, RwLock},
     time::Duration,
 };
 
@@ -21,6 +23,8 @@ use tokio::{
     sync::mpsc::{channel, Sender},
     task::spawn_blocking,
 };
+use tracing::Level;
+use tracing_subscriber::FmtSubscriber;
 use tui_term::widget::PseudoTerm;
 
 #[derive(Debug, Clone)]
@@ -31,6 +35,7 @@ struct Size {
 
 #[tokio::main]
 async fn main() -> io::Result<()> {
+    init_panic_hook();
     let (mut terminal, mut size) = setup_terminal().unwrap();
 
     let cwd = std::env::current_dir().unwrap();
@@ -42,7 +47,9 @@ async fn main() -> io::Result<()> {
     let mut active_pane: Option<usize> = None;
 
     // Add a default pane
-    open_new_pane(&mut panes, &mut active_pane, &cmd, size.clone())?;
+    let mut pane_size = size.clone();
+    pane_size.rows -= 2;
+    open_new_pane(&mut panes, &mut active_pane, &cmd, pane_size)?;
 
     loop {
         terminal.draw(|f| {
@@ -92,6 +99,7 @@ async fn main() -> io::Result<()> {
         })?;
 
         if event::poll(Duration::from_millis(10))? {
+            tracing::info!("Terminal Size: {:?}", terminal.size());
             match event::read()? {
                 Event::Key(key) => match key.code {
                     KeyCode::Char('q') if key.modifiers.contains(KeyModifiers::CONTROL) => {
@@ -99,17 +107,21 @@ async fn main() -> io::Result<()> {
                         return Ok(());
                     }
                     KeyCode::Char('n') if key.modifiers.contains(KeyModifiers::CONTROL) => {
-                        open_new_pane(&mut panes, &mut active_pane, &cmd, size.clone())?;
+                        let amount = panes.len() + 1;
+                        let mut pane_size = size.clone();
+                        pane_size.rows /= amount as u16;
+                        tracing::info!("Opened new pane with size: {size:?}");
+                        open_new_pane(&mut panes, &mut active_pane, &cmd, pane_size)?;
                     }
                     KeyCode::Char('x') if key.modifiers.contains(KeyModifiers::CONTROL) => {
                         close_active_pane(&mut panes, &mut active_pane).await?;
                     }
-                    KeyCode::Char('j') if key.modifiers.contains(KeyModifiers::CONTROL) => {
+                    KeyCode::Char('k') if key.modifiers.contains(KeyModifiers::CONTROL) => {
                         if let Some(pane) = active_pane {
                             active_pane = Some(pane.saturating_sub(1));
                         }
                     }
-                    KeyCode::Char('k') if key.modifiers.contains(KeyModifiers::CONTROL) => {
+                    KeyCode::Char('j') if key.modifiers.contains(KeyModifiers::CONTROL) => {
                         if let Some(pane) = active_pane {
                             if pane < panes.len() - 1 {
                                 active_pane = Some(pane.saturating_add(1));
@@ -125,6 +137,7 @@ async fn main() -> io::Result<()> {
                     }
                 },
                 Event::Resize(rows, cols) => {
+                    tracing::info!("Resized to: rows: {} cols: {}", rows, cols);
                     for pane in panes.iter_mut() {
                         pane.parser.write().unwrap().set_size(rows, cols);
                     }
@@ -147,13 +160,17 @@ impl PtyPane {
         let pty_system = native_pty_system();
         let pty_pair = pty_system
             .openpty(PtySize {
-                rows: size.rows,
-                cols: size.cols,
+                rows: size.rows - 4,
+                cols: size.cols - 4,
                 pixel_width: 0,
                 pixel_height: 0,
             })
             .unwrap();
-        let parser = Arc::new(RwLock::new(vt100::Parser::new(size.rows, size.cols, 0)));
+        let parser = Arc::new(RwLock::new(vt100::Parser::new(
+            size.rows - 4,
+            size.cols - 4,
+            0,
+        )));
 
         spawn_blocking(move || {
             let mut child = pty_pair.slave.spawn_command(cmd).unwrap();
@@ -299,4 +316,54 @@ fn cleanup_terminal(
     terminal.show_cursor()?;
     terminal.clear()?;
     Ok(())
+}
+
+fn init_panic_hook() {
+    let log_file = Some(PathBuf::from("/tmp/tui-term/smux.log"));
+    let log_file = match log_file {
+        Some(path) => {
+            if let Some(parent) = path.parent() {
+                let _ = fs::create_dir_all(parent);
+            }
+            Some(fs::File::create(path).unwrap())
+        }
+        None => None,
+    };
+
+    let subscriber = FmtSubscriber::builder()
+        // all spans/events with a level higher than TRACE (e.g, debug, info, warn, etc.)
+        // will be written to output path.
+        .with_max_level(Level::TRACE)
+        .with_writer(Mutex::new(log_file.unwrap()))
+        .with_thread_ids(true)
+        .with_ansi(true)
+        .with_line_number(true);
+
+    let subscriber = subscriber.finish();
+    tracing::subscriber::set_global_default(subscriber).expect("setting default subscriber failed");
+
+    // Set the panic hook to log panic information before panicking
+    std::panic::set_hook(Box::new(|panic| {
+        let original_hook = std::panic::take_hook();
+        tracing::error!("Panic Error: {}", panic);
+        crossterm::terminal::disable_raw_mode().expect("Could not disable raw mode");
+        crossterm::execute!(std::io::stdout(), crossterm::terminal::LeaveAlternateScreen)
+            .expect("Could not leave the alternate screen");
+
+        original_hook(panic);
+    }));
+    tracing::debug!("Set panic hook")
+}
+
+impl fmt::Debug for PtyPane {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let parser = self.parser.read().unwrap();
+        let screen = parser.screen();
+
+        f.debug_struct("PtyPane")
+            .field("screen", screen)
+            .field("title:", &screen.title())
+            .field("icon_name:", &screen.icon_name())
+            .finish()
+    }
 }

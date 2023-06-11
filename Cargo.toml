@@ -46,6 +46,8 @@ crossterm = "0.26"
 portable-pty = "0.8.1"
 pty-process = "0.3.0"
 tokio = { version = "1", features = ["full"] }
+tracing = "0.1.37"
+tracing-subscriber = "0.3.17"
 
 [profile.dev.package.insta]
 opt-level = 3
