@@ -1,6 +1,6 @@
 use ratatui::buffer::Buffer;
 use ratatui::layout::Rect;
-use ratatui::style::Style;
+use ratatui::style::{Color, Modifier, Style};
 use ratatui::widgets::{Block, Clear, Widget};
 use vt100::Screen;
 
@@ -33,6 +33,83 @@ pub struct PseudoTerm<'a> {
     screen: &'a Screen,
     pub(crate) block: Option<Block<'a>>,
     style: Option<Style>,
+    pub(crate) cursor: Cursor,
+}
+
+pub struct Cursor {
+    pub(crate) symbol: String,
+    pub(crate) style: Style,
+    pub(crate) overlay_style: Style,
+}
+
+impl Cursor {
+    /// Sets the symbol for the cursor.
+    ///
+    /// # Arguments
+    ///
+    /// * `symbol`: The symbol to set as the cursor.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use tui_term::widget::Cursor;
+    /// use ratatui::style::Style;
+    ///
+    /// let cursor = Cursor::default().symbol("|");
+    /// ```
+    pub fn symbol(mut self, symbol: &str) -> Self {
+        self.symbol = symbol.into();
+        self
+    }
+    /// Sets the style for the cursor.
+    ///
+    /// # Arguments
+    ///
+    /// * `style`: The `Style` to set for the cursor.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use tui_term::widget::Cursor;
+    /// use ratatui::style::Style;
+    ///
+    /// let cursor = Cursor::default().style(Style::default());
+    /// ```
+    pub fn style(mut self, style: Style) -> Self {
+        self.style = style;
+        self
+    }
+
+    /// Sets the overlay style for the cursor.
+    ///
+    /// The overlay style is used when the cursor overlaps with existing content on the screen.
+    ///
+    /// # Arguments
+    ///
+    /// * `overlay_style`: The `Style` to set as the overlay style for the cursor.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use tui_term::widget::Cursor;
+    /// use ratatui::style::Style;
+    ///
+    /// let cursor = Cursor::default().overlay_style(Style::default());
+    /// ```
+    pub fn overlay_style(mut self, overlay_style: Style) -> Self {
+        self.overlay_style = overlay_style;
+        self
+    }
+}
+
+impl Default for Cursor {
+    fn default() -> Self {
+        Self {
+            symbol: "█".into(),
+            style: Style::default().fg(Color::Gray),
+            overlay_style: Style::default().add_modifier(Modifier::REVERSED),
+        }
+    }
 }
 
 impl<'a> PseudoTerm<'a> {
@@ -56,6 +133,7 @@ impl<'a> PseudoTerm<'a> {
             screen,
             block: None,
             style: None,
+            cursor: Cursor::default(),
         }
     }
     /// Sets the block for the `PseudoTerm`.
@@ -77,6 +155,30 @@ impl<'a> PseudoTerm<'a> {
     /// ```
     pub fn block(mut self, block: Block<'a>) -> Self {
         self.block = Some(block);
+        self
+    }
+
+    /// Sets the cursor configuration for the `PseudoTerm`.
+    ///
+    /// The `cursor` method allows configuring the appearance of the cursor within the `PseudoTerm` widget.
+    ///
+    /// # Arguments
+    ///
+    /// * `cursor`: The `Cursor` configuration to set.
+    ///
+    /// # Example
+    ///
+    /// ```rust
+    /// use tui_term::widget::PseudoTerm;
+    /// use tui_term::widget::Cursor;
+    /// use ratatui::style::Style;
+    ///
+    /// let mut parser = vt100::Parser::new(24, 80, 0);
+    /// let cursor = Cursor::default().symbol("|").style(Style::default());
+    /// let pseudo_term = PseudoTerm::new(&parser.screen()).cursor(cursor);
+    /// ```
+    pub fn cursor(mut self, cursor: Cursor) -> Self {
+        self.cursor = cursor;
         self
     }
     /// Sets the style for `PseudoTerm`.
@@ -180,6 +282,23 @@ mod tests {
     fn simple_ls() {
         let stream = include_bytes!("../test/typescript/simple_ls.typescript");
         let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
+    #[test]
+    fn simple_cursor_styled() {
+        let stream = include_bytes!("../test/typescript/simple_ls.typescript");
+        let backend = TestBackend::new(80, 24);
+        let mut terminal = Terminal::new(backend).unwrap();
+        let mut parser = vt100::Parser::new(24, 80, 0);
+        let cursor = Cursor::default().symbol("|");
+        parser.process(stream);
+        let pseudo_term = PseudoTerm::new(parser.screen()).cursor(cursor);
+        terminal
+            .draw(|f| {
+                f.render_widget(pseudo_term, f.size());
+            })
+            .unwrap();
+        let view = terminal.backend().to_string();
         insta::assert_snapshot!(view);
     }
     #[test]
