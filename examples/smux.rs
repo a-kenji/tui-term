@@ -13,7 +13,10 @@ use crossterm::{
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
 use portable_pty::{native_pty_system, CommandBuilder, PtySize};
-use ratatui::{backend::CrosstermBackend, layout::Rect, style::Color, Terminal};
+use ratatui::{
+    backend::CrosstermBackend, buffer::Buffer, layout::Rect, style::Color, widgets::Widget,
+    Terminal,
+};
 use ratatui::{
     layout::{Alignment, Constraint, Direction, Layout},
     style::{Modifier, Style},
@@ -43,63 +46,43 @@ async fn main() -> io::Result<()> {
     let mut cmd = CommandBuilder::new(shell);
     cmd.cwd(cwd);
 
-    let mut panes: Vec<PtyPane> = Vec::new();
-    let mut active_pane: Option<usize> = None;
-
     // Add a default pane
     let mut pane_size = size.clone();
     pane_size.rows -= 2;
-    open_new_pane(&mut panes, &mut active_pane, &cmd, pane_size)?;
+
+    let horizontal_layout = Layout::default().direction(Direction::Horizontal);
+    let mut root_pane = PtyPane::new(pane_size, cmd.clone(), horizontal_layout).unwrap();
+    root_pane.is_focused = true;
 
     loop {
-        terminal.draw(|f| {
-            let chunks = Layout::default()
-                .direction(Direction::Vertical)
-                .margin(1)
-                .constraints([Constraint::Percentage(100), Constraint::Min(1)].as_ref())
-                .split(f.size());
+        {
+            let root_pane = root_pane.clone();
+            terminal.draw(|f| {
+                let chunks = Layout::default()
+                    .direction(Direction::Vertical)
+                    .margin(1)
+                    .constraints([Constraint::Percentage(100), Constraint::Min(1)].as_ref())
+                    .split(f.size());
 
-            let pane_height = if panes.is_empty() {
-                chunks[0].height
-            } else {
-                (chunks[0].height.saturating_sub(1)) / panes.len() as u16
-            };
+                f.render_widget(root_pane, chunks[0]);
 
-            for (index, pane) in panes.iter().enumerate() {
-                let block = Block::default()
-                    .borders(Borders::ALL)
-                    .style(Style::default().add_modifier(Modifier::BOLD));
-                let block = if Some(index) == active_pane {
-                    block.style(
-                        Style::default()
-                            .add_modifier(Modifier::BOLD)
-                            .fg(Color::LightMagenta),
-                    )
-                } else {
-                    block
-                };
-                let parser = pane.parser.read().unwrap();
-                let screen = parser.screen();
-                let pseudo_term = PseudoTerm::new(screen).block(block);
-                let pane_chunk = Rect {
-                    x: chunks[0].x,
-                    y: chunks[0].y + (index as u16 * pane_height), // Adjust the y coordinate for each pane
-                    width: chunks[0].width,
-                    height: pane_height, // Use the calculated pane height directly
-                };
-                f.render_widget(pseudo_term, pane_chunk);
-            }
-
-            let explanation =
-                "Ctrl+n to open a new pane | Ctrl+x to close the active pane | Ctrl+q to quit";
-            let explanation = Paragraph::new(explanation)
-                .style(Style::default().add_modifier(Modifier::BOLD | Modifier::REVERSED))
-                .alignment(Alignment::Center);
-            f.render_widget(explanation, chunks[1]);
-        })?;
+                let explanation =
+                    "Ctrl+n to open a new pane | Ctrl+x to close the active pane | Ctrl+q to quit";
+                let explanation = Paragraph::new(explanation)
+                    .style(Style::default().add_modifier(Modifier::BOLD | Modifier::REVERSED))
+                    .alignment(Alignment::Center);
+                f.render_widget(explanation, chunks[1]);
+            })?;
+        }
 
         if event::poll(Duration::from_millis(10))? {
             tracing::info!("Terminal Size: {:?}", terminal.size());
+            tracing::info!("Count: {:?}", PtyPane::count_children(&root_pane));
+            tracing::info!(
+                "Focused Child Id : {:#?}",
+                PtyPane::focused_child(&root_pane)
+            );
+            tracing::info!("RootPane : {:#?}", root_pane);
             match event::read()? {
                 Event::Key(key) => match key.code {
                     KeyCode::Char('q') if key.modifiers.contains(KeyModifiers::CONTROL) => {
@@ -107,56 +90,66 @@ async fn main() -> io::Result<()> {
                         return Ok(());
                     }
                     KeyCode::Char('n') if key.modifiers.contains(KeyModifiers::CONTROL) => {
-                        let amount = panes.len() + 1;
-                        let mut pane_size = size.clone();
-                        pane_size.rows /= amount as u16;
+                        let pane_size = size.clone();
                         tracing::info!("Opened new pane with size: {size:?}");
-                        open_new_pane(&mut panes, &mut active_pane, &cmd, pane_size)?;
+                        if let Some(active_pane) = root_pane.focused() {
+                            active_pane.new_pane_horizontal(pane_size, cmd.clone());
+                        }
+                    }
+                    KeyCode::Char('v') if key.modifiers.contains(KeyModifiers::CONTROL) => {
+                        let pane_size = size.clone();
+                        tracing::info!("Opened new pane with size: {size:?}");
+                        if let Some(active_pane) = root_pane.focused() {
+                            active_pane.new_pane_vertical(pane_size, cmd.clone());
+                        }
                     }
                     KeyCode::Char('x') if key.modifiers.contains(KeyModifiers::CONTROL) => {
-                        close_active_pane(&mut panes, &mut active_pane).await?;
+                        PtyPane::close_focus(&mut root_pane);
                     }
                     KeyCode::Char('k') if key.modifiers.contains(KeyModifiers::CONTROL) => {
-                        if let Some(pane) = active_pane {
-                            active_pane = Some(pane.saturating_sub(1));
-                        }
+                        let mut focused_pane_id = PtyPane::focused_child(&root_pane);
+                        focused_pane_id += 1;
+                        PtyPane::focus(&mut root_pane, focused_pane_id);
                     }
                     KeyCode::Char('j') if key.modifiers.contains(KeyModifiers::CONTROL) => {
-                        if let Some(pane) = active_pane {
-                            if pane < panes.len() - 1 {
-                                active_pane = Some(pane.saturating_add(1));
-                            }
-                        }
+                        let mut focused_pane_id = PtyPane::focused_child(&root_pane);
+                        tracing::info!("Focused Pane Id: {:?}", focused_pane_id);
+                        focused_pane_id -= 1;
+                        tracing::info!("To Focus Pane Id: {:?}", focused_pane_id);
+                        PtyPane::focus(&mut root_pane, focused_pane_id);
                     }
                     _ => {
-                        if let Some(index) = active_pane {
-                            if handle_pane_key_event(&mut panes[index], &key).await {
-                                continue;
-                            }
+                        if let Some(focused_pane) = root_pane.focused() {
+                            let _ = focused_pane.handle_key_event(&key).await;
                         }
                     }
                 },
                 Event::Resize(rows, cols) => {
                     tracing::info!("Resized to: rows: {} cols: {}", rows, cols);
-                    for pane in panes.iter_mut() {
-                        pane.parser.write().unwrap().set_size(rows, cols);
-                    }
                     size.rows = rows;
                     size.cols = cols;
                 }
                 _ => {}
             }
+            tracing::info!("After event_read:\n");
+            tracing::info!("Terminal Size: {:?}", terminal.size());
+            tracing::info!("Count: {:?}", PtyPane::count_children(&root_pane));
+            tracing::info!("RootPane : {:#?}", root_pane);
         }
     }
 }
 
+#[derive(Clone)]
 struct PtyPane {
     parser: Arc<RwLock<vt100::Parser>>,
     sender: Sender<Bytes>,
+    children: Vec<PtyPane>,
+    layout: Layout,
+    is_focused: bool,
 }
 
 impl PtyPane {
-    fn new(size: Size, cmd: CommandBuilder) -> io::Result<Self> {
+    fn new(size: Size, cmd: CommandBuilder, layout: Layout) -> io::Result<Self> {
         let pty_system = native_pty_system();
         let pty_pair = pty_system
             .openpty(PtySize {
@@ -216,82 +209,184 @@ impl PtyPane {
             });
         }
 
-        Ok(Self { parser, sender: tx })
+        Ok(Self {
+            children: Vec::new(),
+            layout,
+            parser,
+            sender: tx,
+            is_focused: false,
+        })
     }
-}
+    pub fn new_pane_vertical(&mut self, size: Size, cmd: CommandBuilder) {
+        let vertical_layout = Layout::default().direction(Direction::Vertical);
+        self.layout = vertical_layout;
+        let mut pty_pane = Self::new(size, cmd, Layout::default()).unwrap();
+        self.is_focused = false;
+        pty_pane.is_focused = true;
+        self.children.push(pty_pane);
+    }
+    pub fn new_pane_horizontal(&mut self, size: Size, cmd: CommandBuilder) {
+        let horizontal_layout = Layout::default().direction(Direction::Horizontal);
+        self.layout = horizontal_layout;
+        let mut pty_pane = Self::new(size, cmd, Layout::default()).unwrap();
+        self.is_focused = false;
+        pty_pane.is_focused = true;
+        self.children.push(pty_pane);
+    }
+    fn count_children(pane: &PtyPane) -> usize {
+        let mut count = 0;
 
-async fn handle_pane_key_event(pane: &mut PtyPane, key: &KeyEvent) -> bool {
-    let input_bytes = match key.code {
-        KeyCode::Char(ch) => {
-            let mut send = vec![ch as u8];
-            if key.modifiers == KeyModifiers::CONTROL {
-                match ch {
-                    'n' => {
-                        // Ignore Ctrl+n within a pane
-                        return true;
-                    }
-                    'x' => {
-                        // Close the pane
-                        return false;
-                    }
-                    'l' => {
-                        send = vec![27, 91, 50, 74];
-                    }
+        for child in &pane.children {
+            count += 1;
+            count += Self::count_children(child);
+        }
+        count
+    }
+    fn close_focus(pane: &mut PtyPane) {
+        if pane.is_focused {
+            return;
+        } else {
+            pane.is_focused = true;
+        }
 
-                    _ => {}
-                }
+        for (i, child) in pane.children.clone().iter().enumerate() {
+            if child.is_focused {
+                pane.children.remove(i);
             }
-            send
         }
-        KeyCode::Enter => vec![b'\n'],
-        KeyCode::Backspace => vec![8],
-        KeyCode::Left => vec![27, 91, 68],
-        KeyCode::Right => vec![27, 91, 67],
-        KeyCode::Up => vec![27, 91, 65],
-        KeyCode::Down => vec![27, 91, 66],
-        KeyCode::Tab => vec![9],
-        KeyCode::Home => vec![27, 91, 72],
-        KeyCode::End => vec![27, 91, 70],
-        KeyCode::PageUp => vec![27, 91, 53, 126],
-        KeyCode::PageDown => vec![27, 91, 54, 126],
-        KeyCode::BackTab => vec![27, 91, 90],
-        KeyCode::Delete => vec![27, 91, 51, 126],
-        KeyCode::Insert => vec![27, 91, 50, 126],
-        KeyCode::Esc => vec![27],
-        _ => return true,
-    };
 
-    pane.sender.send(Bytes::from(input_bytes)).await.ok();
-    true
-}
-
-fn open_new_pane(
-    panes: &mut Vec<PtyPane>,
-    active_pane: &mut Option<usize>,
-    cmd: &CommandBuilder,
-    size: Size,
-) -> io::Result<()> {
-    let new_pane = PtyPane::new(size, cmd.clone())?;
-    let new_pane_index = panes.len();
-    panes.push(new_pane);
-    *active_pane = Some(new_pane_index);
-    Ok(())
-}
-
-async fn close_active_pane(
-    panes: &mut Vec<PtyPane>,
-    active_pane: &mut Option<usize>,
-) -> io::Result<()> {
-    if let Some(active_index) = active_pane {
-        let _pane = panes.remove(*active_index);
-        // TODO: shutdown pane correctly
-        if !panes.is_empty() {
-            let remaining_panes = panes.len();
-            let new_active_index = *active_index % remaining_panes;
-            *active_pane = Some(new_active_index);
+        for child in pane.children.iter_mut() {
+            Self::close_focus(child);
         }
     }
-    Ok(())
+    fn focused_child(pane: &PtyPane) -> usize {
+        let mut count = 0;
+
+        if pane.is_focused {
+            return count;
+        }
+
+        for child in &pane.children {
+            if child.is_focused {
+                return count + 1;
+            }
+            count += 1;
+            count += Self::count_children(child);
+        }
+        count
+    }
+
+    fn focus(pane: &mut PtyPane, focus: usize) -> bool {
+        let mut is_focused = false;
+
+        if focus == 0 {
+            pane.is_focused = true;
+            is_focused = true;
+        } else {
+            pane.is_focused = false;
+        }
+        let mut remaining_focus = focus;
+        for child in pane.children.iter_mut() {
+            if Self::focus(child, remaining_focus - 1) {
+                is_focused = true;
+            }
+            remaining_focus -= 1;
+        }
+        is_focused
+    }
+    fn focused(&mut self) -> Option<&mut PtyPane> {
+        if self.is_focused {
+            return Some(self);
+        }
+
+        for child in self.children.iter_mut() {
+            if let Some(focused_pane) = child.focused() {
+                return Some(focused_pane);
+            }
+        }
+
+        None
+    }
+    async fn handle_key_event(&mut self, key: &KeyEvent) -> bool {
+        let input_bytes = match key.code {
+            KeyCode::Char(ch) => {
+                let mut send = vec![ch as u8];
+                if key.modifiers == KeyModifiers::CONTROL {
+                    match ch {
+                        'n' => {
+                            // Ignore Ctrl+n within a pane
+                            return true;
+                        }
+                        'x' => {
+                            // Close the pane
+                            return false;
+                        }
+                        'l' => {
+                            send = vec![27, 91, 50, 74];
+                        }
+
+                        _ => {}
+                    }
+                }
+                send
+            }
+            KeyCode::Enter => vec![b'\n'],
+            KeyCode::Backspace => vec![8],
+            KeyCode::Left => vec![27, 91, 68],
+            KeyCode::Right => vec![27, 91, 67],
+            KeyCode::Up => vec![27, 91, 65],
+            KeyCode::Down => vec![27, 91, 66],
+            KeyCode::Tab => vec![9],
+            KeyCode::Home => vec![27, 91, 72],
+            KeyCode::End => vec![27, 91, 70],
+            KeyCode::PageUp => vec![27, 91, 53, 126],
+            KeyCode::PageDown => vec![27, 91, 54, 126],
+            KeyCode::BackTab => vec![27, 91, 90],
+            KeyCode::Delete => vec![27, 91, 51, 126],
+            KeyCode::Insert => vec![27, 91, 50, 126],
+            KeyCode::Esc => vec![27],
+            _ => return true,
+        };
+
+        self.sender.send(Bytes::from(input_bytes)).await.ok();
+        true
+    }
+}
+
+impl Widget for PtyPane {
+    fn render(self, area: Rect, buf: &mut Buffer) {
+        let block = Block::default().borders(Borders::ALL);
+        let block = if self.is_focused {
+            block.style(
+                Style::default()
+                    .add_modifier(Modifier::BOLD)
+                    .fg(Color::LightMagenta),
+            )
+        } else {
+            block
+        };
+        let parser = self.parser.read().unwrap();
+        let screen = parser.screen();
+        let pseudo_term = PseudoTerm::new(screen).block(block);
+
+        if self.children.is_empty() {
+            pseudo_term.render(area, buf);
+        } else {
+            let mut contraints = Vec::new();
+            for _ in 1..=self.children.len() + 1 {
+                contraints.push(Constraint::Percentage(
+                    100 / (self.children.len() as u16 + 1),
+                ));
+            }
+            let chunks = self.layout.constraints(contraints).split(area);
+
+            pseudo_term.render(chunks[0], buf);
+
+            for (i, child) in self.children.iter().enumerate() {
+                child.clone().render(chunks[i + 1], buf);
+            }
+        }
+    }
 }
 
 fn setup_terminal() -> io::Result<(Terminal<CrosstermBackend<BufWriter<io::Stdout>>>, Size)> {
@@ -361,9 +456,10 @@ impl fmt::Debug for PtyPane {
         let screen = parser.screen();
 
         f.debug_struct("PtyPane")
-            .field("screen", screen)
             .field("title:", &screen.title())
             .field("icon_name:", &screen.icon_name())
+            .field("children:", &self.children)
+            .field("is_focused:", &self.is_focused)
             .finish()
     }
 }
