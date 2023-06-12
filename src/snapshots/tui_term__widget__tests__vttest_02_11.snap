@@ -3,7 +3,7 @@ source: src/widget.rs
 expression: view
 ---
 "This line should be the one above the bottom of the screen. Push <RETURN>       "
-"                                                                                "
+"                                                                         █      "
 "                                                                                "
 "                                                                                "
 "                                                                                "
