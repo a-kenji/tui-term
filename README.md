@@ -5,6 +5,8 @@
 
 A pseudoterminal widget for the  [ratatui](https://github.com/tui-rs-revival/ratatui) crate.
 
+![Demo of tui-term](https://vhs.charm.sh/vhs-3KdllqrazND0AcDG3tWEpf.gif)
+
 ## Status
 
 NOTE: This project is currently in active development and should be considered as work in progress.
