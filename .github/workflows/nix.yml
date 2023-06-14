@@ -111,7 +111,7 @@ jobs:
     - name: "treefmt"
       run: nix develop .#fmtShell --command treefmt --fail-on-change
 
-  documenation:
+  documentation:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -217,3 +217,19 @@ jobs:
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
     - name: "cargo doc"
       run: nix build -Lvv .#cargoDoc
+
+  typos:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: cachix/install-nix-action@v21
+      with:
+        extra_nix_config: |
+          access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+    - uses: cachix/cachix-action@v12
+      with:
+        name: kenji
+        # If you chose API tokens for write access OR if you have a private cache
+        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+    - name: "typos"
+      run: nix develop -Lv .#lintShell --command typos
