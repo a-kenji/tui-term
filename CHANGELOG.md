@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.1] - 2023-06-14
+
+### Features
+
+- *(bench)* Init iai
+- *(style)* Allow for custom cursor styling and shapes
+- *(uncategorized)* Add boundary checks for the enclosed area
+- *(dependencies)* Reexport vt100
+- *(style)* Add basic styling support
+
+### Documentation
+
+- *(demo)* Add a demo overview
+
+### Continuous Integration
+
+- *(init)* Typos configuration
+
+### Example
+
+- *(uncategorized)* Add tracing support
+- *(example)* Improve input handling in smux
+
 ## [0.1.0] - 2023-06-08
 
 - Initial release
