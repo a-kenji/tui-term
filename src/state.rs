@@ -42,9 +42,6 @@ pub fn handle(term: &PseudoTerm, area: &Rect, buf: &mut Buffer) {
                     if screen_cell.italic() {
                         style = style.add_modifier(Modifier::ITALIC);
                     }
-                    if screen_cell.italic() {
-                        style = style.add_modifier(Modifier::ITALIC);
-                    }
                     if screen_cell.underline() {
                         style = style.add_modifier(Modifier::UNDERLINED);
                     }
