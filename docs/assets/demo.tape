@@ -17,7 +17,7 @@ Sleep 5s
 Type "cargo run --example smux --release"
 Sleep 2s
 Enter
-Sleep 2s
+Sleep 10s
 
 Type "echo 'You can find me in examples/smux.rs' | nix run n#lolcat"
 Sleep 2s
