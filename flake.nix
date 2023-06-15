@@ -103,12 +103,13 @@
         pkgs.typos
 
         pkgs.cargo-deny
-        pkgs.cargo-bloat
-        pkgs.cargo-flamegraph
         pkgs.cargo-diet
-        pkgs.cargo-modules
-        pkgs.cargo-tarpaulin
         pkgs.cargo-dist
+        pkgs.cargo-flamegraph
+        pkgs.cargo-machete
+        pkgs.cargo-modules
+        pkgs.cargo-outdated
+        pkgs.cargo-tarpaulin
         pkgs.cargo-unused-features
         (pkgs.symlinkJoin {
           name = "cargo-udeps-wrapped";

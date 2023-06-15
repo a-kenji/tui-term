@@ -42,8 +42,10 @@ lint:
     nix develop .#lintShell --command lychee *.md
     nix develop .#lintShell --command treefmt --fail-on-change
     nix develop .#lintShell --command cargo udeps
+    nix develop .#lintShell --command cargo machete
+    nix develop .#lintShell --command cargo outdated
     nix develop .#actionlintShell --command actionlint --ignore SC2002
-
+    cargo check --future-incompat-report
     nix flake check
 
 run:
