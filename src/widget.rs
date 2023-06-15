@@ -284,12 +284,54 @@ mod tests {
         insta::assert_snapshot!(view);
     }
     #[test]
-    fn simple_cursor_styled() {
+    fn simple_cursor_alternate_symbol() {
         let stream = include_bytes!("../test/typescript/simple_ls.typescript");
         let backend = TestBackend::new(80, 24);
         let mut terminal = Terminal::new(backend).unwrap();
         let mut parser = vt100::Parser::new(24, 80, 0);
         let cursor = Cursor::default().symbol("|");
+        parser.process(stream);
+        let pseudo_term = PseudoTerm::new(parser.screen()).cursor(cursor);
+        terminal
+            .draw(|f| {
+                f.render_widget(pseudo_term, f.size());
+            })
+            .unwrap();
+        let view = format!("{:?}", terminal.backend().buffer());
+        insta::assert_snapshot!(view);
+    }
+    #[test]
+    fn simple_cursor_styled() {
+        let stream = include_bytes!("../test/typescript/simple_ls.typescript");
+        let backend = TestBackend::new(80, 24);
+        let mut terminal = Terminal::new(backend).unwrap();
+        let mut parser = vt100::Parser::new(24, 80, 0);
+        let style = Style::default().bg(Color::Cyan).fg(Color::LightRed);
+        let cursor = Cursor::default().symbol("|").style(style);
+        parser.process(stream);
+        let pseudo_term = PseudoTerm::new(parser.screen()).cursor(cursor);
+        terminal
+            .draw(|f| {
+                f.render_widget(pseudo_term, f.size());
+            })
+            .unwrap();
+        let view = format!("{:?}", terminal.backend().buffer());
+        insta::assert_snapshot!(view);
+    }
+    #[test]
+    fn overlapping_cursor() {
+        let stream = include_bytes!("../test/typescript/overlapping_cursor.typescript");
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
+    #[test]
+    fn overlapping_cursor_alternate_style() {
+        let stream = include_bytes!("../test/typescript/overlapping_cursor.typescript");
+        let backend = TestBackend::new(80, 24);
+        let mut terminal = Terminal::new(backend).unwrap();
+        let mut parser = vt100::Parser::new(24, 80, 0);
+        let style = Style::default().bg(Color::Cyan).fg(Color::LightRed);
+        let cursor = Cursor::default().overlay_style(style);
         parser.process(stream);
         let pseudo_term = PseudoTerm::new(parser.screen()).cursor(cursor);
         terminal
