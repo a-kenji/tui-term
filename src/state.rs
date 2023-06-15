@@ -34,10 +34,8 @@ pub fn handle(term: &PseudoTerm, area: &Rect, buf: &mut Buffer) {
                     let cell = buf.get_mut(buf_col, buf_row);
                     cell.set_symbol(&screen_cell.contents());
                     let fg: Color = fg.into();
-                    cell.set_fg(fg.into());
                     let bg: Color = bg.into();
-                    cell.set_bg(bg.into());
-                    let mut style = Style::default();
+                    let mut style = Style::reset();
                     if screen_cell.bold() {
                         style = style.add_modifier(Modifier::BOLD);
                     }
@@ -54,6 +52,8 @@ pub fn handle(term: &PseudoTerm, area: &Rect, buf: &mut Buffer) {
                         style = style.add_modifier(Modifier::REVERSED);
                     }
                     cell.set_style(style);
+                    cell.set_fg(fg.into());
+                    cell.set_bg(bg.into());
                 }
             }
         }
