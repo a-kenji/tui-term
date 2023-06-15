@@ -205,11 +205,16 @@
       packages =
         {
           inherit cargoArtifacts cargoArtifactsMSRV cargoNextest cargoDoc;
+          default = self.outputs.packages.${system}.smux;
         }
         // pkgs.lib.genAttrs examples (example:
           mkExample {
             inherit example cargoArtifacts craneLib;
           });
       formatter = pkgs.alejandra;
+      apps.default = {
+        type = "app";
+        program = "${self.outputs.packages.${system}.smux}/bin/smux";
+      };
     });
 }
