@@ -379,6 +379,38 @@ mod tests {
         let view = format!("{:?}", terminal.backend().buffer());
         insta::assert_snapshot!(view);
     }
+    #[test]
+    fn italic_text() {
+        let stream = b"[3mThis line will be displayed in italic.[0m This should have no style.";
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
+    #[test]
+    fn underlined_text() {
+        let stream =
+            b"[4mThis line will be displayed with an underline.[0m This should have no style.";
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
+    #[test]
+    fn bold_text() {
+        let stream = b"[1mThis line will be displayed bold.[0m This should have no style.";
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
+    #[test]
+    fn inverse_text() {
+        let stream = b"[7mThis line will be displayed inversed.[0m This should have no style.";
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
+    #[test]
+    fn combined_modifier_text() {
+        let stream =
+            b"[4m[3mThis line will be displayed in italic and underlined.[0m This should have no style.";
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
 
     #[test]
     fn vttest_02_01() {
