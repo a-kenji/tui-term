@@ -2,28 +2,61 @@
 source: src/widget.rs
 expression: view
 ---
-"AAAAA                                                                           "
-"AAAAA                                                                           "
-"AAAAA                                                                           "
-"                                                                                "
-"                                                                                "
-"                                                                                "
-"           normal      bold        underscored blinking    reversed             "
-"                                                                                "
-"stars:     **********  **********  **********  **********  **********           "
-"                                                                                "
-"line:      qqqqqqqqqq  qqqqqqqqqq  qqqqqqqqqq  qqqqqqqqqq  qqqqqqqqqq           "
-"                                                                                "
-"x'es:      xxxxxxxxxx  xxxxxxxxxx  xxxxxxxxxx  xxxxxxxxxx  xxxxxxxxxx           "
-"                                                                                "
-"diamonds:  ``````````  ``````````  ``````````  ``````````  ``````````           "
-"                                                                                "
-"                                                                                "
-"                                                                                "
-"                                                                                "
-"Test of the SAVE/RESTORE CURSOR feature. There should                           "
-"be ten characters of each flavour, and a rectangle                              "
-"of 5 x 4 A's filling the top left of the screen.                                "
-"Push <RETURN>                                                                   "
-"             █                                                                  "
-
+Buffer {
+    area: Rect { x: 0, y: 0, width: 80, height: 24 },
+    content: [
+        "AAAAA                                                                           ",
+        "AAAAA                                                                           ",
+        "AAAAA                                                                           ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "           normal      bold        underscored blinking    reversed             ",
+        "                                                                                ",
+        "stars:     **********  **********  **********  **********  **********           ",
+        "                                                                                ",
+        "line:      qqqqqqqqqq  qqqqqqqqqq  qqqqqqqqqq  qqqqqqqqqq  qqqqqqqqqq           ",
+        "                                                                                ",
+        "x'es:      xxxxxxxxxx  xxxxxxxxxx  xxxxxxxxxx  xxxxxxxxxx  xxxxxxxxxx           ",
+        "                                                                                ",
+        "diamonds:  ``````````  ``````````  ``````````  ``````````  ``````````           ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "Test of the SAVE/RESTORE CURSOR feature. There should                           ",
+        "be ten characters of each flavour, and a rectangle                              ",
+        "of 5 x 4 A's filling the top left of the screen.                                ",
+        "Push <RETURN>                                                                   ",
+        "             █                                                                  ",
+    ],
+    styles: [
+        x: 0, y: 0, fg: Reset, bg: Reset, modifier: (empty),
+        x: 23, y: 8, fg: Reset, bg: Reset, modifier: BOLD,
+        x: 33, y: 8, fg: Reset, bg: Reset, modifier: (empty),
+        x: 35, y: 8, fg: Reset, bg: Reset, modifier: UNDERLINED,
+        x: 45, y: 8, fg: Reset, bg: Reset, modifier: (empty),
+        x: 59, y: 8, fg: Reset, bg: Reset, modifier: REVERSED,
+        x: 69, y: 8, fg: Reset, bg: Reset, modifier: (empty),
+        x: 23, y: 10, fg: Reset, bg: Reset, modifier: BOLD,
+        x: 33, y: 10, fg: Reset, bg: Reset, modifier: (empty),
+        x: 35, y: 10, fg: Reset, bg: Reset, modifier: UNDERLINED,
+        x: 45, y: 10, fg: Reset, bg: Reset, modifier: (empty),
+        x: 59, y: 10, fg: Reset, bg: Reset, modifier: REVERSED,
+        x: 69, y: 10, fg: Reset, bg: Reset, modifier: (empty),
+        x: 23, y: 12, fg: Reset, bg: Reset, modifier: BOLD,
+        x: 33, y: 12, fg: Reset, bg: Reset, modifier: (empty),
+        x: 35, y: 12, fg: Reset, bg: Reset, modifier: UNDERLINED,
+        x: 45, y: 12, fg: Reset, bg: Reset, modifier: (empty),
+        x: 59, y: 12, fg: Reset, bg: Reset, modifier: REVERSED,
+        x: 69, y: 12, fg: Reset, bg: Reset, modifier: (empty),
+        x: 23, y: 14, fg: Reset, bg: Reset, modifier: BOLD,
+        x: 33, y: 14, fg: Reset, bg: Reset, modifier: (empty),
+        x: 35, y: 14, fg: Reset, bg: Reset, modifier: UNDERLINED,
+        x: 45, y: 14, fg: Reset, bg: Reset, modifier: (empty),
+        x: 59, y: 14, fg: Reset, bg: Reset, modifier: REVERSED,
+        x: 69, y: 14, fg: Reset, bg: Reset, modifier: (empty),
+        x: 13, y: 23, fg: Gray, bg: Reset, modifier: (empty),
+        x: 14, y: 23, fg: Reset, bg: Reset, modifier: (empty),
+    ]
+}

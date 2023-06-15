@@ -2,28 +2,37 @@
 source: src/widget.rs
 expression: view
 ---
-"1234567890123456789012345678901234567890123456789012345678901234567890123456789 "
-"                                                                                "
-"  This is 80 column mode, dark background.                                      "
-"   This is 80 column mode, dark background.                                     "
-"    This is 80 column mode, dark background.                                    "
-"     This is 80 column mode, dark background.                                   "
-"      This is 80 column mode, dark background.                                  "
-"       This is 80 column mode, dark background.                                 "
-"        This is 80 column mode, dark background.                                "
-"         This is 80 column mode, dark background.                               "
-"          This is 80 column mode, dark background.                              "
-"           This is 80 column mode, dark background.                             "
-"            This is 80 column mode, dark background.                            "
-"             This is 80 column mode, dark background.                           "
-"              This is 80 column mode, dark background.                          "
-"               This is 80 column mode, dark background.                         "
-"                This is 80 column mode, dark background.                        "
-"                 This is 80 column mode, dark background.                       "
-"                  This is 80 column mode, dark background.                      "
-"                   This is 80 column mode, dark background.Push <RETURN>        "
-"                                                                        █       "
-"                                                                                "
-"                                                                                "
-"                                                                                "
-
+Buffer {
+    area: Rect { x: 0, y: 0, width: 80, height: 24 },
+    content: [
+        "1234567890123456789012345678901234567890123456789012345678901234567890123456789 ",
+        "                                                                                ",
+        "  This is 80 column mode, dark background.                                      ",
+        "   This is 80 column mode, dark background.                                     ",
+        "    This is 80 column mode, dark background.                                    ",
+        "     This is 80 column mode, dark background.                                   ",
+        "      This is 80 column mode, dark background.                                  ",
+        "       This is 80 column mode, dark background.                                 ",
+        "        This is 80 column mode, dark background.                                ",
+        "         This is 80 column mode, dark background.                               ",
+        "          This is 80 column mode, dark background.                              ",
+        "           This is 80 column mode, dark background.                             ",
+        "            This is 80 column mode, dark background.                            ",
+        "             This is 80 column mode, dark background.                           ",
+        "              This is 80 column mode, dark background.                          ",
+        "               This is 80 column mode, dark background.                         ",
+        "                This is 80 column mode, dark background.                        ",
+        "                 This is 80 column mode, dark background.                       ",
+        "                  This is 80 column mode, dark background.                      ",
+        "                   This is 80 column mode, dark background.Push <RETURN>        ",
+        "                                                                        █       ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+    ],
+    styles: [
+        x: 0, y: 0, fg: Reset, bg: Reset, modifier: (empty),
+        x: 72, y: 20, fg: Gray, bg: Reset, modifier: (empty),
+        x: 73, y: 20, fg: Reset, bg: Reset, modifier: (empty),
+    ]
+}

@@ -2,28 +2,59 @@
 source: src/widget.rs
 expression: view
 ---
-" Cargo.lock      docs         LICENSE               test                    "
-" Cargo.toml      examples     README.md             typescript              "
-" CHANGELOG.md    flake.lock   rust-toolchain.toml   wezterm                 "
-" cliff.toml      flake.nix    src                                            "
-" committed.toml   justfile     target                                        "
-"tui-term on  main [!?⇡] via ❄️ pure (tui-term-env)                              "
-"❯                                                                               "
-"                                                                                "
-"|                                                                               "
-"                                                                                "
-"                                                                                "
-"                                                                                "
-"                                                                                "
-"                                                                                "
-"                                                                                "
-"                                                                                "
-"                                                                                "
-"                                                                                "
-"                                                                                "
-"                                                                                "
-"                                                                                "
-"                                                                                "
-"                                                                                "
-"                                                                                "
-
+Buffer {
+    area: Rect { x: 0, y: 0, width: 80, height: 24 },
+    content: [
+        " Cargo.lock      docs         LICENSE               test                    ",
+        " Cargo.toml      examples     README.md             typescript              ",
+        " CHANGELOG.md    flake.lock   rust-toolchain.toml   wezterm                 ",
+        " cliff.toml      flake.nix    src                                            ",
+        " committed.toml   justfile     target                                        ",
+        "tui-term on  main [!?⇡] via ❄️ pure (tui-term-env)                              ",
+        "❯                                                                               ",
+        "                                                                                ",
+        "|                                                                               ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+    ],
+    styles: [
+        x: 0, y: 0, fg: Reset, bg: Reset, modifier: (empty),
+        x: 17, y: 0, fg: Indexed(4), bg: Reset, modifier: BOLD,
+        x: 23, y: 0, fg: Reset, bg: Reset, modifier: (empty),
+        x: 54, y: 0, fg: Indexed(4), bg: Reset, modifier: BOLD,
+        x: 60, y: 0, fg: Reset, bg: Reset, modifier: (empty),
+        x: 17, y: 1, fg: Indexed(4), bg: Reset, modifier: BOLD,
+        x: 27, y: 1, fg: Reset, bg: Reset, modifier: (empty),
+        x: 54, y: 2, fg: Indexed(4), bg: Reset, modifier: BOLD,
+        x: 63, y: 2, fg: Reset, bg: Reset, modifier: (empty),
+        x: 31, y: 3, fg: Indexed(4), bg: Reset, modifier: BOLD,
+        x: 36, y: 3, fg: Reset, bg: Reset, modifier: (empty),
+        x: 32, y: 4, fg: Indexed(4), bg: Reset, modifier: BOLD,
+        x: 40, y: 4, fg: Reset, bg: Reset, modifier: (empty),
+        x: 0, y: 5, fg: Indexed(6), bg: Reset, modifier: BOLD,
+        x: 8, y: 5, fg: Reset, bg: Reset, modifier: (empty),
+        x: 12, y: 5, fg: Indexed(5), bg: Reset, modifier: BOLD,
+        x: 18, y: 5, fg: Reset, bg: Reset, modifier: (empty),
+        x: 19, y: 5, fg: Indexed(1), bg: Reset, modifier: BOLD,
+        x: 24, y: 5, fg: Reset, bg: Reset, modifier: (empty),
+        x: 29, y: 5, fg: Indexed(4), bg: Reset, modifier: BOLD,
+        x: 50, y: 5, fg: Reset, bg: Reset, modifier: (empty),
+        x: 0, y: 6, fg: Indexed(2), bg: Reset, modifier: BOLD,
+        x: 1, y: 6, fg: Reset, bg: Reset, modifier: (empty),
+        x: 0, y: 8, fg: Gray, bg: Reset, modifier: (empty),
+        x: 1, y: 8, fg: Reset, bg: Reset, modifier: (empty),
+    ]
+}

@@ -241,7 +241,7 @@ mod tests {
                 f.render_widget(pseudo_term, f.size());
             })
             .unwrap();
-        terminal.backend().to_string()
+        format!("{:?}", terminal.backend().buffer())
     }
 
     #[test]
@@ -256,7 +256,7 @@ mod tests {
                 f.render_widget(pseudo_term, f.size());
             })
             .unwrap();
-        let view = terminal.backend().to_string();
+        let view = format!("{:?}", terminal.backend().buffer());
         insta::assert_snapshot!(view);
     }
     #[test]
@@ -273,8 +273,7 @@ mod tests {
                 f.render_widget(pseudo_term, f.size());
             })
             .unwrap();
-        terminal.backend().to_string();
-        let view = snapshot_typescript(stream);
+        let view = format!("{:?}", terminal.backend().buffer());
         insta::assert_snapshot!(view);
     }
 
@@ -298,7 +297,7 @@ mod tests {
                 f.render_widget(pseudo_term, f.size());
             })
             .unwrap();
-        let view = terminal.backend().to_string();
+        let view = format!("{:?}", terminal.backend().buffer());
         insta::assert_snapshot!(view);
     }
     #[test]
@@ -315,7 +314,7 @@ mod tests {
                 f.render_widget(pseudo_term, f.size());
             })
             .unwrap();
-        let view = terminal.backend().to_string();
+        let view = format!("{:?}", terminal.backend().buffer());
         insta::assert_snapshot!(view);
     }
     #[test]
@@ -335,7 +334,7 @@ mod tests {
                 f.render_widget(pseudo_term, f.size());
             })
             .unwrap();
-        let view = terminal.backend().to_string();
+        let view = format!("{:?}", terminal.backend().buffer());
         insta::assert_snapshot!(view);
     }
 
