@@ -29,6 +29,12 @@ cargo-diet:
 cargo-tarpaulin:
     nix develop .#lintShell --command cargo tarpaulin --out html --exclude-files "benches/*"
 
+cargo-public-api:
+    nix develop .#lintShell --command cargo public-api
+
+cargo-diff:
+    nix develop .#lintShell --command cargo public-api diff
+
 lint:
     nix develop .#lintShell --command cargo diet
     nix develop .#lintShell --command cargo deny check licenses
