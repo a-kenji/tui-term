@@ -54,7 +54,7 @@ Buffer {
         x: 50, y: 5, fg: Reset, bg: Reset, modifier: (empty),
         x: 0, y: 6, fg: Indexed(2), bg: Reset, modifier: BOLD,
         x: 1, y: 6, fg: Reset, bg: Reset, modifier: (empty),
-        x: 0, y: 8, fg: LightRed, bg: Cyan, modifier: (empty),
+        x: 0, y: 8, fg: Gray, bg: Reset, modifier: (empty),
         x: 1, y: 8, fg: Reset, bg: Reset, modifier: (empty),
     ]
 }
