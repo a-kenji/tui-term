@@ -2,28 +2,37 @@
 source: src/widget.rs
 expression: view
 ---
-"********************************************************************************"
-"********************************************************************************"
-"********************************************************************************"
-"********************************************************************************"
-"This should be three identical lines of *'s completely filling                  "
-"the top of the screen without any empty lines between.                          "
-"(Test of WRAP AROUND mode setting.)                                             "
-"Push <RETURN>                                                                   "
-"             █                                                                  "
-"                                                                                "
-"                                                                                "
-"                                                                                "
-"                                                                                "
-"                                                                                "
-"                                                                                "
-"                                                                                "
-"                                                                                "
-"                                                                                "
-"                                                                                "
-"                                                                                "
-"                                                                                "
-"                                                                                "
-"                                                                                "
-"                                                                                "
-
+Buffer {
+    area: Rect { x: 0, y: 0, width: 80, height: 24 },
+    content: [
+        "********************************************************************************",
+        "********************************************************************************",
+        "********************************************************************************",
+        "********************************************************************************",
+        "This should be three identical lines of *'s completely filling                  ",
+        "the top of the screen without any empty lines between.                          ",
+        "(Test of WRAP AROUND mode setting.)                                             ",
+        "Push <RETURN>                                                                   ",
+        "             █                                                                  ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+    ],
+    styles: [
+        x: 0, y: 0, fg: Reset, bg: Reset, modifier: (empty),
+        x: 13, y: 8, fg: Gray, bg: Reset, modifier: (empty),
+        x: 14, y: 8, fg: Reset, bg: Reset, modifier: (empty),
+    ]
+}

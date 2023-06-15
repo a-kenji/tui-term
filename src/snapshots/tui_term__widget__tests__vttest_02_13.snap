@@ -2,28 +2,65 @@
 source: src/widget.rs
 expression: view
 ---
-"                   Graphic rendition test pattern:                              "
-"                                                                                "
-"                                                                                "
-"vanilla                                bold                                     "
-"                                                                                "
-"     underline                              bold underline                      "
-"                                                                                "
-"blink                                  bold blink                               "
-"                                                                                "
-"     underline blink                        bold underline blink                "
-"                                                                                "
-"negative                               bold negative                            "
-"                                                                                "
-"     underline negative                     bold underline negative             "
-"                                                                                "
-"blink negative                         bold blink negative                      "
-"                                                                                "
-"     underline blink negative               bold underline blink negative       "
-"                                                                                "
-"                                                                                "
-"                                                                                "
-"                                                                                "
-"Dark background. Push <RETURN>                                                  "
-"                              █                                                 "
-
+Buffer {
+    area: Rect { x: 0, y: 0, width: 80, height: 24 },
+    content: [
+        "                   Graphic rendition test pattern:                              ",
+        "                                                                                ",
+        "                                                                                ",
+        "vanilla                                bold                                     ",
+        "                                                                                ",
+        "     underline                              bold underline                      ",
+        "                                                                                ",
+        "blink                                  bold blink                               ",
+        "                                                                                ",
+        "     underline blink                        bold underline blink                ",
+        "                                                                                ",
+        "negative                               bold negative                            ",
+        "                                                                                ",
+        "     underline negative                     bold underline negative             ",
+        "                                                                                ",
+        "blink negative                         bold blink negative                      ",
+        "                                                                                ",
+        "     underline blink negative               bold underline blink negative       ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "Dark background. Push <RETURN>                                                  ",
+        "                              █                                                 ",
+    ],
+    styles: [
+        x: 0, y: 0, fg: Reset, bg: Reset, modifier: (empty),
+        x: 39, y: 3, fg: Reset, bg: Reset, modifier: BOLD,
+        x: 43, y: 3, fg: Reset, bg: Reset, modifier: (empty),
+        x: 5, y: 5, fg: Reset, bg: Reset, modifier: UNDERLINED,
+        x: 14, y: 5, fg: Reset, bg: Reset, modifier: (empty),
+        x: 44, y: 5, fg: Reset, bg: Reset, modifier: BOLD | UNDERLINED,
+        x: 58, y: 5, fg: Reset, bg: Reset, modifier: (empty),
+        x: 39, y: 7, fg: Reset, bg: Reset, modifier: BOLD,
+        x: 49, y: 7, fg: Reset, bg: Reset, modifier: (empty),
+        x: 5, y: 9, fg: Reset, bg: Reset, modifier: UNDERLINED,
+        x: 20, y: 9, fg: Reset, bg: Reset, modifier: (empty),
+        x: 44, y: 9, fg: Reset, bg: Reset, modifier: BOLD | UNDERLINED,
+        x: 64, y: 9, fg: Reset, bg: Reset, modifier: (empty),
+        x: 0, y: 11, fg: Reset, bg: Reset, modifier: REVERSED,
+        x: 8, y: 11, fg: Reset, bg: Reset, modifier: (empty),
+        x: 39, y: 11, fg: Reset, bg: Reset, modifier: BOLD | REVERSED,
+        x: 52, y: 11, fg: Reset, bg: Reset, modifier: (empty),
+        x: 5, y: 13, fg: Reset, bg: Reset, modifier: UNDERLINED | REVERSED,
+        x: 23, y: 13, fg: Reset, bg: Reset, modifier: (empty),
+        x: 44, y: 13, fg: Reset, bg: Reset, modifier: BOLD | UNDERLINED | REVERSED,
+        x: 67, y: 13, fg: Reset, bg: Reset, modifier: (empty),
+        x: 0, y: 15, fg: Reset, bg: Reset, modifier: REVERSED,
+        x: 14, y: 15, fg: Reset, bg: Reset, modifier: (empty),
+        x: 39, y: 15, fg: Reset, bg: Reset, modifier: BOLD | REVERSED,
+        x: 58, y: 15, fg: Reset, bg: Reset, modifier: (empty),
+        x: 5, y: 17, fg: Reset, bg: Reset, modifier: UNDERLINED | REVERSED,
+        x: 29, y: 17, fg: Reset, bg: Reset, modifier: (empty),
+        x: 44, y: 17, fg: Reset, bg: Reset, modifier: BOLD | UNDERLINED | REVERSED,
+        x: 73, y: 17, fg: Reset, bg: Reset, modifier: (empty),
+        x: 30, y: 23, fg: Gray, bg: Reset, modifier: (empty),
+        x: 31, y: 23, fg: Reset, bg: Reset, modifier: (empty),
+    ]
+}
