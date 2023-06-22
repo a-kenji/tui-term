@@ -14,6 +14,12 @@ cargo run --example simple_ls
 
 - Required: `ls`
 
+Shows the output of `ls` inside a widget.
+
+## `simple_ls_chan`
+
+- Required: `ls`
+
 Uses a channel to share data.
 
 ## `simple_ls_rw`
