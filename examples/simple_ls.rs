@@ -33,7 +33,7 @@ fn main() -> std::io::Result<()> {
         })
         .unwrap();
 
-    let mut parser = vt100::Parser::new(size.rows, size.cols, 0);
+    let mut parser = vt100::Parser::new(size.rows - 1, size.cols - 1, 0);
 
     let mut output = String::new();
 
@@ -92,6 +92,8 @@ fn ui<B: Backend>(f: &mut Frame<B>, screen: &Screen) {
         .borders(Borders::ALL)
         .title(title)
         .style(Style::default().add_modifier(Modifier::BOLD));
+    let pseudo_term = PseudoTerm::new(screen).block(block.clone());
+    f.render_widget(pseudo_term, chunks[0]);
     let pseudo_term = PseudoTerm::new(screen).block(block);
     f.render_widget(pseudo_term, chunks[1]);
     let block = Block::default().borders(Borders::ALL);
