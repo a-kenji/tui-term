@@ -1,12 +1,11 @@
 use std::{
-    io,
+    io::{self, BufWriter},
     sync::{Arc, RwLock},
 };
 
 use crossterm::{
-    event::{self, DisableMouseCapture, EnableMouseCapture, Event, KeyCode, KeyEventKind},
+    event::{self, Event, KeyCode, KeyEventKind},
     execute,
-    style::ResetColor,
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
 use portable_pty::{CommandBuilder, NativePtySystem, PtySize, PtySystem};
@@ -23,13 +22,7 @@ use tui_term::widget::PseudoTerm;
 use vt100::Screen;
 
 fn main() -> std::io::Result<()> {
-    let mut stdout = io::stdout();
-    execute!(stdout, ResetColor)?;
-    enable_raw_mode()?;
-    let mut stdout = io::stdout();
-    execute!(stdout, EnterAlternateScreen, EnableMouseCapture)?;
-    let backend = CrosstermBackend::new(stdout);
-    let mut terminal = Terminal::new(backend)?;
+    let (mut terminal, size) = setup_terminal().unwrap();
 
     let pty_system = NativePtySystem::default();
     let cwd = std::env::current_dir().unwrap();
@@ -38,8 +31,8 @@ fn main() -> std::io::Result<()> {
 
     let pair = pty_system
         .openpty(PtySize {
-            rows: 24,
-            cols: 80,
+            rows: size.rows,
+            cols: size.cols,
             pixel_width: 0,
             pixel_height: 0,
         })
@@ -48,7 +41,11 @@ fn main() -> std::io::Result<()> {
     drop(pair.slave);
 
     let mut reader = pair.master.try_clone_reader().unwrap();
-    let parser = Arc::new(RwLock::new(vt100::Parser::new(24, 80, 0)));
+    let parser = Arc::new(RwLock::new(vt100::Parser::new(
+        size.rows - 1,
+        size.cols - 1,
+        0,
+    )));
 
     {
         let parser = parser.clone();
@@ -69,21 +66,13 @@ fn main() -> std::io::Result<()> {
     }
 
     // Wait for the child to complete
-    let child_exit_status = child.wait().unwrap();
+    let _child_exit_status = child.wait().unwrap();
 
     drop(pair.master);
 
     run(&mut terminal, parser)?;
 
-    // restore terminal
-    disable_raw_mode()?;
-    execute!(
-        terminal.backend_mut(),
-        LeaveAlternateScreen,
-        DisableMouseCapture
-    )?;
-    terminal.show_cursor()?;
-    println!("Exit status: {child_exit_status}");
+    cleanup_terminal(&mut terminal).unwrap();
     Ok(())
 }
 
@@ -122,6 +111,8 @@ fn ui<B: Backend>(f: &mut Frame<B>, screen: &Screen) {
         .borders(Borders::ALL)
         .title(title)
         .style(Style::default().add_modifier(Modifier::BOLD));
+    let pseudo_term = PseudoTerm::new(screen).block(block.clone());
+    f.render_widget(pseudo_term, chunks[0]);
     let pseudo_term = PseudoTerm::new(screen).block(block);
     f.render_widget(pseudo_term, chunks[1]);
     let block = Block::default().borders(Borders::ALL);
@@ -131,4 +122,34 @@ fn ui<B: Backend>(f: &mut Frame<B>, screen: &Screen) {
         .style(Style::default().add_modifier(Modifier::BOLD | Modifier::REVERSED))
         .alignment(Alignment::Center);
     f.render_widget(explanation, chunks[2]);
+}
+
+fn setup_terminal() -> io::Result<(Terminal<CrosstermBackend<BufWriter<io::Stdout>>>, Size)> {
+    enable_raw_mode()?;
+    let stdout = io::stdout();
+    let backend = CrosstermBackend::new(BufWriter::new(stdout));
+    let mut terminal = Terminal::new(backend)?;
+    let initial_size = terminal.size()?;
+    let size = Size {
+        rows: initial_size.height,
+        cols: initial_size.width,
+    };
+    execute!(terminal.backend_mut(), EnterAlternateScreen)?;
+    Ok((terminal, size))
+}
+
+fn cleanup_terminal(
+    terminal: &mut Terminal<CrosstermBackend<BufWriter<io::Stdout>>>,
+) -> io::Result<()> {
+    execute!(terminal.backend_mut(), LeaveAlternateScreen)?;
+    disable_raw_mode()?;
+    terminal.show_cursor()?;
+    terminal.clear()?;
+    Ok(())
+}
+
+#[derive(Debug, Clone)]
+struct Size {
+    cols: u16,
+    rows: u16,
 }
