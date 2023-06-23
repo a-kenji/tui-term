@@ -57,6 +57,7 @@ impl Cursor {
     ///
     /// let cursor = Cursor::default().symbol("|");
     /// ```
+    #[must_use]
     pub fn symbol(mut self, symbol: &str) -> Self {
         self.symbol = symbol.into();
         self
@@ -75,7 +76,8 @@ impl Cursor {
     ///
     /// let cursor = Cursor::default().style(Style::default());
     /// ```
-    pub fn style(mut self, style: Style) -> Self {
+    #[must_use]
+    pub const fn style(mut self, style: Style) -> Self {
         self.style = style;
         self
     }
@@ -96,7 +98,8 @@ impl Cursor {
     ///
     /// let cursor = Cursor::default().overlay_style(Style::default());
     /// ```
-    pub fn overlay_style(mut self, overlay_style: Style) -> Self {
+    #[must_use]
+    pub const fn overlay_style(mut self, overlay_style: Style) -> Self {
         self.overlay_style = overlay_style;
         self
     }
@@ -128,6 +131,7 @@ impl<'a> PseudoTerm<'a> {
     /// let mut parser = vt100::Parser::new(24, 80, 0);
     /// let pseudo_term = PseudoTerm::new(&parser.screen());
     /// ```
+    #[must_use]
     pub fn new(screen: &'a Screen) -> Self {
         PseudoTerm {
             screen,
@@ -153,6 +157,7 @@ impl<'a> PseudoTerm<'a> {
     /// let block = Block::default();
     /// let pseudo_term = PseudoTerm::new(&parser.screen()).block(block);
     /// ```
+    #[must_use]
     pub fn block(mut self, block: Block<'a>) -> Self {
         self.block = Some(block);
         self
@@ -177,6 +182,7 @@ impl<'a> PseudoTerm<'a> {
     /// let cursor = Cursor::default().symbol("|").style(Style::default());
     /// let pseudo_term = PseudoTerm::new(&parser.screen()).cursor(cursor);
     /// ```
+    #[must_use]
     pub fn cursor(mut self, cursor: Cursor) -> Self {
         self.cursor = cursor;
         self
@@ -197,12 +203,14 @@ impl<'a> PseudoTerm<'a> {
     /// let style = Style::default();
     /// let pseudo_term = PseudoTerm::new(&parser.screen()).style(style);
     /// ```
-    pub fn style(mut self, style: Style) -> Self {
+    #[must_use]
+    pub const fn style(mut self, style: Style) -> Self {
         self.style = Some(style);
         self
     }
 
-    pub fn screen(&self) -> &Screen {
+    #[must_use]
+    pub const fn screen(&self) -> &Screen {
         self.screen
     }
 }
@@ -218,7 +226,7 @@ impl Widget for PseudoTerm<'_> {
             }
             None => area,
         };
-        state::handle(&self, &area, buf);
+        state::handle(&self, area, buf);
     }
 }
 

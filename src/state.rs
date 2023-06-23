@@ -6,7 +6,7 @@ use crate::widget::PseudoTerm;
 
 /// Draw the [`Screen`] to the [`Buffer`],
 /// area is the designated area that the consumer provides
-pub fn handle(term: &PseudoTerm, area: &Rect, buf: &mut Buffer) {
+pub fn handle(term: &PseudoTerm, area: Rect, buf: &mut Buffer) {
     let cols = area.width;
     let rows = area.height;
     let col_start = area.x;
@@ -104,9 +104,9 @@ enum Color {
 impl From<vt100::Color> for Color {
     fn from(value: vt100::Color) -> Self {
         match value {
-            vt100::Color::Default => Color::Reset,
-            vt100::Color::Idx(i) => Color::Indexed(i),
-            vt100::Color::Rgb(r, g, b) => Color::Rgb(r, g, b),
+            vt100::Color::Default => Self::Reset,
+            vt100::Color::Idx(i) => Self::Indexed(i),
+            vt100::Color::Rgb(r, g, b) => Self::Rgb(r, g, b),
         }
     }
 }
@@ -114,25 +114,25 @@ impl From<vt100::Color> for Color {
 impl From<Color> for vt100::Color {
     fn from(value: Color) -> Self {
         match value {
-            Color::Reset => vt100::Color::Default,
-            Color::Black => vt100::Color::Idx(0),
-            Color::Red => vt100::Color::Idx(1),
-            Color::Green => vt100::Color::Idx(2),
-            Color::Yellow => vt100::Color::Idx(3),
-            Color::Blue => vt100::Color::Idx(4),
-            Color::Magenta => vt100::Color::Idx(5),
-            Color::Cyan => vt100::Color::Idx(6),
-            Color::Gray => vt100::Color::Idx(7),
-            Color::DarkGray => vt100::Color::Idx(8),
-            Color::LightRed => vt100::Color::Idx(9),
-            Color::LightGreen => vt100::Color::Idx(10),
-            Color::LightYellow => vt100::Color::Idx(11),
-            Color::LightBlue => vt100::Color::Idx(12),
-            Color::LightMagenta => vt100::Color::Idx(13),
-            Color::LightCyan => vt100::Color::Idx(14),
-            Color::White => vt100::Color::Idx(15),
-            Color::Rgb(r, g, b) => vt100::Color::Rgb(r, g, b),
-            Color::Indexed(i) => vt100::Color::Idx(i),
+            Color::Reset => Self::Default,
+            Color::Black => Self::Idx(0),
+            Color::Red => Self::Idx(1),
+            Color::Green => Self::Idx(2),
+            Color::Yellow => Self::Idx(3),
+            Color::Blue => Self::Idx(4),
+            Color::Magenta => Self::Idx(5),
+            Color::Cyan => Self::Idx(6),
+            Color::Gray => Self::Idx(7),
+            Color::DarkGray => Self::Idx(8),
+            Color::LightRed => Self::Idx(9),
+            Color::LightGreen => Self::Idx(10),
+            Color::LightYellow => Self::Idx(11),
+            Color::LightBlue => Self::Idx(12),
+            Color::LightMagenta => Self::Idx(13),
+            Color::LightCyan => Self::Idx(14),
+            Color::White => Self::Idx(15),
+            Color::Rgb(r, g, b) => Self::Rgb(r, g, b),
+            Color::Indexed(i) => Self::Idx(i),
         }
     }
 }
@@ -140,25 +140,25 @@ impl From<Color> for vt100::Color {
 impl From<Color> for ratatui::style::Color {
     fn from(value: Color) -> Self {
         match value {
-            Color::Reset => ratatui::style::Color::Reset,
-            Color::Black => ratatui::style::Color::Black,
-            Color::Red => ratatui::style::Color::Red,
-            Color::Green => ratatui::style::Color::Green,
-            Color::Yellow => ratatui::style::Color::Yellow,
-            Color::Blue => ratatui::style::Color::Blue,
-            Color::Magenta => ratatui::style::Color::Magenta,
-            Color::Cyan => ratatui::style::Color::Cyan,
-            Color::Gray => ratatui::style::Color::Gray,
-            Color::DarkGray => ratatui::style::Color::DarkGray,
-            Color::LightRed => ratatui::style::Color::LightRed,
-            Color::LightGreen => ratatui::style::Color::LightGreen,
-            Color::LightYellow => ratatui::style::Color::LightYellow,
-            Color::LightBlue => ratatui::style::Color::LightBlue,
-            Color::LightMagenta => ratatui::style::Color::LightMagenta,
-            Color::LightCyan => ratatui::style::Color::LightCyan,
-            Color::White => ratatui::style::Color::White,
-            Color::Rgb(r, g, b) => ratatui::style::Color::Rgb(r, g, b),
-            Color::Indexed(i) => ratatui::style::Color::Indexed(i),
+            Color::Reset => Self::Reset,
+            Color::Black => Self::Black,
+            Color::Red => Self::Red,
+            Color::Green => Self::Green,
+            Color::Yellow => Self::Yellow,
+            Color::Blue => Self::Blue,
+            Color::Magenta => Self::Magenta,
+            Color::Cyan => Self::Cyan,
+            Color::Gray => Self::Gray,
+            Color::DarkGray => Self::DarkGray,
+            Color::LightRed => Self::LightRed,
+            Color::LightGreen => Self::LightGreen,
+            Color::LightYellow => Self::LightYellow,
+            Color::LightBlue => Self::LightBlue,
+            Color::LightMagenta => Self::LightMagenta,
+            Color::LightCyan => Self::LightCyan,
+            Color::White => Self::White,
+            Color::Rgb(r, g, b) => Self::Rgb(r, g, b),
+            Color::Indexed(i) => Self::Indexed(i),
         }
     }
 }
