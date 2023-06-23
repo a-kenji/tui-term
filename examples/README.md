@@ -15,18 +15,23 @@ cargo run --example simple_ls
 - Required: `ls`
 
 Shows the output of `ls` inside a widget.
+This example demonstrates a basic implementation of a file listing using `tui-term`.
+It shows how to interact with the `PseudoTerm` widget and display file information.
+In this example, synchronization is not explicitly implemented.
 
 ## `simple_ls_chan`
 
 - Required: `ls`
 
 Uses a channel to share data.
+It demonstrates how to send messages from one thread to another to update the `PseudoTerm` widget.
 
 ## `simple_ls_rw`
 
 - Required: `ls`
 
 Uses a `RWLock` to manage shared read/write access.
+The RWLock ensures that multiple threads can read from the pseudoterminal simultaneously, while exclusive write access is granted to only one thread at a time.
 
 ## `nested_shell`
 

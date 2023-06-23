@@ -2,6 +2,47 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.2] - 2023-06-23
+
+### Features
+
+- *(uncategorized)* Improve handling performance
+- *(uncategorized)* Inline most methods
+
+### Bug Fixes
+
+- *(uncategorized)* Use unicodepoints, to increase portability
+- *(uncategorized)* Remove duplicate line
+- *(uncategorized)* Widget clears Block style
+
+### Documentation
+
+- *(readme)* Update demo gif
+
+### Styling
+
+- *(uncategorized)* Use a clearer construct
+- *(uncategorized)* Add must_use to public api
+- *(uncategorized)* Prefer self
+
+### Testing
+
+- *(uncategorized)* Add modifier tests
+- *(uncategorized)* Add cursor style tests
+- *(tests)* Test terminal dimensions and styles
+
+### Miscellaneous Tasks
+
+- *(lint)* Add more lint targets
+
+### Examples
+
+- *(uncategorized)* Align `simple_ls*` highlighting differences
+- *(examples)* Improve simple example
+- *(examples)* Add default output from examples
+
+
+
 ## [0.1.1] - 2023-06-14
 
 ### Features
