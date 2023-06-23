@@ -75,7 +75,7 @@ impl Cursor {
     ///
     /// let cursor = Cursor::default().style(Style::default());
     /// ```
-    pub fn style(mut self, style: Style) -> Self {
+    pub const fn style(mut self, style: Style) -> Self {
         self.style = style;
         self
     }
@@ -96,7 +96,7 @@ impl Cursor {
     ///
     /// let cursor = Cursor::default().overlay_style(Style::default());
     /// ```
-    pub fn overlay_style(mut self, overlay_style: Style) -> Self {
+    pub const fn overlay_style(mut self, overlay_style: Style) -> Self {
         self.overlay_style = overlay_style;
         self
     }
@@ -197,12 +197,12 @@ impl<'a> PseudoTerm<'a> {
     /// let style = Style::default();
     /// let pseudo_term = PseudoTerm::new(&parser.screen()).style(style);
     /// ```
-    pub fn style(mut self, style: Style) -> Self {
+    pub const fn style(mut self, style: Style) -> Self {
         self.style = Some(style);
         self
     }
 
-    pub fn screen(&self) -> &Screen {
+    pub const fn screen(&self) -> &Screen {
         self.screen
     }
 }
