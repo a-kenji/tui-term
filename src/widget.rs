@@ -228,14 +228,11 @@ impl Widget for PseudoTerm<'_> {
     #[inline]
     fn render(self, area: Rect, buf: &mut Buffer) {
         Clear.render(area, buf);
-        let area = match &self.block {
-            Some(b) => {
-                let inner_area = b.inner(area);
-                b.clone().render(area, buf);
-                inner_area
-            }
-            None => area,
-        };
+        let area = self.block.as_ref().map_or(area, |b| {
+            let inner_area = b.inner(area);
+            b.clone().render(area, buf);
+            inner_area
+        });
         state::handle(&self, area, buf);
     }
 }
