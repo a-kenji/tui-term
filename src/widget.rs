@@ -226,7 +226,7 @@ impl Widget for PseudoTerm<'_> {
             }
             None => area,
         };
-        state::handle(&self, &area, buf);
+        state::handle(&self, area, buf);
     }
 }
 
