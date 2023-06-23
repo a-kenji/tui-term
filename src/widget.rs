@@ -57,6 +57,7 @@ impl Cursor {
     ///
     /// let cursor = Cursor::default().symbol("|");
     /// ```
+    #[inline]
     #[must_use]
     pub fn symbol(mut self, symbol: &str) -> Self {
         self.symbol = symbol.into();
@@ -76,6 +77,7 @@ impl Cursor {
     ///
     /// let cursor = Cursor::default().style(Style::default());
     /// ```
+    #[inline]
     #[must_use]
     pub const fn style(mut self, style: Style) -> Self {
         self.style = style;
@@ -98,6 +100,7 @@ impl Cursor {
     ///
     /// let cursor = Cursor::default().overlay_style(Style::default());
     /// ```
+    #[inline]
     #[must_use]
     pub const fn overlay_style(mut self, overlay_style: Style) -> Self {
         self.overlay_style = overlay_style;
@@ -106,9 +109,10 @@ impl Cursor {
 }
 
 impl Default for Cursor {
+    #[inline]
     fn default() -> Self {
         Self {
-            symbol: "█".into(),
+            symbol: "\u{2588}".into(), //"█".
             style: Style::default().fg(Color::Gray),
             overlay_style: Style::default().add_modifier(Modifier::REVERSED),
         }
@@ -131,6 +135,7 @@ impl<'a> PseudoTerm<'a> {
     /// let mut parser = vt100::Parser::new(24, 80, 0);
     /// let pseudo_term = PseudoTerm::new(&parser.screen());
     /// ```
+    #[inline]
     #[must_use]
     pub fn new(screen: &'a Screen) -> Self {
         PseudoTerm {
@@ -157,6 +162,7 @@ impl<'a> PseudoTerm<'a> {
     /// let block = Block::default();
     /// let pseudo_term = PseudoTerm::new(&parser.screen()).block(block);
     /// ```
+    #[inline]
     #[must_use]
     pub fn block(mut self, block: Block<'a>) -> Self {
         self.block = Some(block);
@@ -182,6 +188,7 @@ impl<'a> PseudoTerm<'a> {
     /// let cursor = Cursor::default().symbol("|").style(Style::default());
     /// let pseudo_term = PseudoTerm::new(&parser.screen()).cursor(cursor);
     /// ```
+    #[inline]
     #[must_use]
     pub fn cursor(mut self, cursor: Cursor) -> Self {
         self.cursor = cursor;
@@ -203,12 +210,14 @@ impl<'a> PseudoTerm<'a> {
     /// let style = Style::default();
     /// let pseudo_term = PseudoTerm::new(&parser.screen()).style(style);
     /// ```
+    #[inline]
     #[must_use]
     pub const fn style(mut self, style: Style) -> Self {
         self.style = Some(style);
         self
     }
 
+    #[inline]
     #[must_use]
     pub const fn screen(&self) -> &Screen {
         self.screen
@@ -216,16 +225,14 @@ impl<'a> PseudoTerm<'a> {
 }
 
 impl Widget for PseudoTerm<'_> {
+    #[inline]
     fn render(self, area: Rect, buf: &mut Buffer) {
         Clear.render(area, buf);
-        let area = match &self.block {
-            Some(b) => {
-                let inner_area = b.inner(area);
-                b.clone().render(area, buf);
-                inner_area
-            }
-            None => area,
-        };
+        let area = self.block.as_ref().map_or(area, |b| {
+            let inner_area = b.inner(area);
+            b.clone().render(area, buf);
+            inner_area
+        });
         state::handle(&self, area, buf);
     }
 }

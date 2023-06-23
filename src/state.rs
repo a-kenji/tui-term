@@ -102,6 +102,7 @@ enum Color {
 }
 
 impl From<vt100::Color> for Color {
+    #[inline]
     fn from(value: vt100::Color) -> Self {
         match value {
             vt100::Color::Default => Self::Reset,
@@ -112,6 +113,7 @@ impl From<vt100::Color> for Color {
 }
 
 impl From<Color> for vt100::Color {
+    #[inline]
     fn from(value: Color) -> Self {
         match value {
             Color::Reset => Self::Default,
@@ -138,6 +140,7 @@ impl From<Color> for vt100::Color {
 }
 
 impl From<Color> for ratatui::style::Color {
+    #[inline]
     fn from(value: Color) -> Self {
         match value {
             Color::Reset => Self::Reset,
