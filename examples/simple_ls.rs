@@ -5,7 +5,7 @@ use crossterm::{
     execute,
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
-use portable_pty::{CommandBuilder, NativePtySystem, PtySize, PtySystem};
+use portable_pty::{native_pty_system, CommandBuilder, PtySize};
 use ratatui::{
     backend::{Backend, CrosstermBackend},
     layout::Alignment,
@@ -19,7 +19,7 @@ use tui_term::{vt100::Screen, widget::PseudoTerm};
 fn main() -> std::io::Result<()> {
     let (mut terminal, size) = setup_terminal().unwrap();
 
-    let pty_system = NativePtySystem::default();
+    let pty_system = native_pty_system();
     let cwd = std::env::current_dir().unwrap();
     let mut cmd = CommandBuilder::new("ls");
     cmd.cwd(cwd);
