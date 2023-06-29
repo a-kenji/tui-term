@@ -70,7 +70,7 @@ harness = false
 
 
 [[example]]
-name = "simple_ls"
+name = "simple_ls_chan"
 doc-scrape-examples = true
 
 [[example]]

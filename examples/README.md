@@ -2,22 +2,13 @@
 
 In this folder you find examples for using `tui-term`.
 
-To run the `simple_ls` example:
+To run the `simple_ls_rw` example:
 
 ```
-cargo run --example simple_ls
+cargo run --example simple_rw
 ```
 
 ** Note: The examples provided here are simplified and may omit proper error handling and edge cases for brevity and clarity. They are intended to demonstrate specific features and concepts related to `tui-term`. **
-
-## `simple_ls`
-
-- Required: `ls`
-
-Shows the output of `ls` inside a widget.
-This example demonstrates a basic implementation of a file listing using `tui-term`.
-It shows how to interact with the `PseudoTerm` widget and display file information.
-In this example, synchronization is not explicitly implemented.
 
 ## `simple_ls_chan`
 
