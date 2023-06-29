@@ -25,7 +25,7 @@ use tokio::{
 };
 use tracing::Level;
 use tracing_subscriber::FmtSubscriber;
-use tui_term::widget::PseudoTerm;
+use tui_term::widget::PseudoTerminal;
 
 #[derive(Debug, Clone)]
 struct Size {
@@ -80,7 +80,7 @@ async fn main() -> io::Result<()> {
                 };
                 let parser = pane.parser.read().unwrap();
                 let screen = parser.screen();
-                let pseudo_term = PseudoTerm::new(screen).block(block);
+                let pseudo_term = PseudoTerminal::new(screen).block(block);
                 let pane_chunk = Rect {
                     x: chunks[0].x,
                     y: chunks[0].y + (index as u16 * pane_height), // Adjust the y coordinate for each pane

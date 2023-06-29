@@ -20,7 +20,7 @@ use ratatui::{
     Frame,
 };
 use ratatui::{backend::CrosstermBackend, Terminal};
-use tui_term::widget::PseudoTerm;
+use tui_term::widget::PseudoTerminal;
 use vt100::Screen;
 
 fn main() -> std::io::Result<()> {
@@ -138,7 +138,7 @@ fn ui<B: Backend>(f: &mut Frame<B>, screen: &Screen) {
         .borders(Borders::ALL)
         .title(title)
         .style(Style::default().add_modifier(Modifier::BOLD));
-    let pseudo_term = PseudoTerm::new(screen).block(block);
+    let pseudo_term = PseudoTerminal::new(screen).block(block);
     f.render_widget(pseudo_term, chunks[1]);
     let block = Block::default().borders(Borders::ALL);
     f.render_widget(block, f.size());

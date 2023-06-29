@@ -8,28 +8,28 @@ use crate::state;
 
 /// A widget representing a pseudo-terminal screen.
 ///
-/// The `PseudoTerm` widget displays the contents of a pseudo-terminal screen,
+/// The `PseudoTerminal` widget displays the contents of a pseudo-terminal screen,
 /// which is typically populated with text and control sequences from a terminal emulator.
 /// It provides a visual representation of the terminal output within a TUI application.
 ///
 /// The contents of the pseudo-terminal screen are represented by a `vt100::Screen` object.
 /// The `vt100` library provides functionality for parsing and processing terminal control sequences and handling terminal state,
-/// allowing the `PseudoTerm` widget to accurately render the terminal output.
+/// allowing the `PseudoTerminal` widget to accurately render the terminal output.
 ///
 /// # Examples
 ///
 /// ```rust
 /// use ratatui::widgets::{Block, Borders};
 /// use ratatui::style::{Style, Modifier, Color};
-/// use tui_term::widget::PseudoTerm;
+/// use tui_term::widget::PseudoTerminal;
 /// use vt100::Parser;
 ///
 /// let mut parser = vt100::Parser::new(24, 80, 0);
-/// let pseudo_term = PseudoTerm::new(&parser.screen())
+/// let pseudo_term = PseudoTerminal::new(&parser.screen())
 ///     .block(Block::default().title("Terminal").borders(Borders::ALL))
 ///     .style(Style::default().fg(Color::White).bg(Color::Black).add_modifier(Modifier::BOLD));
 /// ```
-pub struct PseudoTerm<'a> {
+pub struct PseudoTerminal<'a> {
     screen: &'a Screen,
     pub(crate) block: Option<Block<'a>>,
     style: Option<Style>,
@@ -119,8 +119,8 @@ impl Default for Cursor {
     }
 }
 
-impl<'a> PseudoTerm<'a> {
-    /// Creates a new instance of `PseudoTerm`.
+impl<'a> PseudoTerminal<'a> {
+    /// Creates a new instance of `PseudoTerminal`.
     ///
     /// # Arguments
     ///
@@ -129,23 +129,23 @@ impl<'a> PseudoTerm<'a> {
     /// # Example
     ///
     /// ```
-    /// use tui_term::widget::PseudoTerm;
+    /// use tui_term::widget::PseudoTerminal;
     /// use vt100::Parser;
     ///
     /// let mut parser = vt100::Parser::new(24, 80, 0);
-    /// let pseudo_term = PseudoTerm::new(&parser.screen());
+    /// let pseudo_term = PseudoTerminal::new(&parser.screen());
     /// ```
     #[inline]
     #[must_use]
     pub fn new(screen: &'a Screen) -> Self {
-        PseudoTerm {
+        PseudoTerminal {
             screen,
             block: None,
             style: None,
             cursor: Cursor::default(),
         }
     }
-    /// Sets the block for the `PseudoTerm`.
+    /// Sets the block for the `PseudoTerminal`.
     ///
     /// # Arguments
     ///
@@ -154,13 +154,13 @@ impl<'a> PseudoTerm<'a> {
     /// # Example
     ///
     /// ```
-    /// use tui_term::widget::PseudoTerm;
+    /// use tui_term::widget::PseudoTerminal;
     /// use ratatui::widgets::Block;
     /// use vt100::Parser;
     ///
     /// let mut parser = vt100::Parser::new(24, 80, 0);
     /// let block = Block::default();
-    /// let pseudo_term = PseudoTerm::new(&parser.screen()).block(block);
+    /// let pseudo_term = PseudoTerminal::new(&parser.screen()).block(block);
     /// ```
     #[inline]
     #[must_use]
@@ -169,9 +169,9 @@ impl<'a> PseudoTerm<'a> {
         self
     }
 
-    /// Sets the cursor configuration for the `PseudoTerm`.
+    /// Sets the cursor configuration for the `PseudoTerminal`.
     ///
-    /// The `cursor` method allows configuring the appearance of the cursor within the `PseudoTerm` widget.
+    /// The `cursor` method allows configuring the appearance of the cursor within the `PseudoTerminal` widget.
     ///
     /// # Arguments
     ///
@@ -180,13 +180,13 @@ impl<'a> PseudoTerm<'a> {
     /// # Example
     ///
     /// ```rust
-    /// use tui_term::widget::PseudoTerm;
+    /// use tui_term::widget::PseudoTerminal;
     /// use tui_term::widget::Cursor;
     /// use ratatui::style::Style;
     ///
     /// let mut parser = vt100::Parser::new(24, 80, 0);
     /// let cursor = Cursor::default().symbol("|").style(Style::default());
-    /// let pseudo_term = PseudoTerm::new(&parser.screen()).cursor(cursor);
+    /// let pseudo_term = PseudoTerminal::new(&parser.screen()).cursor(cursor);
     /// ```
     #[inline]
     #[must_use]
@@ -194,7 +194,7 @@ impl<'a> PseudoTerm<'a> {
         self.cursor = cursor;
         self
     }
-    /// Sets the style for `PseudoTerm`.
+    /// Sets the style for `PseudoTerminal`.
     ///
     /// # Arguments
     ///
@@ -203,12 +203,12 @@ impl<'a> PseudoTerm<'a> {
     /// # Example
     ///
     /// ```
-    /// use tui_term::widget::PseudoTerm;
+    /// use tui_term::widget::PseudoTerminal;
     /// use ratatui::style::Style;
     ///
     /// let mut parser = vt100::Parser::new(24, 80, 0);
     /// let style = Style::default();
-    /// let pseudo_term = PseudoTerm::new(&parser.screen()).style(style);
+    /// let pseudo_term = PseudoTerminal::new(&parser.screen()).style(style);
     /// ```
     #[inline]
     #[must_use]
@@ -224,7 +224,7 @@ impl<'a> PseudoTerm<'a> {
     }
 }
 
-impl Widget for PseudoTerm<'_> {
+impl Widget for PseudoTerminal<'_> {
     #[inline]
     fn render(self, area: Rect, buf: &mut Buffer) {
         Clear.render(area, buf);
@@ -250,7 +250,7 @@ mod tests {
         let mut terminal = Terminal::new(backend).unwrap();
         let mut parser = vt100::Parser::new(24, 80, 0);
         parser.process(stream);
-        let pseudo_term = PseudoTerm::new(parser.screen());
+        let pseudo_term = PseudoTerminal::new(parser.screen());
         terminal
             .draw(|f| {
                 f.render_widget(pseudo_term, f.size());
@@ -265,7 +265,7 @@ mod tests {
         let mut terminal = Terminal::new(backend).unwrap();
         let mut parser = vt100::Parser::new(24, 80, 0);
         parser.process(b" ");
-        let pseudo_term = PseudoTerm::new(parser.screen());
+        let pseudo_term = PseudoTerminal::new(parser.screen());
         terminal
             .draw(|f| {
                 f.render_widget(pseudo_term, f.size());
@@ -282,7 +282,7 @@ mod tests {
         let mut terminal = Terminal::new(backend).unwrap();
         let mut parser = vt100::Parser::new(24, 80, 0);
         parser.process(stream);
-        let pseudo_term = PseudoTerm::new(parser.screen());
+        let pseudo_term = PseudoTerminal::new(parser.screen());
         terminal
             .draw(|f| {
                 f.render_widget(pseudo_term, f.size());
@@ -306,7 +306,7 @@ mod tests {
         let mut parser = vt100::Parser::new(24, 80, 0);
         let cursor = Cursor::default().symbol("|");
         parser.process(stream);
-        let pseudo_term = PseudoTerm::new(parser.screen()).cursor(cursor);
+        let pseudo_term = PseudoTerminal::new(parser.screen()).cursor(cursor);
         terminal
             .draw(|f| {
                 f.render_widget(pseudo_term, f.size());
@@ -324,7 +324,7 @@ mod tests {
         let style = Style::default().bg(Color::Cyan).fg(Color::LightRed);
         let cursor = Cursor::default().symbol("|").style(style);
         parser.process(stream);
-        let pseudo_term = PseudoTerm::new(parser.screen()).cursor(cursor);
+        let pseudo_term = PseudoTerminal::new(parser.screen()).cursor(cursor);
         terminal
             .draw(|f| {
                 f.render_widget(pseudo_term, f.size());
@@ -348,7 +348,7 @@ mod tests {
         let style = Style::default().bg(Color::Cyan).fg(Color::LightRed);
         let cursor = Cursor::default().overlay_style(style);
         parser.process(stream);
-        let pseudo_term = PseudoTerm::new(parser.screen()).cursor(cursor);
+        let pseudo_term = PseudoTerminal::new(parser.screen()).cursor(cursor);
         terminal
             .draw(|f| {
                 f.render_widget(pseudo_term, f.size());
@@ -365,7 +365,7 @@ mod tests {
         let mut parser = vt100::Parser::new(24, 80, 0);
         parser.process(stream);
         let block = Block::default().borders(Borders::ALL).title("ls");
-        let pseudo_term = PseudoTerm::new(parser.screen()).block(block);
+        let pseudo_term = PseudoTerminal::new(parser.screen()).block(block);
         terminal
             .draw(|f| {
                 f.render_widget(pseudo_term, f.size());
@@ -385,7 +385,7 @@ mod tests {
             .borders(Borders::ALL)
             .style(Style::default().add_modifier(Modifier::BOLD))
             .title("ls");
-        let pseudo_term = PseudoTerm::new(parser.screen()).block(block);
+        let pseudo_term = PseudoTerminal::new(parser.screen()).block(block);
         terminal
             .draw(|f| {
                 f.render_widget(pseudo_term, f.size());

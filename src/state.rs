@@ -2,11 +2,11 @@ use ratatui::buffer::Buffer;
 use ratatui::layout::Rect;
 use ratatui::style::{Modifier, Style};
 
-use crate::widget::PseudoTerm;
+use crate::widget::PseudoTerminal;
 
 /// Draw the [`Screen`] to the [`Buffer`],
 /// area is the designated area that the consumer provides
-pub fn handle(term: &PseudoTerm, area: Rect, buf: &mut Buffer) {
+pub fn handle(term: &PseudoTerminal, area: Rect, buf: &mut Buffer) {
     let cols = area.width;
     let rows = area.height;
     let col_start = area.x;

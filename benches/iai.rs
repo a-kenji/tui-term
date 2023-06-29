@@ -1,7 +1,7 @@
 use once_cell::sync::Lazy;
 use ratatui::backend::TestBackend;
 use ratatui::Terminal;
-use tui_term::widget::PseudoTerm;
+use tui_term::widget::PseudoTerminal;
 use vt100::Screen;
 
 static SIMPLE_LS_ACTIONS: Lazy<Screen> = Lazy::new(|| {
@@ -120,7 +120,7 @@ static VTTEST_02_15: Lazy<Screen> = Lazy::new(|| {
 fn render_typescript(screen: &Screen) {
     let backend = TestBackend::new(80, 24);
     let mut terminal = Terminal::new(backend).unwrap();
-    let pseudo_term = PseudoTerm::new(screen);
+    let pseudo_term = PseudoTerminal::new(screen);
     terminal
         .draw(|f| {
             f.render_widget(pseudo_term, f.size());
