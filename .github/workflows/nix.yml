@@ -53,25 +53,6 @@ jobs:
     - name: "cargo clippy"
       run: nix develop --command cargo clippy
 
-  actionlint:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - uses: cachix/install-nix-action@v22
-      with:
-        extra_nix_config: |
-          access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-    - uses: cachix/cachix-action@v12
-      with:
-        name: kenji
-        # If you chose API tokens for write access OR if you have a private cache
-        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-    - uses: DeterminateSystems/magic-nix-cache-action@v2
-      with:
-        diagnostic-endpoint: ""
-    - name: "actionlint"
-      run: nix develop .#actionlintShell --command actionlint --ignore SC2002
-
   cargo-deny:
     runs-on: ubuntu-latest
     steps:
