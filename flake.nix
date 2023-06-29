@@ -49,7 +49,7 @@
       };
 
       # the example targets
-      examples = ["simple_ls" "simple_ls_rw" "smux" "long_running" "nested_shell" "nested_shell_async"];
+      examples = ["simple_ls_chan" "simple_ls_rw" "smux" "long_running" "nested_shell" "nested_shell_async"];
 
       craneLib = (crane.mkLib pkgs).overrideToolchain rustToolchainTOML;
       craneLibMSRV = (crane.mkLib pkgs).overrideToolchain rustToolchainMSRV;

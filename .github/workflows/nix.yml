@@ -188,7 +188,7 @@ jobs:
         diagnostic-endpoint: ""
     - name: "build examples"
       run: |
-        nix build -Lvv .#simple_ls
+        nix build -Lvv .#simple_ls_chan
         nix build -Lvv .#simple_ls_rw
         nix build -Lvv .#smux
         nix build -Lvv .#nested_shell

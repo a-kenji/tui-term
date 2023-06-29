@@ -22,7 +22,7 @@ jobs:
       - name: "Build (Intel)"
         shell: bash
         run: |
-          examples=("long_running" "nested_shell" "nested_shell_async" "simple_ls" "simple_ls_chan" "simple_ls_rw" "smux")
+          examples=("long_running" "nested_shell" "nested_shell_async" "simple_ls_chan" "simple_ls_rw" "smux")
 
           for example in "${examples[@]}"; do
               cargo build --target x86_64-apple-darwin --example "$example"
@@ -31,7 +31,7 @@ jobs:
       - name: "Build (ARM)"
         shell: bash
         run: |
-          examples=("long_running" "nested_shell" "nested_shell_async" "simple_ls" "simple_ls_chan" "simple_ls_rw" "smux")
+          examples=("long_running" "nested_shell" "nested_shell_async" "simple_ls_chan" "simple_ls_rw" "smux")
 
           for example in "${examples[@]}"; do
               cargo build --target aarch64-apple-darwin --example "$example"

@@ -32,7 +32,7 @@ cargo add tui-term
 
 Check out the examples directory, for more information, or run an example:
 ```
-cargo run --example simple_ls
+cargo run --example simple_ls_rw
 ```
 
 ## Chat Room
