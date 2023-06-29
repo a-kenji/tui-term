@@ -20,11 +20,11 @@
 //! ```rust
 //! use ratatui::widgets::{Block, Borders};
 //! use ratatui::style::{Style, Modifier, Color};
-//! use tui_term::widget::PseudoTerm;
+//! use tui_term::widget::PseudoTerminal;
 //! use vt100::Parser;
 //!
 //! let mut parser = vt100::Parser::new(24, 80, 0);
-//! let pseudo_term = PseudoTerm::new(&parser.screen())
+//! let pseudo_term = PseudoTerminal::new(&parser.screen())
 //!     .block(Block::default().title("Terminal").borders(Borders::ALL))
 //!     .style(Style::default().fg(Color::White).bg(Color::Black).add_modifier(Modifier::BOLD));
 //! ```

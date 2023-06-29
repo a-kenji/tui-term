@@ -15,7 +15,7 @@ cargo run --example simple_rw
 - Required: `ls`
 
 Uses a channel to share data.
-It demonstrates how to send messages from one thread to another to update the `PseudoTerm` widget.
+It demonstrates how to send messages from one thread to another to update the `PseudoTerminal` widget.
 
 ## `simple_ls_rw`
 

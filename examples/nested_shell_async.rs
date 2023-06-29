@@ -24,7 +24,7 @@ use tokio::{
     sync::mpsc::{channel, Sender},
     task,
 };
-use tui_term::widget::PseudoTerm;
+use tui_term::widget::PseudoTerminal;
 use vt100::Screen;
 
 #[derive(Debug)]
@@ -210,7 +210,7 @@ fn ui<B: Backend>(f: &mut Frame<B>, screen: &Screen) {
     let block = Block::default()
         .borders(Borders::ALL)
         .style(Style::default().add_modifier(Modifier::BOLD));
-    let pseudo_term = PseudoTerm::new(screen).block(block);
+    let pseudo_term = PseudoTerminal::new(screen).block(block);
     f.render_widget(pseudo_term, chunks[0]);
     let explanation = "Press q to exit".to_string();
     let explanation = Paragraph::new(explanation)
