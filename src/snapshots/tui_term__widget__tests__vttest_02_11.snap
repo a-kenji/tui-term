@@ -31,8 +31,8 @@ Buffer {
         "Origin mode test. This line should be at the bottom of the screen.              ",
     ],
     styles: [
-        x: 0, y: 0, fg: Reset, bg: Reset, modifier: (empty),
-        x: 73, y: 1, fg: Gray, bg: Reset, modifier: (empty),
-        x: 74, y: 1, fg: Reset, bg: Reset, modifier: (empty),
+        x: 0, y: 0, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+        x: 73, y: 1, fg: Gray, bg: Reset, underline: Reset, modifier: NONE,
+        x: 74, y: 1, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
     ]
 }

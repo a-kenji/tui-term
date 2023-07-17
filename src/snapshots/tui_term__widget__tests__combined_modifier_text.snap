@@ -31,7 +31,7 @@ Buffer {
         "                                                                                ",
     ],
     styles: [
-        x: 0, y: 0, fg: Reset, bg: Reset, modifier: ITALIC | UNDERLINED,
-        x: 53, y: 0, fg: Reset, bg: Reset, modifier: (empty),
+        x: 0, y: 0, fg: Reset, bg: Reset, underline: Reset, modifier: ITALIC | UNDERLINED,
+        x: 53, y: 0, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
     ]
 }

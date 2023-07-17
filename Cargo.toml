@@ -32,7 +32,7 @@ categories = ["command-line-interface", "command-line-utilities"]
 # ]
 
 [dependencies]
-ratatui = "0.21.0"
+ratatui = "0.22.0"
 vt100 = "0.15.2"
 
 [dev-dependencies]
