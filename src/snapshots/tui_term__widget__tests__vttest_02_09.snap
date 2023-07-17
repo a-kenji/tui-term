@@ -31,8 +31,8 @@ Buffer {
         "                                                                                ",
     ],
     styles: [
-        x: 0, y: 0, fg: Reset, bg: Reset, modifier: (empty),
-        x: 13, y: 12, fg: Reset, bg: Reset, modifier: REVERSED,
-        x: 14, y: 12, fg: Reset, bg: Reset, modifier: (empty),
+        x: 0, y: 0, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+        x: 13, y: 12, fg: Reset, bg: Reset, underline: Reset, modifier: REVERSED,
+        x: 14, y: 12, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
     ]
 }
