@@ -11,13 +11,15 @@ use crossterm::{
 };
 use portable_pty::CommandBuilder;
 use ratatui::{
-    backend::Backend,
+    backend::{Backend, CrosstermBackend},
     layout::Alignment,
-    style::{Modifier, Style},
+    prelude::{Constraint, Direction, Layout},
+    style::{Color, Modifier, Style},
+    terminal::Terminal,
+    text::Span,
     widgets::{Block, Borders, Paragraph},
     Frame,
 };
-use ratatui::{backend::CrosstermBackend, Terminal};
 use tui_term::widget::{PseudoTerminal, PseudoTerminalState};
 
 fn main() -> std::io::Result<()> {
@@ -34,7 +36,8 @@ fn main() -> std::io::Result<()> {
     let mut command = CommandBuilder::new(shell);
     command.cwd(cwd);
 
-    let terminal_state = PseudoTerminalState::default();
+    let initial_size = terminal.size()?;
+    let terminal_state = PseudoTerminalState::new(initial_size);
 
     let child_process_thread = terminal_state.spawn_child_process_thread(command);
     let parser_thread = terminal_state.spawn_parser_thread();
@@ -125,25 +128,23 @@ fn run<B: Backend>(
 }
 
 fn ui<B: Backend>(f: &mut Frame<B>, state: &mut PseudoTerminalState) {
-    let chunks = ratatui::layout::Layout::default()
-        .direction(ratatui::layout::Direction::Vertical)
-        .margin(1)
-        .constraints(
-            [
-                ratatui::layout::Constraint::Percentage(100),
-                ratatui::layout::Constraint::Min(1),
-            ]
-            .as_ref(),
-        )
+    let chunks = Layout::default()
+        .direction(Direction::Vertical)
+        .constraints([Constraint::Min(1), Constraint::Length(1)].as_ref())
         .split(f.size());
-    let block = Block::default()
+
+    let terminal_block = Block::default()
+        .title(Span::styled("Terminal", Style::default().fg(Color::Green)))
         .borders(Borders::ALL)
         .style(Style::default().add_modifier(Modifier::BOLD));
-    let pseudo_term = PseudoTerminal::default().block(block);
-    f.render_stateful_widget(pseudo_term, chunks[0], state);
+
+    let pseudo_term = PseudoTerminal::default().block(terminal_block);
+
     let explanation = "Press q to exit".to_string();
     let explanation = Paragraph::new(explanation)
         .style(Style::default().add_modifier(Modifier::BOLD | Modifier::REVERSED))
         .alignment(Alignment::Center);
+
+    f.render_stateful_widget(pseudo_term, chunks[0], state);
     f.render_widget(explanation, chunks[1]);
 }
