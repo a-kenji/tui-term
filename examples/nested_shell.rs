@@ -45,7 +45,7 @@ fn main() -> std::io::Result<()> {
     cmd.cwd(cwd);
 
     let size = Size {
-        rows: terminal.size()?.height,
+        rows: terminal.size()?.height - 6,
         cols: terminal.size()?.width,
     };
 

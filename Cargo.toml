@@ -32,6 +32,8 @@ categories = ["command-line-interface", "command-line-utilities"]
 # ]
 
 [dependencies]
+bytes = "1.4.0"
+portable-pty = "0.8.1"
 ratatui = "0.22.0"
 vt100 = "0.15.2"
 

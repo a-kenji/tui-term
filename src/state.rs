@@ -2,18 +2,34 @@ use ratatui::buffer::Buffer;
 use ratatui::layout::Rect;
 use ratatui::style::{Modifier, Style};
 
-use crate::widget::PseudoTerminal;
+use crate::widget::{PseudoTerminal, PseudoTerminalState};
 
 /// Draw the [`Screen`] to the [`Buffer`],
 /// area is the designated area that the consumer provides
-pub fn handle(term: &PseudoTerminal, area: Rect, buf: &mut Buffer) {
+pub fn handle(
+    term: &PseudoTerminal,
+    area: Rect,
+    buf: &mut Buffer,
+    state: Option<&mut PseudoTerminalState>,
+) {
+    let reader;
     let cols = area.width;
     let rows = area.height;
     let col_start = area.x;
     let row_start = area.y;
     let area_cols = area.width + area.x;
     let area_rows = area.height + area.y;
-    let screen = term.screen();
+    let screen = match term.screen() {
+        Some(s) => s,
+        None => {
+            let Some(state) = state else {
+                return;
+            };
+
+            reader = state.parser.read().unwrap();
+            reader.screen()
+        }
+    };
 
     // The [`Screen`] is made out of rows of cells
     for row in 0..rows {
@@ -58,7 +74,7 @@ pub fn handle(term: &PseudoTerminal, area: Rect, buf: &mut Buffer) {
 
     if !screen.hide_cursor() {
         let (c_row, c_col) = screen.cursor_position();
-        if (c_row + row_start) < area_rows && (c_col + col_start)< area_cols {
+        if (c_row + row_start) < area_rows && (c_col + col_start) < area_cols {
             let c_cell = buf.get_mut(c_col + col_start, c_row + row_start);
             if let Some(cell) = screen.cell(c_row, c_col) {
                 if cell.has_contents() {

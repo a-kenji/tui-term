@@ -1,8 +1,14 @@
+use std::sync::mpsc::{channel, Sender};
+use std::sync::{Arc, RwLock};
+use std::thread::{self, JoinHandle};
+
+use bytes::Bytes;
+use portable_pty::{CommandBuilder, ExitStatus, NativePtySystem, PtyPair, PtySize, PtySystem};
 use ratatui::buffer::Buffer;
 use ratatui::layout::Rect;
 use ratatui::style::{Color, Modifier, Style};
-use ratatui::widgets::{Block, Clear, Widget};
-use vt100::Screen;
+use ratatui::widgets::{Block, Clear, StatefulWidget, Widget};
+use vt100::{Parser, Screen};
 
 use crate::state;
 
@@ -29,8 +35,9 @@ use crate::state;
 ///     .block(Block::default().title("Terminal").borders(Borders::ALL))
 ///     .style(Style::default().fg(Color::White).bg(Color::Black).add_modifier(Modifier::BOLD));
 /// ```
+#[derive(Default)]
 pub struct PseudoTerminal<'a> {
-    screen: &'a Screen,
+    screen: Option<&'a Screen>,
     pub(crate) block: Option<Block<'a>>,
     style: Option<Style>,
     pub(crate) cursor: Cursor,
@@ -139,7 +146,7 @@ impl<'a> PseudoTerminal<'a> {
     #[must_use]
     pub fn new(screen: &'a Screen) -> Self {
         PseudoTerminal {
-            screen,
+            screen: Some(screen),
             block: None,
             style: None,
             cursor: Cursor::default(),
@@ -219,21 +226,122 @@ impl<'a> PseudoTerminal<'a> {
 
     #[inline]
     #[must_use]
-    pub const fn screen(&self) -> &Screen {
+    pub const fn screen(&self) -> Option<&Screen> {
         self.screen
     }
 }
 
 impl Widget for PseudoTerminal<'_> {
     #[inline]
-    fn render(self, area: Rect, buf: &mut Buffer) {
+    fn render(mut self, area: Rect, buf: &mut Buffer) {
         Clear.render(area, buf);
-        let area = self.block.as_ref().map_or(area, |b| {
-            let inner_area = b.inner(area);
-            b.clone().render(area, buf);
-            inner_area
-        });
-        state::handle(&self, area, buf);
+        let area = match self.block.take() {
+            Some(b) => b.inner(area),
+            None => area,
+        };
+        state::handle(&self, area, buf, None);
+    }
+}
+
+pub struct PseudoTerminalState {
+    pub parser: Arc<RwLock<Parser>>,
+    pty: PtyPair,
+}
+
+impl Default for PseudoTerminalState {
+    // Initializes a PTY and a parser, using a default size as it will be resized on the first render
+    fn default() -> Self {
+        let size = PtySize {
+            rows: 0,
+            cols: 0,
+            pixel_width: 0,
+            pixel_height: 0,
+        };
+
+        Self {
+            parser: Arc::new(RwLock::new(Parser::new(1, 0, 0))),
+            pty: NativePtySystem::default().openpty(size).unwrap(),
+        }
+    }
+}
+
+impl PseudoTerminalState {
+    // Updates the area of the PTY and the parser on a frame update
+    pub fn set_area(&mut self, new_area: Rect) {
+        let (rows, cols) = (new_area.height, new_area.width);
+
+        self.pty
+            .master
+            .resize(PtySize {
+                rows,
+                cols,
+                pixel_width: 0,
+                pixel_height: 0,
+            })
+            .unwrap();
+
+        self.parser.write().unwrap().set_size(rows, cols);
+    }
+
+    // Run the given command in a separate thread
+    pub fn spawn_child_process_thread(&self, command: CommandBuilder) -> JoinHandle<ExitStatus> {
+        let mut child = self.pty.slave.spawn_command(command).unwrap();
+        thread::spawn(move || -> ExitStatus { child.wait().unwrap() })
+    }
+
+    // Spawn the thread which parses process output in order for it to be properly displayed
+    pub fn spawn_parser_thread(&self) -> JoinHandle<()> {
+        let mut reader = self.pty.master.try_clone_reader().unwrap();
+        let parser = self.parser.clone();
+
+        thread::spawn(move || {
+            let mut buf = [0u8; 8192];
+            let mut processed_buf = Vec::new();
+            loop {
+                let size = reader.read(&mut buf).unwrap();
+                if size == 0 {
+                    break;
+                }
+                if size > 0 {
+                    processed_buf.extend_from_slice(&buf[..size]);
+                    let mut parser = parser.write().unwrap();
+                    parser.process(&processed_buf);
+
+                    processed_buf.clear();
+                }
+            }
+        })
+    }
+
+    // Spawn the thread which sends user input to the process
+    pub fn spawn_input_thread(&self) -> (Sender<Bytes>, JoinHandle<()>) {
+        let (input_sender, input_receiver) = channel::<Bytes>();
+        let mut writer = self.pty.master.take_writer().unwrap();
+
+        (
+            input_sender,
+            thread::spawn(move || {
+                while let Ok(bytes) = input_receiver.recv() {
+                    writer.write_all(&bytes).unwrap();
+                }
+            }),
+        )
+    }
+}
+
+impl StatefulWidget for PseudoTerminal<'_> {
+    type State = PseudoTerminalState;
+
+    fn render(mut self, area: Rect, buf: &mut Buffer, state: &mut Self::State) {
+        Clear.render(area, buf);
+        let area = match self.block.take() {
+            Some(b) => b.inner(area),
+            None => area,
+        };
+
+        state.set_area(area);
+
+        state::handle(&self, area, buf, Some(state));
     }
 }
 
