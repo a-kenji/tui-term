@@ -1,10 +1,10 @@
 #![allow(unused_variables)]
 
-use std::{io, sync::mpsc::Sender, time::Duration};
+use std::{io, sync::mpsc::Sender};
 
 use bytes::Bytes;
 use crossterm::{
-    event::{self, DisableMouseCapture, Event, KeyCode, KeyEventKind},
+    event::{DisableMouseCapture, Event, KeyCode, KeyEvent, KeyModifiers},
     execute,
     style::ResetColor,
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
@@ -61,68 +61,23 @@ fn run<B: Backend>(
     mut state: PseudoTerminalState,
     sender: Sender<Bytes>,
 ) -> io::Result<()> {
+    let excluded_events = [Event::Key(KeyEvent::new(
+        KeyCode::Char('c'),
+        KeyModifiers::CONTROL,
+    ))];
     loop {
-        terminal.draw(|f| ui(f, &mut state))?;
-
-        // Event read is blocking
-        if event::poll(Duration::from_millis(10))? {
-            // It's guaranteed that the `read()` won't block when the `poll()`
-            // function returns `true`
-            match event::read()? {
-                Event::Key(key) => {
-                    if key.kind == KeyEventKind::Press {
-                        match key.code {
-                            KeyCode::Char('q') => return Ok(()),
-                            KeyCode::Char(input) => sender
-                                .send(Bytes::from(input.to_string().into_bytes()))
-                                .unwrap(),
-                            KeyCode::Backspace => {
-                                sender.send(Bytes::from(vec![8])).unwrap();
-                            }
-                            KeyCode::Enter => sender.send(Bytes::from(vec![b'\n'])).unwrap(),
-                            KeyCode::Left => sender.send(Bytes::from(vec![27, 91, 68])).unwrap(),
-                            KeyCode::Right => sender.send(Bytes::from(vec![27, 91, 67])).unwrap(),
-                            KeyCode::Up => sender.send(Bytes::from(vec![27, 91, 65])).unwrap(),
-                            KeyCode::Down => sender.send(Bytes::from(vec![27, 91, 66])).unwrap(),
-                            KeyCode::Home => sender.send(Bytes::from(vec![27, 91, 72])).unwrap(),
-                            KeyCode::End => sender.send(Bytes::from(vec![27, 91, 70])).unwrap(),
-                            KeyCode::PageUp => {
-                                sender.send(Bytes::from(vec![27, 91, 53, 126])).unwrap()
-                            }
-                            KeyCode::PageDown => {
-                                sender.send(Bytes::from(vec![27, 91, 54, 126])).unwrap()
-                            }
-                            KeyCode::Tab => sender.send(Bytes::from(vec![9])).unwrap(),
-                            KeyCode::BackTab => sender.send(Bytes::from(vec![27, 91, 90])).unwrap(),
-                            KeyCode::Delete => {
-                                sender.send(Bytes::from(vec![27, 91, 51, 126])).unwrap()
-                            }
-                            KeyCode::Insert => {
-                                sender.send(Bytes::from(vec![27, 91, 50, 126])).unwrap()
-                            }
-                            KeyCode::F(_) => todo!(),
-                            KeyCode::Null => todo!(),
-                            KeyCode::Esc => todo!(),
-                            KeyCode::CapsLock => todo!(),
-                            KeyCode::ScrollLock => todo!(),
-                            KeyCode::NumLock => todo!(),
-                            KeyCode::PrintScreen => todo!(),
-                            KeyCode::Pause => todo!(),
-                            KeyCode::Menu => todo!(),
-                            KeyCode::KeypadBegin => todo!(),
-                            KeyCode::Media(_) => todo!(),
-                            KeyCode::Modifier(_) => todo!(),
-                        }
-                    }
+        let input_result = state.handle_input(&excluded_events, &sender);
+        if !input_result.handled {
+            match input_result.event {
+                Event::Key(ke)
+                    if ke == KeyEvent::new(KeyCode::Char('c'), KeyModifiers::CONTROL) =>
+                {
+                    return Ok(());
                 }
-                Event::FocusGained => {}
-                Event::FocusLost => {}
-                Event::Mouse(_) => {}
-                Event::Paste(_) => todo!(),
-                Event::Resize(rows, cols) => {
-                    state.parser.write().unwrap().set_size(rows, cols);
-                }
+                _ => {}
             }
+        } else {
+            terminal.draw(|f| ui(f, &mut state))?;
         }
     }
 }
@@ -140,7 +95,7 @@ fn ui<B: Backend>(f: &mut Frame<B>, state: &mut PseudoTerminalState) {
 
     let pseudo_term = PseudoTerminal::default().block(terminal_block);
 
-    let explanation = "Press q to exit".to_string();
+    let explanation = "Press Ctrl+C to exit".to_string();
     let explanation = Paragraph::new(explanation)
         .style(Style::default().add_modifier(Modifier::BOLD | Modifier::REVERSED))
         .alignment(Alignment::Center);
