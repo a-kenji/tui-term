@@ -3,6 +3,7 @@ use std::sync::{Arc, RwLock};
 use std::thread::{self, JoinHandle};
 
 use bytes::Bytes;
+use crossterm::event::{self, Event, KeyCode, KeyEventKind};
 use portable_pty::{CommandBuilder, ExitStatus, NativePtySystem, PtyPair, PtySize, PtySystem};
 use ratatui::buffer::Buffer;
 use ratatui::layout::Rect;
@@ -253,6 +254,18 @@ pub struct PseudoTerminalState {
     pub pty: PtyPair,
 }
 
+// TODO: Make `handled` an enum with three variants, with unhandled events being classified as either ignored or explicitly skipped
+pub struct EventHandlerResult {
+    pub event: Event,
+    pub handled: bool,
+}
+
+impl EventHandlerResult {
+    fn new(event: Event, handled: bool) -> Self {
+        Self { event, handled }
+    }
+}
+
 impl PseudoTerminalState {
     /// Initializes a PTY and a parser, using a given initial size
     pub fn new(initial_size: Rect) -> Self {
@@ -330,6 +343,66 @@ impl PseudoTerminalState {
                 }
             }),
         )
+    }
+
+    /// Handles input from the user, sending it to the process
+    /// Ignores user-specified events, usually so they can be handled by the application
+    // ? Should this just return bytes which the user can choose to send/not send?
+    pub fn handle_input(
+        &self,
+        excluded_events: &[Event],
+        input_sender: &Sender<Bytes>,
+    ) -> EventHandlerResult {
+        // Event read is blocking
+        let event = event::read().unwrap();
+        if excluded_events.contains(&event) {
+            return EventHandlerResult::new(event, false);
+        }
+
+        // This block avoids each arm needing to return `true` explicitly
+        let handled = 'handled: {
+            match event {
+                Event::FocusGained
+                | Event::FocusLost
+                | Event::Mouse(_)
+                | Event::Paste(_)
+                // Resize events do not need to be handled because the frame will be
+                // resized on every render call anyway
+                | Event::Resize(_, _) => false,
+                Event::Key(key_event) => {
+                    let send = |sender: &Sender<Bytes>, bytes: &[u8]| {
+                        sender.send(Bytes::from(bytes.to_vec())).unwrap();
+                    };
+
+                    if key_event.kind != KeyEventKind::Press {
+                        break 'handled false;
+                    }
+
+                    match key_event.code {
+                        KeyCode::Char(c) => send(input_sender, c.to_string().as_bytes()),
+                        KeyCode::Backspace => send(input_sender, &[8]),
+                        KeyCode::Enter => send(input_sender, &[b'\n']),
+                        KeyCode::Left => send(input_sender, b"\x1b[D"),
+                        KeyCode::Right => send(input_sender, b"\x1b[C"),
+                        KeyCode::Up => send(input_sender, b"\x1b[A"),
+                        KeyCode::Down => send(input_sender, b"\x1b[B"),
+                        KeyCode::Home => send(input_sender, b"\x1b[H"),
+                        KeyCode::End => send(input_sender, b"\x1b[F"),
+                        KeyCode::PageUp => send(input_sender, b"\x1b[5~"),
+                        KeyCode::PageDown => send(input_sender, b"\x1b[6~"),
+                        KeyCode::Tab => send(input_sender, b"\t"),
+                        KeyCode::BackTab => send(input_sender, b"\x1b[Z"),
+                        KeyCode::Delete => send(input_sender, b"\x1b[3~"),
+                        KeyCode::Insert => send(input_sender, b"\x1b[2~"),
+                        _ => break 'handled false,
+                    }
+
+                    true
+                }
+            }
+        };
+
+        EventHandlerResult::new(event, handled)
     }
 }
 
