@@ -13,11 +13,12 @@ use crossterm::{
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
 use portable_pty::{native_pty_system, CommandBuilder, PtySize};
-use ratatui::{backend::CrosstermBackend, layout::Rect, style::Color, Terminal};
 use ratatui::{
-    layout::{Alignment, Constraint, Direction, Layout},
-    style::{Modifier, Style},
+    backend::CrosstermBackend,
+    layout::{Alignment, Constraint, Direction, Layout, Rect},
+    style::{Color, Modifier, Style},
     widgets::{Block, Borders, Paragraph},
+    Terminal,
 };
 use tokio::{
     sync::mpsc::{channel, Sender},
@@ -83,7 +84,8 @@ async fn main() -> io::Result<()> {
                 let pseudo_term = PseudoTerminal::new(screen).block(block);
                 let pane_chunk = Rect {
                     x: chunks[0].x,
-                    y: chunks[0].y + (index as u16 * pane_height), // Adjust the y coordinate for each pane
+                    y: chunks[0].y + (index as u16 * pane_height), /* Adjust the y coordinate for
+                                                                    * each pane */
                     width: chunks[0].width,
                     height: pane_height, // Use the calculated pane height directly
                 };

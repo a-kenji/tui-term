@@ -1,5 +1,5 @@
 # This file is updated by the `akenji@update-rust-toolchain` GitHub action
 [toolchain]
-channel = "1.72.0"
-components = ["clippy", "rust-analysis"]
+channel = "nightly-2023-07-01"
+components = ["rustfmt"]
 targets = [ ]

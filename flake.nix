@@ -35,12 +35,20 @@
         inherit system overlays;
       };
       src = self;
+
       RUST_TOOLCHAIN = src + "/rust-toolchain.toml";
+      RUSTFMT_TOOLCHAIN = src + "/.rustfmt-toolchain.toml";
+
       cargoTOML = builtins.fromTOML (builtins.readFile (src + "/Cargo.toml"));
       inherit (cargoTOML.package) name rust-version version;
-      rustToolchainTOML = rustPkgs.rust-bin.fromRustupToolchainFile RUST_TOOLCHAIN;
+      # rustToolchainTOML = rustPkgs.rust-bin.fromRustupToolchainFile RUST_TOOLCHAIN;
+      toolchainTOML = builtins.fromTOML (builtins.readFile RUST_TOOLCHAIN);
+      toolchainVersion = toolchainTOML.toolchain.channel;
+      rustToolchainTOML = rustPkgs.rust-bin.stable.${toolchainVersion}.minimal;
+      rustFmtToolchainTOML = rustPkgs.rust-bin.fromRustupToolchainFile RUSTFMT_TOOLCHAIN;
+
       rustToolchainDevTOML = rustToolchainTOML.override {
-        extensions = ["rustfmt" "clippy" "rust-analysis" "rust-docs"];
+        extensions = ["clippy" "rust-analysis" "rust-docs"];
         targets = [];
       };
       rustToolchainMSRV = rustPkgs.rust-bin.stable.${rust-version}.default.override {
@@ -83,6 +91,7 @@
 
       devInputs = [
         rustToolchainDevTOML
+        rustFmtToolchainTOML
         pkgs.just
         pkgs.cargo-watch
 
@@ -167,6 +176,7 @@
         pkgs.actionlint
       ];
       fmtInputs = [
+        rustFmtToolchainTOML
         pkgs.alejandra
         pkgs.treefmt
       ];

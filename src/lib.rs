@@ -1,4 +1,5 @@
-//! `tui-term` is a library that provides pseudoterminal widget functionality for building interactive terminal applications using `ratatui`.
+//! `tui-term` is a library that provides pseudoterminal widget functionality for building
+//! interactive terminal applications using `ratatui`.
 //!
 //! # Installation
 //!
@@ -37,7 +38,8 @@
 //!
 //! # Limitations
 //!
-//! - The `vt100` crate is currently the only supported backend for parsing terminal control sequences, but future versions may introduce support for alternative backends.
+//! - The `vt100` crate is currently the only supported backend for parsing terminal control
+//!   sequences, but future versions may introduce support for alternative backends.
 
 mod state;
 pub mod widget;
