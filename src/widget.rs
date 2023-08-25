@@ -1,7 +1,9 @@
-use ratatui::buffer::Buffer;
-use ratatui::layout::Rect;
-use ratatui::style::{Color, Modifier, Style};
-use ratatui::widgets::{Block, Clear, Widget};
+use ratatui::{
+    buffer::Buffer,
+    layout::Rect,
+    style::{Color, Modifier, Style},
+    widgets::{Block, Clear, Widget},
+};
 use vt100::Screen;
 
 use crate::state;
@@ -13,8 +15,9 @@ use crate::state;
 /// It provides a visual representation of the terminal output within a TUI application.
 ///
 /// The contents of the pseudo-terminal screen are represented by a `vt100::Screen` object.
-/// The `vt100` library provides functionality for parsing and processing terminal control sequences and handling terminal state,
-/// allowing the `PseudoTerminal` widget to accurately render the terminal output.
+/// The `vt100` library provides functionality for parsing and processing terminal control sequences
+/// and handling terminal state, allowing the `PseudoTerminal` widget to accurately render the
+/// terminal output.
 ///
 /// # Examples
 ///
@@ -171,7 +174,8 @@ impl<'a> PseudoTerminal<'a> {
 
     /// Sets the cursor configuration for the `PseudoTerminal`.
     ///
-    /// The `cursor` method allows configuring the appearance of the cursor within the `PseudoTerminal` widget.
+    /// The `cursor` method allows configuring the appearance of the cursor within the
+    /// `PseudoTerminal` widget.
     ///
     /// # Arguments
     ///
@@ -239,9 +243,7 @@ impl Widget for PseudoTerminal<'_> {
 
 #[cfg(test)]
 mod tests {
-    use ratatui::backend::TestBackend;
-    use ratatui::widgets::Borders;
-    use ratatui::Terminal;
+    use ratatui::{backend::TestBackend, widgets::Borders, Terminal};
 
     use super::*;
 

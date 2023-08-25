@@ -9,15 +9,14 @@ use crossterm::{
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
 use portable_pty::{CommandBuilder, NativePtySystem, PtySize, PtySystem};
-use ratatui::text::Line;
 use ratatui::{
-    backend::Backend,
+    backend::{Backend, CrosstermBackend},
     layout::Alignment,
     style::{Modifier, Style},
+    text::Line,
     widgets::{Block, Borders, Paragraph},
-    Frame,
+    Frame, Terminal,
 };
-use ratatui::{backend::CrosstermBackend, Terminal};
 use tui_term::widget::PseudoTerminal;
 use vt100::Screen;
 

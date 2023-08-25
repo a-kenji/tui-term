@@ -13,13 +13,12 @@ use crossterm::{
 };
 use portable_pty::{CommandBuilder, NativePtySystem, PtySize, PtySystem};
 use ratatui::{
-    backend::Backend,
+    backend::{Backend, CrosstermBackend},
     layout::Alignment,
     style::{Modifier, Style},
     widgets::{Block, Borders, Paragraph},
-    Frame,
+    Frame, Terminal,
 };
-use ratatui::{backend::CrosstermBackend, Terminal};
 use tokio::{
     sync::mpsc::{channel, Sender},
     task,
