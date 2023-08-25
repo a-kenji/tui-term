@@ -2,6 +2,41 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.3] - 2023-08-25
+
+### Bug Fixes
+
+- *(uncategorized)* Boundary condition check for the cursor
+
+### Miscellaneous Tasks
+
+- *(ci)* Adjust automatic updates
+- *(deps)* Bump tokio from 1.29.1 to 1.32.0
+- *(deps)* Bump crossterm from 0.26.1 to 0.27.0
+- *(deps)* Bump tokio from 1.28.2 to 1.29.1
+- *(uncategorized)* Document the release process
+- *(uncategorized)* Bump ratatui `0.21.0` -> `0.22.0`
+- *(uncategorized)* Rename PseudoTerm to PseudoTerminal [**breaking**]
+
+### Continuous Integration
+
+- *(update)* Update nix-cache-action `v1` -> `v2`
+- *(uncategorized)* Split actionlint into its own module
+- *(uncategorized)* Add darwin
+- *(uncategorized)* Init gh-cache
+
+### Flake.lock
+
+- *(uncategorized)* Update
+
+### Rm
+
+- *(uncategorized)* Simple ls
+
+### Update
+
+- *(cargo)* `Cargo.lock`
+
 ## [0.1.2] - 2023-06-23
 
 ### Features
