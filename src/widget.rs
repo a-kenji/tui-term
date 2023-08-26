@@ -22,15 +22,22 @@ use crate::state;
 /// # Examples
 ///
 /// ```rust
-/// use ratatui::widgets::{Block, Borders};
-/// use ratatui::style::{Style, Modifier, Color};
+/// use ratatui::{
+///     style::{Color, Modifier, Style},
+///     widgets::{Block, Borders},
+/// };
 /// use tui_term::widget::PseudoTerminal;
 /// use vt100::Parser;
 ///
 /// let mut parser = vt100::Parser::new(24, 80, 0);
 /// let pseudo_term = PseudoTerminal::new(&parser.screen())
 ///     .block(Block::default().title("Terminal").borders(Borders::ALL))
-///     .style(Style::default().fg(Color::White).bg(Color::Black).add_modifier(Modifier::BOLD));
+///     .style(
+///         Style::default()
+///             .fg(Color::White)
+///             .bg(Color::Black)
+///             .add_modifier(Modifier::BOLD),
+///     );
 /// ```
 pub struct PseudoTerminal<'a> {
     screen: &'a Screen,
@@ -55,8 +62,8 @@ impl Cursor {
     /// # Example
     ///
     /// ```
-    /// use tui_term::widget::Cursor;
     /// use ratatui::style::Style;
+    /// use tui_term::widget::Cursor;
     ///
     /// let cursor = Cursor::default().symbol("|");
     /// ```
@@ -66,6 +73,7 @@ impl Cursor {
         self.symbol = symbol.into();
         self
     }
+
     /// Sets the style for the cursor.
     ///
     /// # Arguments
@@ -75,8 +83,8 @@ impl Cursor {
     /// # Example
     ///
     /// ```
-    /// use tui_term::widget::Cursor;
     /// use ratatui::style::Style;
+    /// use tui_term::widget::Cursor;
     ///
     /// let cursor = Cursor::default().style(Style::default());
     /// ```
@@ -98,8 +106,8 @@ impl Cursor {
     /// # Example
     ///
     /// ```
-    /// use tui_term::widget::Cursor;
     /// use ratatui::style::Style;
+    /// use tui_term::widget::Cursor;
     ///
     /// let cursor = Cursor::default().overlay_style(Style::default());
     /// ```
@@ -148,6 +156,7 @@ impl<'a> PseudoTerminal<'a> {
             cursor: Cursor::default(),
         }
     }
+
     /// Sets the block for the `PseudoTerminal`.
     ///
     /// # Arguments
@@ -157,8 +166,8 @@ impl<'a> PseudoTerminal<'a> {
     /// # Example
     ///
     /// ```
-    /// use tui_term::widget::PseudoTerminal;
     /// use ratatui::widgets::Block;
+    /// use tui_term::widget::PseudoTerminal;
     /// use vt100::Parser;
     ///
     /// let mut parser = vt100::Parser::new(24, 80, 0);
@@ -184,9 +193,8 @@ impl<'a> PseudoTerminal<'a> {
     /// # Example
     ///
     /// ```rust
-    /// use tui_term::widget::PseudoTerminal;
-    /// use tui_term::widget::Cursor;
     /// use ratatui::style::Style;
+    /// use tui_term::widget::{Cursor, PseudoTerminal};
     ///
     /// let mut parser = vt100::Parser::new(24, 80, 0);
     /// let cursor = Cursor::default().symbol("|").style(Style::default());
@@ -198,6 +206,7 @@ impl<'a> PseudoTerminal<'a> {
         self.cursor = cursor;
         self
     }
+
     /// Sets the style for `PseudoTerminal`.
     ///
     /// # Arguments
@@ -207,8 +216,8 @@ impl<'a> PseudoTerminal<'a> {
     /// # Example
     ///
     /// ```
-    /// use tui_term::widget::PseudoTerminal;
     /// use ratatui::style::Style;
+    /// use tui_term::widget::PseudoTerminal;
     ///
     /// let mut parser = vt100::Parser::new(24, 80, 0);
     /// let style = Style::default();
