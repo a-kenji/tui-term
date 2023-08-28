@@ -12,7 +12,7 @@ documentation = "https://docs.rs/tui-term/latest/tui-term/"
 repository = "https://github.com/a-kenji/tui-term"
 
 autoexamples = true
-rust-version = "1.66.0"
+rust-version = "1.67.0"
 
 
 keywords = [
@@ -32,7 +32,7 @@ categories = ["command-line-interface", "command-line-utilities"]
 # ]
 
 [dependencies]
-ratatui = "0.22.0"
+ratatui = "0.23.0"
 vt100 = "0.15.2"
 
 [dev-dependencies]
