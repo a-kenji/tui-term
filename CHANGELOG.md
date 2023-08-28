@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.4] - 2023-08-28
+
+Compatible with `ratatui`: `v0.23.0`.
+
+### Miscellaneous Tasks
+
+- *(deps)* Update ratatui `v0.22.0` -> `v0.23.0` [**breaking**]
+- *(docs)* Document clippy version
+- *(chore)* Use nightly formatter
+
 ## [0.1.3] - 2023-08-25
 
 ### Bug Fixes

@@ -1149,7 +1149,7 @@ dependencies = [
 
 [[package]]
 name = "tui-term"
-version = "0.1.3"
+version = "0.1.4"
 dependencies = [
  "bytes",
  "criterion",
