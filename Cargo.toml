@@ -2,9 +2,16 @@
 name = "tui-term"
 description = "A pseudoterminal widget for ratatui"
 version = "0.1.4"
-authors = ["Alexander Kenji Berthold <aks.kenji@protonmail.com>" ]
+authors = ["Alexander Kenji Berthold <aks.kenji@protonmail.com>"]
 edition = "2021"
-include = ["src/**/*","examples/*","benches/*", "LICENSE", "README.md", "CHANGELOG.md"]
+include = [
+  "src/**/*",
+  "examples/*",
+  "benches/*",
+  "LICENSE",
+  "README.md",
+  "CHANGELOG.md",
+]
 license = "MIT"
 
 readme = "README.md"
@@ -15,13 +22,7 @@ autoexamples = true
 rust-version = "1.67.0"
 
 
-keywords = [
-    "tui",
-    "terminal",
-    "ratatui",
-    "tty",
-    "multiplexer",
-]
+keywords = ["tui", "terminal", "ratatui", "tty", "multiplexer"]
 
 categories = ["command-line-interface", "command-line-utilities"]
 
@@ -66,7 +67,6 @@ harness = false
 [[bench]]
 name = "iai"
 harness = false
-
 
 
 [[example]]

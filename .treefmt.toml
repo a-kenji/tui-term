@@ -5,3 +5,8 @@ includes = ["*.nix"]
 [formatter.rust]
 command = "rustfmt"
 includes = ["*.rs"]
+
+[formatter.toml]
+command = "taplo"
+options = ["fmt"]
+includes = ["*.toml"]
