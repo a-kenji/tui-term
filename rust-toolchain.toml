@@ -2,4 +2,4 @@
 [toolchain]
 channel = "1.72.0"
 components = ["clippy", "rust-analysis"]
-targets = [ ]
+targets = []

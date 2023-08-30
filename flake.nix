@@ -110,6 +110,7 @@
         pkgs.reuse
         pkgs.lychee
         pkgs.typos
+        pkgs.taplo
 
         pkgs.cargo-deny
         pkgs.cargo-diet
@@ -179,6 +180,7 @@
         rustFmtToolchainTOML
         pkgs.alejandra
         pkgs.treefmt
+        pkgs.taplo
       ];
       editorConfigInputs = [
         pkgs.editorconfig-checker
