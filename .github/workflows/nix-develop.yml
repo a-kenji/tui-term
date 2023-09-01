@@ -18,6 +18,7 @@ on:
       - 'flake.lock'
       - 'flake.nix'
       - 'rust-toolchain.toml'
+  merge_group:
 
 jobs:
   develop:
