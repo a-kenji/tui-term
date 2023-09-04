@@ -10,7 +10,7 @@ jobs:
     environment: "update"
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install Nix
         uses: cachix/install-nix-action@v22
         with:
