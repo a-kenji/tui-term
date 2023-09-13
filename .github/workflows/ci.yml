@@ -7,13 +7,14 @@ on:
     branches: [ main ]
   push:
     branches: [ main ]
+  merge_group:
 
 jobs:
   editor-config:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - uses: cachix/install-nix-action@v22
+    - uses: actions/checkout@v4
+    - uses: cachix/install-nix-action@v23
       with:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
@@ -38,8 +39,8 @@ jobs:
   lychee:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - uses: cachix/install-nix-action@v22
+    - uses: actions/checkout@v4
+    - uses: cachix/install-nix-action@v23
       with:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}

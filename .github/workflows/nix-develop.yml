@@ -18,16 +18,17 @@ on:
       - 'flake.lock'
       - 'flake.nix'
       - 'rust-toolchain.toml'
+  merge_group:
 
 jobs:
   develop:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 0 # Nix Flakes doesn't work on shallow clones
-    - uses: cachix/install-nix-action@v22
+    - uses: cachix/install-nix-action@v23
       with:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}

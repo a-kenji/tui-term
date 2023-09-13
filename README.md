@@ -11,7 +11,7 @@ A pseudoterminal widget for the  [ratatui](https://github.com/tui-rs-revival/rat
 
 NOTE: This project is currently in active development and should be considered as work in progress.
 
-It can not be considered stable yet.
+It cannot be considered stable yet.
 
 The goal of tui-term is to provide a robust and well-tested pseudoterminal widget for users of the ratatui crate.
 

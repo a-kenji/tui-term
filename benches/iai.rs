@@ -1,6 +1,5 @@
 use once_cell::sync::Lazy;
-use ratatui::backend::TestBackend;
-use ratatui::Terminal;
+use ratatui::{backend::TestBackend, Terminal};
 use tui_term::widget::PseudoTerminal;
 use vt100::Screen;
 

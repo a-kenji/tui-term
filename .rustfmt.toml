@@ -1,0 +1,13 @@
+edition="2021"
+newline_style = "Unix"
+group_imports = "StdExternalCrate"
+imports_granularity = "Crate"
+wrap_comments = true
+comment_width = 100
+
+unstable_features = true
+condense_wildcard_suffixes = true
+format_code_in_doc_comments = true
+reorder_impl_items = true
+use_field_init_shorthand = true
+use_try_shorthand = true
