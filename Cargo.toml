@@ -5,12 +5,12 @@ version = "0.1.4"
 authors = ["Alexander Kenji Berthold <aks.kenji@protonmail.com>"]
 edition = "2021"
 include = [
-    "src/**/*",
-    "examples/*",
-    "benches/*",
-    "LICENSE",
-    "README.md",
-    "CHANGELOG.md",
+  "src/**/*",
+  "examples/*",
+  "benches/*",
+  "LICENSE",
+  "README.md",
+  "CHANGELOG.md",
 ]
 license = "MIT"
 
