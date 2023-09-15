@@ -39,9 +39,7 @@ fn main() -> std::io::Result<()> {
     let initial_size = terminal.size()?;
     let terminal_state = PseudoTerminalState::new(initial_size);
 
-    let child_process_thread = terminal_state.spawn_child_process_thread(command);
-    let parser_thread = terminal_state.spawn_parser_thread();
-    let (input_sender, input_thread) = terminal_state.spawn_input_thread();
+    let input_sender = terminal_state.spawn(command);
 
     run(&mut terminal, terminal_state, input_sender)?;
 

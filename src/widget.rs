@@ -301,6 +301,14 @@ impl PseudoTerminalState {
         }
     }
 
+    /// Spawns needed input handling threads
+    pub fn spawn(&self, command: CommandBuilder) -> Sender<Bytes> {
+        let _child_process_thread = self.spawn_child_process_thread(command);
+        let _parser_thread = self.spawn_parser_thread();
+        let (input_sender, _input_thread) = self.spawn_input_thread();
+        input_sender
+    }
+
     /// Updates the area of the PTY and the parser on a frame update
     pub fn set_area(&mut self, new_area: Rect) {
         let (rows, cols) = (new_area.height, new_area.width);
