@@ -98,6 +98,11 @@ name = "nested_shell_async"
 doc-scrape-examples = true
 
 [[example]]
+name = "nested_shell_stateful"
+doc-scrape-examples = true
+required-features = ["unstable"]
+
+[[example]]
 name = "smux"
 doc-scrape-examples = true
 
