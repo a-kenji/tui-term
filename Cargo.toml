@@ -42,7 +42,7 @@ criterion = "0.5.1"
 #TODO: go back to release version, once it is fixed
 # iai = "0.1.1"
 iai = { git = "https://github.com/sigaloid/iai", rev = "6c83e942" }
-insta = "1.33.0"
+insta = "1.34.0"
 once_cell = "1.17.1"
 
 # for examples
