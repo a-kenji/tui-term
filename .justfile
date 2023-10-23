@@ -37,7 +37,7 @@ cargo-diff:
 
 lint:
     nix develop .#lintShell --command cargo diet
-    nix develop .#lintShell --command cargo deny check licenses
+    nix develop .#lintShell --command cargo deny check licenses sources
     nix develop .#lintShell --command typos
     nix develop .#lintShell --command lychee *.md
     nix develop .#fmtShell --command treefmt --fail-on-change
