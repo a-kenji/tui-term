@@ -79,6 +79,7 @@ allow = [
   "MIT",
   "Apache-2.0",
   "Unicode-DFS-2016",
+  "BSD-2-Clause",
   # "WTFPL",
   # "AGPL-3.0",
   #"Apache-2.0 WITH LLVM-exception",
@@ -203,7 +204,8 @@ unknown-git = "warn"
 # if not specified. If it is specified but empty, no registries are allowed.
 allow-registry = ["https://github.com/rust-lang/crates.io-index"]
 # List of URLs for allowed Git repositories
-allow-git = []
+allow-git = [  "git+https://github.com/sigaloid/iai?rev=6c83e942#6c83e9429b86290f88d6ff30ca6c0d6014b5a5f3"
+]
 
 [sources.allow-org]
 # 1 or more github.com organizations to allow git sources for

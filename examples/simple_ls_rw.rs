@@ -92,7 +92,7 @@ fn run<B: Backend>(
     }
 }
 
-fn ui<B: Backend>(f: &mut Frame<B>, screen: &Screen) {
+fn ui(f: &mut Frame, screen: &Screen) {
     let chunks = ratatui::layout::Layout::default()
         .direction(ratatui::layout::Direction::Vertical)
         .margin(1)
