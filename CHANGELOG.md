@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.5] - 2023-10-25
+
+Compatible with `ratatui`: `v0.24.0`.
+
+MSRV is now `rustc --version`: `1.70.0`.
+
+### Miscellaneous Tasks
+
+- *(deps)* Bump ratatui from 0.23.0 to 0.24.0 [**breaking**]
+- *(fmt)* init taplo
+
+### Continuous Integration
+
+- *(uncategorized)* Init merge queue
+
 ## [0.1.4] - 2023-08-28
 
 Compatible with `ratatui`: `v0.23.0`.
