@@ -40,8 +40,7 @@ async fn main() -> io::Result<()> {
     let (mut terminal, mut size) = setup_terminal().unwrap();
 
     let cwd = std::env::current_dir().unwrap();
-    let shell = std::env::var("SHELL").unwrap();
-    let mut cmd = CommandBuilder::new(shell);
+    let mut cmd = CommandBuilder::new_default_prog();
     cmd.cwd(cwd);
 
     let mut panes: Vec<PtyPane> = Vec::new();
@@ -245,7 +244,10 @@ async fn handle_pane_key_event(pane: &mut PtyPane, key: &KeyEvent) -> bool {
             }
             send
         }
+        #[cfg(unix)]
         KeyCode::Enter => vec![b'\n'],
+        #[cfg(windows)]
+        KeyCode::Enter => vec![b'\r', b'\n'],
         KeyCode::Backspace => vec![8],
         KeyCode::Left => vec![27, 91, 68],
         KeyCode::Right => vec![27, 91, 67],

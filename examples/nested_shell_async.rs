@@ -6,7 +6,7 @@ use std::{
 
 use bytes::Bytes;
 use crossterm::{
-    event::{self, DisableMouseCapture, Event, KeyCode, KeyEventKind},
+    event::{self, Event, KeyCode, KeyEventKind},
     execute,
     style::ResetColor,
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
@@ -44,8 +44,7 @@ async fn main() -> io::Result<()> {
 
     let pty_system = NativePtySystem::default();
     let cwd = std::env::current_dir().unwrap();
-    let shell = std::env::var("SHELL").unwrap();
-    let mut cmd = CommandBuilder::new(shell);
+    let mut cmd = CommandBuilder::new_default_prog();
     cmd.cwd(cwd);
 
     let size = Size {
@@ -112,11 +111,7 @@ async fn main() -> io::Result<()> {
 
     // restore terminal
     disable_raw_mode()?;
-    execute!(
-        terminal.backend_mut(),
-        LeaveAlternateScreen,
-        DisableMouseCapture
-    )?;
+    execute!(terminal.backend_mut(), LeaveAlternateScreen,)?;
     terminal.show_cursor()?;
     println!("{size:?}");
     Ok(())
