@@ -26,13 +26,11 @@ The RWLock ensures that multiple threads can read from the pseudoterminal simult
 
 ## `nested_shell`
 
-- Required: `SHELL` environment variable
 - Description: Demonstrates nested shell functionality.
 - Uses a RWLock to manage shared read/write access.
 
 ## `nested_shell_async`
 
-- Required: SHELL environment variable
 - Description: Demonstrates nested shell functionality with asynchronous I/O using Tokio.
 - Uses an RWLock to manage shared read/write access.
 
@@ -43,6 +41,5 @@ The RWLock ensures that multiple threads can read from the pseudoterminal simult
 
 ## `smux`
 
-- Required: SHELL environment variable
 - Description: This example demonstrates a simple terminal multiplexer.
 - Uses: asynchronous I/O using Tokio
