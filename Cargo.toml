@@ -38,7 +38,8 @@ vt100 = "0.15.2"
 
 [dev-dependencies]
 bytes = "1.5.0"
-criterion = "0.5.1"
+criterion = { version = "0.5.1", features = ["html_reports"] }
+divan = "0.1.1"
 #TODO: go back to release version, once it is fixed
 # iai = "0.1.1"
 iai = { git = "https://github.com/sigaloid/iai", rev = "6c83e942" }
@@ -68,6 +69,9 @@ harness = false
 name = "iai"
 harness = false
 
+[[bench]]
+name = "divan"
+harness = false
 
 [[example]]
 name = "simple_ls_chan"
