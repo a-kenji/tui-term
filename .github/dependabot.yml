@@ -4,8 +4,10 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    target-branch: "development"
 
   - package-ecosystem: "cargo"
     directory: "/"
     schedule:
       interval: "weekly"
+    target-branch: "development"

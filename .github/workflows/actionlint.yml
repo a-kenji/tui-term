@@ -3,11 +3,11 @@ name: "actionlint"
 on:
   workflow_dispatch: # allows manual triggering
   pull_request:
-    branches: [ main ]
+    branches: [ release, development]
     paths-ignore:
       - '**.md'
   push:
-    branches: [ main ]
+    branches: [ release, development ]
     paths-ignore:
       - '**.md'
   merge_group:

@@ -4,9 +4,9 @@ name: "ci"
 on:
   workflow_dispatch: # allows manual triggering
   pull_request:
-    branches: [ main ]
+    branches: [ release, development ]
   push:
-    branches: [ main ]
+    branches: [ release, development ]
   merge_group:
 
 jobs:
