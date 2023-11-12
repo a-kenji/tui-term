@@ -20,6 +20,7 @@ jobs:
         uses: DeterminateSystems/update-flake-lock@v20
         with:
           token: ${{ secrets.GH_TOKEN_FOR_UPDATES }}
+          branch: development
           pr-labels: |
             dependencies
             automated

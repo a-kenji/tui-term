@@ -5,14 +5,14 @@ name: "nix develop"
 on:
   workflow_dispatch: # allows manual triggering
   pull_request:
-    branches: [ main ]
+    branches: [ release, development ]
     paths:
       - '**.nix'
       - 'flake.lock'
       - 'flake.nix'
       - 'rust-toolchain.toml'
   push:
-    branches: [ main ]
+    branches: [ release, development ]
     paths:
       - '**.nix'
       - 'flake.lock'

@@ -2,8 +2,9 @@ name: darwin
 
 on:
   pull_request:
-    branches:
-      - main
+    branches: [ release, development ]
+    paths-ignore:
+      - '**.md'
   merge_group:
 
 jobs:
