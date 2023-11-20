@@ -19,7 +19,6 @@ jobs:
         with:
           toolchain-path: './rust-toolchain.toml'
           token: ${{ secrets.GH_TOKEN_FOR_UPDATES }}
-          pr-branch: development
           pr-labels: |
             dependencies
             automated
