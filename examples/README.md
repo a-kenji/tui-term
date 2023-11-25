@@ -5,10 +5,11 @@ In this folder you find examples for using `tui-term`.
 To run the `simple_ls_rw` example:
 
 ```
-cargo run --example simple_ls_chan
+cargo run --example simple_ls_rw
 ```
 
-** Note: The examples provided here are simplified and may omit proper error handling and edge cases for brevity and clarity. They are intended to demonstrate specific features and concepts related to `tui-term`. **
+> **Note** 
+> The examples provided here are simplified and may omit proper error handling and edge cases for brevity and clarity. They are intended to demonstrate specific features and concepts related to `tui-term`.
 
 ## `simple_ls_chan`
 
