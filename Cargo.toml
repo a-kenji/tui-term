@@ -39,7 +39,7 @@ vt100 = "0.15.2"
 [dev-dependencies]
 bytes = "1.5.0"
 criterion = { version = "0.5.1", features = ["html_reports"] }
-divan = "0.1.2"
+divan = "0.1.4"
 #TODO: go back to release version, once it is fixed
 # iai = "0.1.1"
 iai = { git = "https://github.com/sigaloid/iai", rev = "6c83e942" }
