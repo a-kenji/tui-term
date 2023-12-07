@@ -25,6 +25,18 @@ It demonstrates how to send messages from one thread to another to update the `P
 Uses a `RWLock` to manage shared read/write access.
 The RWLock ensures that multiple threads can read from the pseudoterminal simultaneously, while exclusive write access is granted to only one thread at a time.
 
+## `simple_ls_controller`
+
+- Required: `ls`
+
+Uses the tui-term's controller to handle the command lifecycle.
+This feature is gated behind the `unstable` flag.
+Run it with:
+```
+cargo run --example simple_ls_controller --features unstable
+```
+
+
 ## `nested_shell`
 
 - Description: Demonstrates nested shell functionality.
