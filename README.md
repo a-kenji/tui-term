@@ -33,6 +33,17 @@ Check out the examples directory, for more information, or run an example:
 cargo run --example simple_ls_rw
 ```
 
+
+## Controller
+
+The controller is an `experimental` feature helping with managing the lifecycle of commands that are spawned inside a pseudoterminal.
+Currently the support is limited to oneshot commands.
+
+To activate the feature:
+```
+cargo add tui-term -F unstable
+```
+
 ## Chat Room
 Join our matrix chat room, for possibly synchronous communication.
 

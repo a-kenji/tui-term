@@ -51,5 +51,8 @@
 mod state;
 pub mod widget;
 
+#[cfg(feature = "unstable")]
+pub mod controller;
+
 /// Reexport of the vt100 crate to ensure correct version compatibility
 pub use vt100;

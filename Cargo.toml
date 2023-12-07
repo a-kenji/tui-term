@@ -32,9 +32,13 @@ categories = ["command-line-interface", "command-line-utilities"]
 #     "bench",
 # ]
 
+[features]
+unstable = ["dep:portable-pty"]
+
 [dependencies]
 ratatui = "0.25.0"
 vt100 = "0.15.2"
+portable-pty = { version = "0.8.1", optional = true }
 
 [dev-dependencies]
 bytes = "1.5.0"
