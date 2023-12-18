@@ -19,11 +19,11 @@ jobs:
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0 # Nix Flakes doesn't work on shallow clones
-    - uses: cachix/install-nix-action@v23
+    - uses: cachix/install-nix-action@v24
       with:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-    - uses: cachix/cachix-action@v12
+    - uses: cachix/cachix-action@v13
       with:
         name: kenji
         # If you chose API tokens for write access OR if you have a private cache
@@ -39,11 +39,11 @@ jobs:
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0 # Nix Flakes doesn't work on shallow clones
-    - uses: cachix/install-nix-action@v23
+    - uses: cachix/install-nix-action@v24
       with:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-    - uses: cachix/cachix-action@v12
+    - uses: cachix/cachix-action@v13
       with:
         name: kenji
         # If you chose API tokens for write access OR if you have a private cache
@@ -58,11 +58,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - uses: cachix/install-nix-action@v23
+    - uses: cachix/install-nix-action@v24
       with:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-    - uses: cachix/cachix-action@v12
+    - uses: cachix/cachix-action@v13
       with:
         name: kenji
         # If you chose API tokens for write access OR if you have a private cache
@@ -77,11 +77,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - uses: cachix/install-nix-action@v23
+    - uses: cachix/install-nix-action@v24
       with:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-    - uses: cachix/cachix-action@v12
+    - uses: cachix/cachix-action@v13
       with:
         name: kenji
         # If you chose API tokens for write access OR if you have a private cache
@@ -96,11 +96,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - uses: cachix/install-nix-action@v23
+    - uses: cachix/install-nix-action@v24
       with:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-    - uses: cachix/cachix-action@v12
+    - uses: cachix/cachix-action@v13
       with:
         name: kenji
         # If you chose API tokens for write access OR if you have a private cache
@@ -115,11 +115,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - uses: cachix/install-nix-action@v23
+    - uses: cachix/install-nix-action@v24
       with:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-    - uses: cachix/cachix-action@v12
+    - uses: cachix/cachix-action@v13
       with:
         name: kenji
         # If you chose API tokens for write access OR if you have a private cache
@@ -136,11 +136,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - uses: cachix/install-nix-action@v23
+    - uses: cachix/install-nix-action@v24
       with:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-    - uses: cachix/cachix-action@v12
+    - uses: cachix/cachix-action@v13
       with:
         name: kenji
         # If you chose API tokens for write access OR if you have a private cache
@@ -155,11 +155,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - uses: cachix/install-nix-action@v23
+    - uses: cachix/install-nix-action@v24
       with:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-    - uses: cachix/cachix-action@v12
+    - uses: cachix/cachix-action@v13
       with:
         name: kenji
         # If you chose API tokens for write access OR if you have a private cache
@@ -175,11 +175,11 @@ jobs:
     needs: dependencies
     steps:
     - uses: actions/checkout@v4
-    - uses: cachix/install-nix-action@v23
+    - uses: cachix/install-nix-action@v24
       with:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-    - uses: cachix/cachix-action@v12
+    - uses: cachix/cachix-action@v13
       with:
         name: kenji
         # If you chose API tokens for write access OR if you have a private cache
@@ -200,11 +200,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - uses: cachix/install-nix-action@v23
+    - uses: cachix/install-nix-action@v24
       with:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-    - uses: cachix/cachix-action@v12
+    - uses: cachix/cachix-action@v13
       with:
         name: kenji
         # If you chose API tokens for write access OR if you have a private cache
@@ -221,11 +221,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - uses: cachix/install-nix-action@v23
+    - uses: cachix/install-nix-action@v24
       with:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-    - uses: cachix/cachix-action@v12
+    - uses: cachix/cachix-action@v13
       with:
         name: kenji
         # If you chose API tokens for write access OR if you have a private cache
@@ -240,11 +240,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - uses: cachix/install-nix-action@v23
+    - uses: cachix/install-nix-action@v24
       with:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-    - uses: cachix/cachix-action@v12
+    - uses: cachix/cachix-action@v13
       with:
         name: kenji
         # If you chose API tokens for write access OR if you have a private cache
