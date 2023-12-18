@@ -37,10 +37,10 @@
 
         cargoTOML = builtins.fromTOML (builtins.readFile (src + "/Cargo.toml"));
         inherit (cargoTOML.package) name rust-version version;
-        # rustToolchainTOML = rustPkgs.rust-bin.fromRustupToolchainFile RUST_TOOLCHAIN;
-        toolchainTOML = builtins.fromTOML (builtins.readFile RUST_TOOLCHAIN);
-        toolchainVersion = toolchainTOML.toolchain.channel;
-        rustToolchainTOML = rustPkgs.rust-bin.stable.${toolchainVersion}.minimal;
+        rustToolchainTOML = rustPkgs.rust-bin.fromRustupToolchainFile RUST_TOOLCHAIN;
+        # toolchainTOML = builtins.fromTOML (builtins.readFile RUST_TOOLCHAIN);
+        # toolchainVersion = toolchainTOML.toolchain.channel;
+        # rustToolchainTOML = rustPkgs.rust-bin.stable.${toolchainVersion}.minimal;
         rustFmtToolchainTOML =
           rustPkgs.rust-bin.fromRustupToolchainFile
           RUSTFMT_TOOLCHAIN;
