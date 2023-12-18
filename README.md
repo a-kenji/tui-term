@@ -9,11 +9,9 @@ A pseudoterminal widget for the  [ratatui](https://github.com/tui-rs-revival/rat
 
 ## Status
 
-NOTE: This project is currently in active development and should be considered as work in progress.
-
-It cannot be considered stable yet.
-
-The goal of tui-term is to provide a robust and well-tested pseudoterminal widget for users of the ratatui crate.
+> [!NOTE]
+> This project is currently in active development and should be considered a work in progress.
+> The goal of tui-term is to provide a robust and well-tested pseudoterminal widget for users of the `ratatui` crate.
 
 ## Installation
 
