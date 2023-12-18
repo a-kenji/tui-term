@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.5] - 2023-12-18
+
+Compatible with `ratatui`: `v0.25.0`.
+
+### Miscellaneous Tasks
+
+- *(deps)* Bump ratatui from `0.24.0` to `0.25.0` [**breaking**]
+- *(doc)* Fix note style
+- *(doc)* Fix typo
+
+### Bench
+
+- Init divan
+
+### Examples
+
+-  Improve cross platform support
+
 ## [0.1.5] - 2023-10-25
 
 Compatible with `ratatui`: `v0.24.0`.

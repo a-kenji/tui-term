@@ -19,7 +19,7 @@ To use `tui-term`, simply add it as a dependency in your Cargo.toml file:
 
 ```
 [dependencies]
-tui-term = "0.1.0"
+tui-term = "0.1.6"
 ```
 or use `cargo add`:
 ```
