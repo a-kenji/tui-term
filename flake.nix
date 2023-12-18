@@ -191,7 +191,7 @@
       in {
         devShells = {
           default = (pkgs.mkShell.override {inherit stdenv;}) {
-            buildInputs = shellInputs ++ fmtInputs ++ devInputs;
+            buildInputs = shellInputs ++ devInputs ++ fmtInputs;
             inherit name;
             RUST_BACKTRACE = true;
             RUSTFLAGS = "-C linker=clang -C link-arg=-fuse-ld=${pkgs.mold}/bin/mold -C target-cpu=native";
