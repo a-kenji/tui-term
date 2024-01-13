@@ -39,6 +39,7 @@ use crate::state;
 ///             .add_modifier(Modifier::BOLD),
 ///     );
 /// ```
+#[non_exhaustive]
 pub struct PseudoTerminal<'a> {
     screen: &'a Screen,
     pub(crate) block: Option<Block<'a>>,
@@ -46,7 +47,9 @@ pub struct PseudoTerminal<'a> {
     pub(crate) cursor: Cursor,
 }
 
+#[non_exhaustive]
 pub struct Cursor {
+    pub(crate) show: bool,
     pub(crate) symbol: String,
     pub(crate) style: Style,
     pub(crate) overlay_style: Style,
@@ -117,12 +120,33 @@ impl Cursor {
         self.overlay_style = overlay_style;
         self
     }
+
+    /// Set the visibility of the cursor (default = shown)
+    #[inline]
+    #[must_use]
+    pub const fn visibility(mut self, show: bool) -> Self {
+        self.show = show;
+        self
+    }
+
+    /// Show the cursor (default)
+    #[inline]
+    pub fn show(&mut self) {
+        self.show = true;
+    }
+
+    /// Hide the cursor
+    #[inline]
+    pub fn hide(&mut self) {
+        self.show = false;
+    }
 }
 
 impl Default for Cursor {
     #[inline]
     fn default() -> Self {
         Self {
+            show: true,
             symbol: "\u{2588}".into(), //"█".
             style: Style::default().fg(Color::Gray),
             overlay_style: Style::default().add_modifier(Modifier::REVERSED),
@@ -334,6 +358,41 @@ mod tests {
         let mut parser = vt100::Parser::new(24, 80, 0);
         let style = Style::default().bg(Color::Cyan).fg(Color::LightRed);
         let cursor = Cursor::default().symbol("|").style(style);
+        parser.process(stream);
+        let pseudo_term = PseudoTerminal::new(parser.screen()).cursor(cursor);
+        terminal
+            .draw(|f| {
+                f.render_widget(pseudo_term, f.size());
+            })
+            .unwrap();
+        let view = format!("{:?}", terminal.backend().buffer());
+        insta::assert_snapshot!(view);
+    }
+    #[test]
+    fn simple_cursor_hide() {
+        let stream = include_bytes!("../test/typescript/simple_ls.typescript");
+        let backend = TestBackend::new(80, 24);
+        let mut terminal = Terminal::new(backend).unwrap();
+        let mut parser = vt100::Parser::new(24, 80, 0);
+        let cursor = Cursor::default().visibility(false);
+        parser.process(stream);
+        let pseudo_term = PseudoTerminal::new(parser.screen()).cursor(cursor);
+        terminal
+            .draw(|f| {
+                f.render_widget(pseudo_term, f.size());
+            })
+            .unwrap();
+        let view = format!("{:?}", terminal.backend().buffer());
+        insta::assert_snapshot!(view);
+    }
+    #[test]
+    fn simple_cursor_hide_alt() {
+        let stream = include_bytes!("../test/typescript/simple_ls.typescript");
+        let backend = TestBackend::new(80, 24);
+        let mut terminal = Terminal::new(backend).unwrap();
+        let mut parser = vt100::Parser::new(24, 80, 0);
+        let mut cursor = Cursor::default();
+        cursor.hide();
         parser.process(stream);
         let pseudo_term = PseudoTerminal::new(parser.screen()).cursor(cursor);
         terminal
