@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.6] - 2024-02-02
+
+Compatible with `ratatui`: `v0.26.0`.
+
+### Features
+
+- Add unstable controller interface, for `oneshot` commands. 
+  Please see the examples for more details.
+- Set visiblity of the cursor
+
+### Miscellaneous Tasks
+
+- *(deps)* Bump cachix/install-nix-action from 24 to 25
+- *(deps)* Bump cachix/cachix-action from 13 to 14
+- *(deps)* Bump tokio from 1.35.0 to 1.35.1
+
 ## [0.1.5] - 2023-12-18
 
 Compatible with `ratatui`: `v0.25.0`.
