@@ -10,7 +10,7 @@ Compatible with `ratatui`: `v0.26.0`.
 
 - Add unstable controller interface, for `oneshot` commands. 
   Please see the examples for more details.
-- Set visiblity of the cursor
+- Set visibility of the cursor
 
 ### Miscellaneous Tasks
 
