@@ -2,7 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.1.6] - 2024-02-02
+## [0.1.8] - 2024-02-14
+
+Compatible with `ratatui`: `v0.26.1`.
+
+- *(deps)* Bump ratatui from 0.26.0 to 0.26.1
+- *(inputs)* switch to nixpkgs
+
+## [0.1.7] - 2024-02-02
 
 Compatible with `ratatui`: `v0.26.0`.
 
@@ -18,7 +25,7 @@ Compatible with `ratatui`: `v0.26.0`.
 - *(deps)* Bump cachix/cachix-action from 13 to 14
 - *(deps)* Bump tokio from 1.35.0 to 1.35.1
 
-## [0.1.5] - 2023-12-18
+## [0.1.6] - 2023-12-18
 
 Compatible with `ratatui`: `v0.25.0`.
 
