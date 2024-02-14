@@ -1,7 +1,7 @@
 {
   description = "tui-term - a pseudoterminal widget for ratatui";
 
-  inputs.nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+  inputs.nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
   inputs.rust-overlay = {
     url = "github:oxalica/rust-overlay";
@@ -132,7 +132,7 @@
           pkgs.cargo-modules
           pkgs.cargo-outdated
           pkgs.cargo-tarpaulin
-          pkgs.cargo-unused-features
+          # pkgs.cargo-unused-features
           (pkgs.symlinkJoin {
             name = "cargo-udeps-wrapped";
             paths = [pkgs.cargo-udeps];
