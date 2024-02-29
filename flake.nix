@@ -14,6 +14,8 @@
     inputs.nixpkgs.follows = "nixpkgs";
   };
 
+  inputs.flake-utils.url = "github:numtide/flake-utils";
+
   outputs = {
     self,
     nixpkgs,
