@@ -30,29 +30,8 @@ pub fn handle(term: &PseudoTerminal, area: Rect, buf: &mut Buffer) {
 
             if let Some(screen_cell) = screen.cell(row, col) {
                 if screen_cell.has_contents() {
-                    let fg = screen_cell.fgcolor();
-                    let bg = screen_cell.bgcolor();
-
                     let cell = buf.get_mut(buf_col, buf_row);
-                    cell.set_symbol(&screen_cell.contents());
-                    let fg: Color = fg.into();
-                    let bg: Color = bg.into();
-                    let mut style = Style::reset();
-                    if screen_cell.bold() {
-                        style = style.add_modifier(Modifier::BOLD);
-                    }
-                    if screen_cell.italic() {
-                        style = style.add_modifier(Modifier::ITALIC);
-                    }
-                    if screen_cell.underline() {
-                        style = style.add_modifier(Modifier::UNDERLINED);
-                    }
-                    if screen_cell.inverse() {
-                        style = style.add_modifier(Modifier::REVERSED);
-                    }
-                    cell.set_style(style);
-                    cell.set_fg(fg.into());
-                    cell.set_bg(bg.into());
+                    fill_buf_cell(screen_cell, cell);
                 }
             }
         }
@@ -75,6 +54,31 @@ pub fn handle(term: &PseudoTerminal, area: Rect, buf: &mut Buffer) {
             }
         }
     }
+}
+
+fn fill_buf_cell(screen_cell: &vt100::Cell, buf_cell: &mut ratatui::buffer::Cell) {
+    let fg = screen_cell.fgcolor();
+    let bg = screen_cell.bgcolor();
+
+    buf_cell.set_symbol(&screen_cell.contents());
+    let fg: Color = fg.into();
+    let bg: Color = bg.into();
+    let mut style = Style::reset();
+    if screen_cell.bold() {
+        style = style.add_modifier(Modifier::BOLD);
+    }
+    if screen_cell.italic() {
+        style = style.add_modifier(Modifier::ITALIC);
+    }
+    if screen_cell.underline() {
+        style = style.add_modifier(Modifier::UNDERLINED);
+    }
+    if screen_cell.inverse() {
+        style = style.add_modifier(Modifier::REVERSED);
+    }
+    buf_cell.set_style(style);
+    buf_cell.set_fg(fg.into());
+    buf_cell.set_bg(bg.into());
 }
 
 /// Represents a foreground or background color for cells.
