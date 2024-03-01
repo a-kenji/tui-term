@@ -27,7 +27,7 @@
 //! use vt100::Parser;
 //!
 //! let mut parser = vt100::Parser::new(24, 80, 0);
-//! let pseudo_term = PseudoTerminal::new(&parser.screen())
+//! let pseudo_term = PseudoTerminal::new(parser.screen())
 //!     .block(Block::default().title("Terminal").borders(Borders::ALL))
 //!     .style(
 //!         Style::default()
@@ -49,6 +49,7 @@
 //!   sequences, but future versions may introduce support for alternative backends.
 
 mod state;
+mod vt100_imp;
 pub mod widget;
 
 #[cfg(feature = "unstable")]
