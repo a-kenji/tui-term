@@ -49,6 +49,7 @@
 //!   sequences, but future versions may introduce support for alternative backends.
 
 mod state;
+#[cfg(feature = "vt100")]
 mod vt100_imp;
 pub mod widget;
 
@@ -56,4 +57,5 @@ pub mod widget;
 pub mod controller;
 
 /// Reexport of the vt100 crate to ensure correct version compatibility
+#[cfg(feature = "vt100")]
 pub use vt100;

@@ -33,11 +33,12 @@ categories = ["command-line-interface", "command-line-utilities"]
 # ]
 
 [features]
+default = ["vt100"]
 unstable = ["dep:portable-pty"]
 
 [dependencies]
 ratatui = "0.26.1"
-vt100 = "0.15.2"
+vt100 = { version = "0.15.2", optional = true }
 portable-pty = { version = "0.8.1", optional = true }
 
 [dev-dependencies]

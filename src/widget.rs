@@ -286,7 +286,7 @@ impl<S: Screen> Widget for PseudoTerminal<'_, S> {
     }
 }
 
-#[cfg(test)]
+#[cfg(all(test, feature = "vt100"))]
 mod tests {
     use ratatui::{backend::TestBackend, widgets::Borders, Terminal};
 
