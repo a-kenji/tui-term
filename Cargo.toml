@@ -99,6 +99,10 @@ name = "nested_shell_async"
 doc-scrape-examples = true
 
 [[example]]
+name = "simple_ls_controller"
+required-features = ["unstable"]
+
+[[example]]
 name = "smux"
 doc-scrape-examples = true
 
