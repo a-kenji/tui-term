@@ -7,16 +7,29 @@ use ratatui::{
 
 use crate::state;
 
+/// A trait representing a pseudo-terminal screen.
+///
+/// Implementing this trait allows for backends other than `vt100` to be used
+/// with the `PseudoTerminal` widget.
 pub trait Screen {
+    /// The type of cell this screen contains
     type C: Cell;
 
+    /// Returns the cell at the given location if it exists.
     fn cell(&self, row: u16, col: u16) -> Option<&Self::C>;
+    /// Returns whether the terminal should be hidden
     fn hide_cursor(&self) -> bool;
+    /// Returns cursor position of screen.
+    ///
+    /// The return value is expected to be (row, column)
     fn cursor_position(&self) -> (u16, u16);
 }
 
+/// A trait for representing a single cell on a screen.
 pub trait Cell {
+    /// Whether the cell has any contents that could be rendered to the screen.
     fn has_contents(&self) -> bool;
+    /// Apply the contents and styling of this cell to the provided buffer cell.
     fn apply(&self, cell: &mut ratatui::buffer::Cell);
 }
 
