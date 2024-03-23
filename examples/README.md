@@ -4,7 +4,7 @@ In this folder you find examples for using `tui-term`.
 
 To run the `simple_ls_rw` example:
 
-```
+```sh
 cargo run --example simple_ls_rw
 ```
 
@@ -32,10 +32,9 @@ The RWLock ensures that multiple threads can read from the pseudoterminal simult
 Uses the tui-term's controller to handle the command lifecycle.
 This feature is gated behind the `unstable` flag.
 Run it with:
-```
+```sh
 cargo run --example simple_ls_controller --features unstable
 ```
-
 
 ## `nested_shell`
 
