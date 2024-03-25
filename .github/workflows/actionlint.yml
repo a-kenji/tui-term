@@ -26,7 +26,7 @@ jobs:
         name: kenji
         # If you chose API tokens for write access OR if you have a private cache
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-    - uses: DeterminateSystems/magic-nix-cache-action@v3
+    - uses: DeterminateSystems/magic-nix-cache-action@v4
       with:
         diagnostic-endpoint: ""
     - name: "actionlint"
