@@ -2,6 +2,47 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.9] - 2024-03-28
+
+Compatible with `ratatui`: `v0.26.1`.
+
+This release increases `tui-term`'s flexibility.
+
+The two notable changes are breaking changes:
+- Looser coupling with `vt100` https://github.com/a-kenji/tui-term/pull/152
+It is now possible to implement the `Screen` trait for alternative backend parser implementations.
+    -> PseudoTerminal now contains a generic.
+    -> Automatic dereferencing no longer works for the constructor e.g. `PseudoTerminal::new(&parser.screen())` will fail.
+- `ratatui`'s default features are not activated anymore, allowing for easier composition 
+with backends other than `crossterm`
+
+### Features
+
+-  Add `vt100` as optional, but enabled by default
+
+### Bug Fixes
+
+-  Specify required feature for controller example
+
+### Documentation
+
+- Add doc comments to `Screen` and `Cell` trait
+- *(readme)* Improve the readme
+
+### Testing
+
+- Use fixed crane `nextest` command
+
+### Miscellaneous Tasks
+
+- Move `vt100` specific details to own module
+- Move `vt100` to `ratatui` cell conversion to helper
+- *(toolchain)* Bump default development toolchain
+
+### Flake.lock
+
+- Update
+
 ## [0.1.8] - 2024-02-14
 
 Compatible with `ratatui`: `v0.26.1`.
