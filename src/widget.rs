@@ -4,9 +4,34 @@ use ratatui::{
     style::{Color, Modifier, Style},
     widgets::{Block, Clear, Widget},
 };
-use vt100::Screen;
 
 use crate::state;
+
+/// A trait representing a pseudo-terminal screen.
+///
+/// Implementing this trait allows for backends other than `vt100` to be used
+/// with the `PseudoTerminal` widget.
+pub trait Screen {
+    /// The type of cell this screen contains
+    type C: Cell;
+
+    /// Returns the cell at the given location if it exists.
+    fn cell(&self, row: u16, col: u16) -> Option<&Self::C>;
+    /// Returns whether the terminal should be hidden
+    fn hide_cursor(&self) -> bool;
+    /// Returns cursor position of screen.
+    ///
+    /// The return value is expected to be (row, column)
+    fn cursor_position(&self) -> (u16, u16);
+}
+
+/// A trait for representing a single cell on a screen.
+pub trait Cell {
+    /// Whether the cell has any contents that could be rendered to the screen.
+    fn has_contents(&self) -> bool;
+    /// Apply the contents and styling of this cell to the provided buffer cell.
+    fn apply(&self, cell: &mut ratatui::buffer::Cell);
+}
 
 /// A widget representing a pseudo-terminal screen.
 ///
@@ -30,7 +55,7 @@ use crate::state;
 /// use vt100::Parser;
 ///
 /// let mut parser = vt100::Parser::new(24, 80, 0);
-/// let pseudo_term = PseudoTerminal::new(&parser.screen())
+/// let pseudo_term = PseudoTerminal::new(parser.screen())
 ///     .block(Block::default().title("Terminal").borders(Borders::ALL))
 ///     .style(
 ///         Style::default()
@@ -40,8 +65,8 @@ use crate::state;
 ///     );
 /// ```
 #[non_exhaustive]
-pub struct PseudoTerminal<'a> {
-    screen: &'a Screen,
+pub struct PseudoTerminal<'a, S> {
+    screen: &'a S,
     pub(crate) block: Option<Block<'a>>,
     style: Option<Style>,
     pub(crate) cursor: Cursor,
@@ -154,7 +179,7 @@ impl Default for Cursor {
     }
 }
 
-impl<'a> PseudoTerminal<'a> {
+impl<'a, S: Screen> PseudoTerminal<'a, S> {
     /// Creates a new instance of `PseudoTerminal`.
     ///
     /// # Arguments
@@ -168,11 +193,11 @@ impl<'a> PseudoTerminal<'a> {
     /// use vt100::Parser;
     ///
     /// let mut parser = vt100::Parser::new(24, 80, 0);
-    /// let pseudo_term = PseudoTerminal::new(&parser.screen());
+    /// let pseudo_term = PseudoTerminal::new(parser.screen());
     /// ```
     #[inline]
     #[must_use]
-    pub fn new(screen: &'a Screen) -> Self {
+    pub fn new(screen: &'a S) -> Self {
         PseudoTerminal {
             screen,
             block: None,
@@ -196,7 +221,7 @@ impl<'a> PseudoTerminal<'a> {
     ///
     /// let mut parser = vt100::Parser::new(24, 80, 0);
     /// let block = Block::default();
-    /// let pseudo_term = PseudoTerminal::new(&parser.screen()).block(block);
+    /// let pseudo_term = PseudoTerminal::new(parser.screen()).block(block);
     /// ```
     #[inline]
     #[must_use]
@@ -222,7 +247,7 @@ impl<'a> PseudoTerminal<'a> {
     ///
     /// let mut parser = vt100::Parser::new(24, 80, 0);
     /// let cursor = Cursor::default().symbol("|").style(Style::default());
-    /// let pseudo_term = PseudoTerminal::new(&parser.screen()).cursor(cursor);
+    /// let pseudo_term = PseudoTerminal::new(parser.screen()).cursor(cursor);
     /// ```
     #[inline]
     #[must_use]
@@ -245,7 +270,7 @@ impl<'a> PseudoTerminal<'a> {
     ///
     /// let mut parser = vt100::Parser::new(24, 80, 0);
     /// let style = Style::default();
-    /// let pseudo_term = PseudoTerminal::new(&parser.screen()).style(style);
+    /// let pseudo_term = PseudoTerminal::new(parser.screen()).style(style);
     /// ```
     #[inline]
     #[must_use]
@@ -256,12 +281,12 @@ impl<'a> PseudoTerminal<'a> {
 
     #[inline]
     #[must_use]
-    pub const fn screen(&self) -> &Screen {
+    pub const fn screen(&self) -> &S {
         self.screen
     }
 }
 
-impl Widget for PseudoTerminal<'_> {
+impl<S: Screen> Widget for PseudoTerminal<'_, S> {
     #[inline]
     fn render(self, area: Rect, buf: &mut Buffer) {
         Clear.render(area, buf);
@@ -274,7 +299,7 @@ impl Widget for PseudoTerminal<'_> {
     }
 }
 
-#[cfg(test)]
+#[cfg(all(test, feature = "vt100"))]
 mod tests {
     use ratatui::{backend::TestBackend, widgets::Borders, Terminal};
 

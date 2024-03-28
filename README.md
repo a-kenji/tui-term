@@ -15,21 +15,21 @@ A pseudoterminal widget for the  [ratatui](https://github.com/tui-rs-revival/rat
 
 ## Installation
 
-To use `tui-term`, simply add it as a dependency in your Cargo.toml file:
+To use `tui-term`, simply add it as a dependency in your `Cargo.toml` file:
 
-```
+```sh
 [dependencies]
-tui-term = "0.1.6"
+tui-term = "0.1.7"
 ```
 or use `cargo add`:
-```
+```sh
 cargo add tui-term
 ```
 
 ## Examples
 
 Check out the examples directory, for more information, or run an example:
-```
+```sh
 cargo run --example simple_ls_rw
 ```
 
@@ -40,24 +40,23 @@ The controller is an `experimental` feature helping with managing the lifecycle 
 Currently the support is limited to oneshot commands.
 
 To activate the feature:
-```
+```sh
 cargo add tui-term -F unstable
 ```
 
 ## Chat Room
-Join our matrix chat room, for possibly synchronous communication.
+Join our [matrix chat room](https://matrix.to/#/#tui-term-main:matrix.org), for possibly synchronous communication.
 
 ## Architecture
 
-For a top-level understanding of the architecture of `tui-term` and the design choices made, please refer to the [Architecture](docs/ARCHITECTURE.md) document.
+For an overview of `tui-term`'s architecture and design principles, please refer to the [Architecture](docs/ARCHITECTURE.md) documentation.
 
 ## Contributing
-We welcome contributions from the community! If you're interested in contributing to tui-term, please refer to the contribution guidelines for instructions on how to get started.
+We welcome contributions from the community!
+Check out the [Contributing Guidelines](./docs/CONTRIBUTING.md) on how to get started.
 
-[How to contribute.](./docs/CONTRIBUTING.md)
-
-## Changes
-[Changelog](./CHANGELOG.md)
+## Release Notes
+Stay updated with the latest changes by viewing the [Changelog](./CHANGELOG.md).
 
 ## License
-MIT
+`tui-term` is available under the MIT license. See [LICENCE](LICENSE) for more information.

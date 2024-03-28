@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - uses: cachix/install-nix-action@v25
+    - uses: cachix/install-nix-action@v26
       with:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
@@ -24,7 +24,7 @@ jobs:
         name: kenji
         # If you chose API tokens for write access OR if you have a private cache
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-    - uses: DeterminateSystems/magic-nix-cache-action@v3
+    - uses: DeterminateSystems/magic-nix-cache-action@v4
       with:
         diagnostic-endpoint: ""
     - name: "install editorconfig-checker"
@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - uses: cachix/install-nix-action@v25
+    - uses: cachix/install-nix-action@v26
       with:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
@@ -50,7 +50,7 @@ jobs:
         name: kenji
         # If you chose API tokens for write access OR if you have a private cache
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-    - uses: DeterminateSystems/magic-nix-cache-action@v3
+    - uses: DeterminateSystems/magic-nix-cache-action@v4
       with:
         diagnostic-endpoint: ""
     - name: "lychee"

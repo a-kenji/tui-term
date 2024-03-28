@@ -99,7 +99,7 @@
           inherit cargoArtifacts src;
           partitions = 1;
           partitionType = "count";
-          cargoExtraArgs = "--features unstable";
+          cargoNextestExtraArgs = "--features unstable";
         };
         cargoDoc = craneLib.cargoDoc (commonArgs // {inherit cargoArtifacts;});
 
