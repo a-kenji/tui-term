@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.10] - 2024-04-16
+
+Compatible with `ratatui`: `v0.26.2`.
+
+MSRV is now `rustc --version`: `1.74.0`.
+
+### Miscellaneous Tasks
+
+- *(deps)* Bump ratatui from 0.26.1 to 0.26.2
+-  Bump MSRV `1.70.0` -> `1.74.0` [**breaking**]
+
+### Bench
+
+-  Add divan back
+
 ## [0.1.9] - 2024-03-28
 
 Compatible with `ratatui`: `v0.26.1`.
