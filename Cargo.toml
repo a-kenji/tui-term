@@ -19,7 +19,7 @@ documentation = "https://docs.rs/tui-term/latest/tui-term/"
 repository = "https://github.com/a-kenji/tui-term"
 
 autoexamples = true
-rust-version = "1.70.0"
+rust-version = "1.74.0"
 
 
 keywords = ["tui", "terminal", "ratatui", "tty", "multiplexer"]
