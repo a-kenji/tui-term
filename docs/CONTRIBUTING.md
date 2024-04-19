@@ -5,7 +5,7 @@ We are always happy to receive contributions and attempt to process them in a ti
 
 ## Branches
 Releases will be cut on the `release` branch.
-Most PR`s and features should land on the `development` branch.
+Most PRs and features should land on the `development` branch.
 
 ## Issues
 To get an overview of what can be worked on, please take a look at the [issues](https://github.com/a-kenji/tui-term/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc).
