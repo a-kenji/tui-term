@@ -181,7 +181,7 @@ async fn run<B: Backend>(
                 Event::FocusLost => {}
                 Event::Mouse(_) => {}
                 Event::Paste(_) => todo!(),
-                Event::Resize(rows, cols) => {
+                Event::Resize(cols, rows) => {
                     parser.write().unwrap().set_size(rows, cols);
                 }
             }
