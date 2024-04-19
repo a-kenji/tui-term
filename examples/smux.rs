@@ -137,7 +137,7 @@ async fn main() -> io::Result<()> {
                         }
                     }
                 },
-                Event::Resize(rows, cols) => {
+                Event::Resize(cols, rows) => {
                     tracing::info!("Resized to: rows: {} cols: {}", rows, cols);
                     for pane in panes.iter_mut() {
                         pane.parser.write().unwrap().set_size(rows, cols);
