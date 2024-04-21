@@ -26,7 +26,7 @@ use tokio::{
 };
 use tracing::Level;
 use tracing_subscriber::FmtSubscriber;
-use tui_term::widget::PseudoTerminal;
+use tui_term::widget::{Cursor, PseudoTerminal};
 
 #[derive(Debug, Clone, Copy)]
 struct Size {
@@ -68,6 +68,7 @@ async fn main() -> io::Result<()> {
                 let block = Block::default()
                     .borders(Borders::ALL)
                     .style(Style::default().add_modifier(Modifier::BOLD));
+                let mut cursor = Cursor::default();
                 let block = if Some(index) == active_pane {
                     block.style(
                         Style::default()
@@ -75,11 +76,12 @@ async fn main() -> io::Result<()> {
                             .fg(Color::LightMagenta),
                     )
                 } else {
+                    cursor.hide();
                     block
                 };
                 let parser = pane.parser.read().unwrap();
                 let screen = parser.screen();
-                let pseudo_term = PseudoTerminal::new(screen).block(block);
+                let pseudo_term = PseudoTerminal::new(screen).block(block).cursor(cursor);
                 let pane_chunk = Rect {
                     x: chunks[0].x,
                     y: chunks[0].y + (index as u16 * pane_height), /* Adjust the y coordinate for
