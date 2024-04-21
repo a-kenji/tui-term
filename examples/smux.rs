@@ -12,7 +12,7 @@ use crossterm::{
     execute,
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
-use portable_pty::{native_pty_system, CommandBuilder, PtySize};
+use portable_pty::{native_pty_system, CommandBuilder, MasterPty, PtySize};
 use ratatui::{
     backend::CrosstermBackend,
     layout::{Alignment, Constraint, Direction, Layout, Rect},
@@ -28,7 +28,7 @@ use tracing::Level;
 use tracing_subscriber::FmtSubscriber;
 use tui_term::widget::PseudoTerminal;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 struct Size {
     cols: u16,
     rows: u16,
@@ -47,8 +47,7 @@ async fn main() -> io::Result<()> {
     let mut active_pane: Option<usize> = None;
 
     // Add a default pane
-    let mut pane_size = size.clone();
-    pane_size.rows -= 2;
+    let pane_size = calc_pane_size(size, 1);
     open_new_pane(&mut panes, &mut active_pane, &cmd, pane_size)?;
 
     loop {
@@ -108,14 +107,14 @@ async fn main() -> io::Result<()> {
                         return Ok(());
                     }
                     KeyCode::Char('n') if key.modifiers.contains(KeyModifiers::CONTROL) => {
-                        let amount = panes.len() + 1;
-                        let mut pane_size = size.clone();
-                        pane_size.rows /= amount as u16;
+                        let pane_size = calc_pane_size(size, panes.len() + 1);
                         tracing::info!("Opened new pane with size: {size:?}");
+                        resize_all_panes(&mut panes, pane_size);
                         open_new_pane(&mut panes, &mut active_pane, &cmd, pane_size)?;
                     }
                     KeyCode::Char('x') if key.modifiers.contains(KeyModifiers::CONTROL) => {
                         close_active_pane(&mut panes, &mut active_pane).await?;
+                        resize_all_panes(&mut panes, pane_size);
                     }
                     KeyCode::Char('k') if key.modifiers.contains(KeyModifiers::CONTROL) => {
                         if let Some(pane) = active_pane {
@@ -139,11 +138,10 @@ async fn main() -> io::Result<()> {
                 },
                 Event::Resize(cols, rows) => {
                     tracing::info!("Resized to: rows: {} cols: {}", rows, cols);
-                    for pane in panes.iter_mut() {
-                        pane.parser.write().unwrap().set_size(rows, cols);
-                    }
                     size.rows = rows;
                     size.cols = cols;
+                    let pane_size = calc_pane_size(size, panes.len());
+                    resize_all_panes(&mut panes, pane_size);
                 }
                 _ => {}
             }
@@ -151,9 +149,22 @@ async fn main() -> io::Result<()> {
     }
 }
 
+fn calc_pane_size(mut size: Size, nr_panes: usize) -> Size {
+    size.rows -= 2;
+    size.rows /= nr_panes as u16;
+    size
+}
+
+fn resize_all_panes(panes: &mut Vec<PtyPane>, size: Size) {
+    for pane in panes.iter() {
+        pane.resize(size);
+    }
+}
+
 struct PtyPane {
     parser: Arc<RwLock<vt100::Parser>>,
     sender: Sender<Bytes>,
+    master_pty: Box<dyn MasterPty>,
 }
 
 impl PtyPane {
@@ -205,19 +216,35 @@ impl PtyPane {
 
         let (tx, mut rx) = channel::<Bytes>(32);
 
-        {
-            let mut writer = BufWriter::new(pty_pair.master.take_writer().unwrap());
-            // Drop writer on purpose
-            tokio::spawn(async move {
-                while let Some(bytes) = rx.recv().await {
-                    writer.write_all(&bytes).unwrap();
-                    writer.flush().unwrap();
-                }
-                drop(pty_pair.master);
-            });
-        }
+        let mut writer = BufWriter::new(pty_pair.master.take_writer().unwrap());
+        // writer is moved into the tokio task below
+        tokio::spawn(async move {
+            while let Some(bytes) = rx.recv().await {
+                writer.write_all(&bytes).unwrap();
+                writer.flush().unwrap();
+            }
+        });
 
-        Ok(Self { parser, sender: tx })
+        Ok(Self {
+            parser,
+            sender: tx,
+            master_pty: pty_pair.master,
+        })
+    }
+
+    fn resize(&self, size: Size) {
+        self.parser
+            .write()
+            .unwrap()
+            .set_size(size.rows - 4, size.cols - 4);
+        self.master_pty
+            .resize(PtySize {
+                rows: size.rows - 4,
+                cols: size.cols - 4,
+                pixel_width: 0,
+                pixel_height: 0,
+            })
+            .unwrap();
     }
 }
 
