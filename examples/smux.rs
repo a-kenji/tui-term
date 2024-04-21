@@ -262,11 +262,15 @@ async fn handle_pane_key_event(pane: &mut PtyPane, key: &KeyEvent) -> bool {
                         // Close the pane
                         return false;
                     }
-                    'l' => {
-                        send = vec![27, 91, 50, 74];
+                    _ => {
+                        let char = ch.to_ascii_uppercase();
+                        let ascii_val = char as u8;
+                        // Since char is guaranteed to be an ASCII character,
+                        // we can safely subtract 64 to get
+                        // the corresponding control character
+                        let ascii_to_send = ascii_val - 64;
+                        send = vec![ascii_to_send];
                     }
-
-                    _ => {}
                 }
             }
             send
