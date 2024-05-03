@@ -25,10 +25,8 @@ pub fn handle<S: Screen>(term: &PseudoTerminal<S>, area: Rect, buf: &mut Buffer)
             }
 
             if let Some(screen_cell) = screen.cell(row, col) {
-                if screen_cell.has_contents() {
-                    let cell = buf.get_mut(buf_col, buf_row);
-                    screen_cell.apply(cell);
-                }
+                let cell = buf.get_mut(buf_col, buf_row);
+                screen_cell.apply(cell);
             }
         }
     }
