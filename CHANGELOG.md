@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.11] - 2024-05-04
+
+Compatible with `ratatui`: `v0.26.2`.
+
+While not a breaking change, consumers that implement the `Screen`
+trait may want to look into how the underlying implementation changed in #182.
+
+### Bug Fixes
+
+- Render cells correctly that have no content but styles
+
+### Continuous Integration
+
+- *(fix)* Correct the buildbot base branch
+
+### Examples
+
+- Show cursor on focused pane in the `smux` example
+- `smux` handle control characters
+
 ## [0.1.10] - 2024-04-16
 
 Compatible with `ratatui`: `v0.26.2`.
