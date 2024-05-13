@@ -254,25 +254,34 @@ async fn handle_pane_key_event(pane: &mut PtyPane, key: &KeyEvent) -> bool {
     let input_bytes = match key.code {
         KeyCode::Char(ch) => {
             let mut send = vec![ch as u8];
+            let upper = ch.to_ascii_uppercase();
             if key.modifiers == KeyModifiers::CONTROL {
-                match ch {
-                    'n' => {
+                match upper {
+                    'N' => {
                         // Ignore Ctrl+n within a pane
                         return true;
                     }
-                    'x' => {
+                    'X' => {
                         // Close the pane
                         return false;
                     }
-                    _ => {
-                        let char = ch.to_ascii_uppercase();
-                        let ascii_val = char as u8;
-                        // Since char is guaranteed to be an ASCII character,
+                    // https://github.com/fyne-io/terminal/blob/master/input.go
+                    // https://gist.github.com/ConnerWill/d4b6c776b509add763e17f9f113fd25b
+                    '2' | '@' | ' ' => send = vec![0],
+                    '3' | '[' => send = vec![27],
+                    '4' | '\\' => send = vec![28],
+                    '5' | ']' => send = vec![29],
+                    '6' | '^' => send = vec![30],
+                    '7' | '-' | '_' => send = vec![31],
+                    char if ('A'..='_').contains(&char) => {
+                        // Since A == 65,
                         // we can safely subtract 64 to get
                         // the corresponding control character
+                        let ascii_val = char as u8;
                         let ascii_to_send = ascii_val - 64;
                         send = vec![ascii_to_send];
                     }
+                    _ => {}
                 }
             }
             send
