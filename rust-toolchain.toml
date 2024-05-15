@@ -1,6 +1,6 @@
 # This file is updated by the `akenji@update-rust-toolchain` GitHub action
 [toolchain]
-channel = "1.77.2"
+channel = "1.78.0"
 components = []
 targets = []
 profile = "minimal"
