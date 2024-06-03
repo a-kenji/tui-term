@@ -28,7 +28,7 @@ jobs:
         name: kenji
         # If you chose API tokens for write access OR if you have a private cache
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-    - uses: DeterminateSystems/magic-nix-cache-action@v6
+    - uses: DeterminateSystems/magic-nix-cache-action@v7
       with:
         diagnostic-endpoint: ""
     - name: "nix flake check"
@@ -48,7 +48,7 @@ jobs:
         name: kenji
         # If you chose API tokens for write access OR if you have a private cache
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-    - uses: DeterminateSystems/magic-nix-cache-action@v6
+    - uses: DeterminateSystems/magic-nix-cache-action@v7
       with:
         diagnostic-endpoint: ""
     - name: "cargo clippy"
@@ -67,7 +67,7 @@ jobs:
         name: kenji
         # If you chose API tokens for write access OR if you have a private cache
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-    - uses: DeterminateSystems/magic-nix-cache-action@v6
+    - uses: DeterminateSystems/magic-nix-cache-action@v7
       with:
         diagnostic-endpoint: ""
     - name: "cargo deny"
@@ -86,7 +86,7 @@ jobs:
         name: kenji
         # If you chose API tokens for write access OR if you have a private cache
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-    - uses: DeterminateSystems/magic-nix-cache-action@v6
+    - uses: DeterminateSystems/magic-nix-cache-action@v7
       with:
         diagnostic-endpoint: ""
     - name: "cargo udeps"
@@ -105,7 +105,7 @@ jobs:
         name: kenji
         # If you chose API tokens for write access OR if you have a private cache
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-    - uses: DeterminateSystems/magic-nix-cache-action@v6
+    - uses: DeterminateSystems/magic-nix-cache-action@v7
       with:
         diagnostic-endpoint: ""
     - name: "treefmt"
@@ -124,7 +124,7 @@ jobs:
         name: kenji
         # If you chose API tokens for write access OR if you have a private cache
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-    - uses: DeterminateSystems/magic-nix-cache-action@v6
+    - uses: DeterminateSystems/magic-nix-cache-action@v7
       with:
         diagnostic-endpoint: ""
     - name: "build documentation"
@@ -145,7 +145,7 @@ jobs:
         name: kenji
         # If you chose API tokens for write access OR if you have a private cache
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-    - uses: DeterminateSystems/magic-nix-cache-action@v6
+    - uses: DeterminateSystems/magic-nix-cache-action@v7
       with:
         diagnostic-endpoint: ""
     - name: "build dependencies"
@@ -164,7 +164,7 @@ jobs:
         name: kenji
         # If you chose API tokens for write access OR if you have a private cache
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-    - uses: DeterminateSystems/magic-nix-cache-action@v6
+    - uses: DeterminateSystems/magic-nix-cache-action@v7
       with:
         diagnostic-endpoint: ""
     - name: "build dependencies msrv"
@@ -184,7 +184,7 @@ jobs:
         name: kenji
         # If you chose API tokens for write access OR if you have a private cache
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-    - uses: DeterminateSystems/magic-nix-cache-action@v6
+    - uses: DeterminateSystems/magic-nix-cache-action@v7
       with:
         diagnostic-endpoint: ""
     - name: "build examples"
@@ -209,7 +209,7 @@ jobs:
         name: kenji
         # If you chose API tokens for write access OR if you have a private cache
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-    - uses: DeterminateSystems/magic-nix-cache-action@v6
+    - uses: DeterminateSystems/magic-nix-cache-action@v7
       with:
         diagnostic-endpoint: ""
     - name: "cargo test"
@@ -230,7 +230,7 @@ jobs:
         name: kenji
         # If you chose API tokens for write access OR if you have a private cache
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-    - uses: DeterminateSystems/magic-nix-cache-action@v6
+    - uses: DeterminateSystems/magic-nix-cache-action@v7
       with:
         diagnostic-endpoint: ""
     - name: "cargo doc"
@@ -249,7 +249,7 @@ jobs:
         name: kenji
         # If you chose API tokens for write access OR if you have a private cache
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-    - uses: DeterminateSystems/magic-nix-cache-action@v6
+    - uses: DeterminateSystems/magic-nix-cache-action@v7
       with:
         diagnostic-endpoint: ""
     - name: "typos"
