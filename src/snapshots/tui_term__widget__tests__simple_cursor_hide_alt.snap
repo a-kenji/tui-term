@@ -10,7 +10,7 @@ Buffer {
         " CHANGELOG.md    flake.lock   rust-toolchain.toml   wezterm                 ",
         " cliff.toml      flake.nix    src                                            ",
         " committed.toml   justfile     target                                        ",
-        "tui-term on  main [!?⇡] via ❄️ pure (tui-term-env)                              ",
+        "tui-term on  main [!?⇡] via ❄️pure (tui-term-env)                              ", // hidden by multi-width symbols: [(30, " ")]
         "❯                                                                               ",
         "                                                                                ",
         "                                                                                ",
@@ -51,6 +51,8 @@ Buffer {
         x: 19, y: 5, fg: Indexed(1), bg: Reset, underline: Reset, modifier: BOLD,
         x: 24, y: 5, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
         x: 29, y: 5, fg: Indexed(4), bg: Reset, underline: Reset, modifier: BOLD,
+        x: 30, y: 5, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+        x: 31, y: 5, fg: Indexed(4), bg: Reset, underline: Reset, modifier: BOLD,
         x: 50, y: 5, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
         x: 0, y: 6, fg: Indexed(2), bg: Reset, underline: Reset, modifier: BOLD,
         x: 1, y: 6, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
