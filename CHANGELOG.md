@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.11] - 2024-06-25
+
+Compatible with `ratatui`: `v0.27.0`.
+
+### Bug Fixes
+
+- *(example/smux)* Don't crash on some control codes
+
+### Miscellaneous Tasks
+
+- *(deps)* Bump ratatui from 0.26.3 to 0.27.0
+- *(deps)* Bump tokio from 1.37.0 to 1.38.0
+
 ## [0.1.11] - 2024-05-04
 
 Compatible with `ratatui`: `v0.26.2`.
