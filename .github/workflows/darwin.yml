@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    runs-on: "macos-11"
+    runs-on: "macos-14"
 
     steps:
       - name: "checkout repo"
@@ -21,6 +21,9 @@ jobs:
       - name: "Install Rust (ARM)"
         shell: bash
         run: "rustup target add aarch64-apple-darwin"
+      - name: "Install Rust Intel"
+        shell: bash
+        run: "rustup target add x86_64-apple-darwin"
       - name: "Build (Intel)"
         shell: bash
         run: |
