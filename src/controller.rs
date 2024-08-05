@@ -1,4 +1,4 @@
-//! This is an unstable interface, and can be activatet with the following
+//! This is an unstable interface, and can be activated with the following
 //! feature flag: `unstable`.
 //!
 //! The controller aims to help manage spawning and reading processes
