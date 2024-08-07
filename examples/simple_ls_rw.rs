@@ -104,7 +104,7 @@ fn ui(f: &mut Frame, screen: &Screen) {
             ]
             .as_ref(),
         )
-        .split(f.size());
+        .split(f.area());
     let title = Line::from("[ Running: ls ]");
     let block = Block::default()
         .borders(Borders::ALL)
@@ -115,7 +115,7 @@ fn ui(f: &mut Frame, screen: &Screen) {
     let pseudo_term = PseudoTerminal::new(screen).block(block);
     f.render_widget(pseudo_term, chunks[1]);
     let block = Block::default().borders(Borders::ALL);
-    f.render_widget(block, f.size());
+    f.render_widget(block, f.area());
     let explanation = "Press q to exit";
     let explanation = Paragraph::new(explanation)
         .style(Style::default().add_modifier(Modifier::BOLD | Modifier::REVERSED))

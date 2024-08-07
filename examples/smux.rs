@@ -56,7 +56,7 @@ async fn main() -> io::Result<()> {
                 .direction(Direction::Vertical)
                 .margin(1)
                 .constraints([Constraint::Percentage(100), Constraint::Min(1)].as_ref())
-                .split(f.size());
+                .split(f.area());
 
             let pane_height = if panes.is_empty() {
                 chunks[0].height

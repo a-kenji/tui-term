@@ -313,7 +313,7 @@ mod tests {
         let pseudo_term = PseudoTerminal::new(parser.screen());
         terminal
             .draw(|f| {
-                f.render_widget(pseudo_term, f.size());
+                f.render_widget(pseudo_term, f.area());
             })
             .unwrap();
         format!("{:?}", terminal.backend().buffer())
@@ -328,7 +328,7 @@ mod tests {
         let pseudo_term = PseudoTerminal::new(parser.screen());
         terminal
             .draw(|f| {
-                f.render_widget(pseudo_term, f.size());
+                f.render_widget(pseudo_term, f.area());
             })
             .unwrap();
         let view = format!("{:?}", terminal.backend().buffer());
@@ -345,7 +345,7 @@ mod tests {
         let pseudo_term = PseudoTerminal::new(parser.screen());
         terminal
             .draw(|f| {
-                f.render_widget(pseudo_term, f.size());
+                f.render_widget(pseudo_term, f.area());
             })
             .unwrap();
         let view = format!("{:?}", terminal.backend().buffer());
@@ -369,7 +369,7 @@ mod tests {
         let pseudo_term = PseudoTerminal::new(parser.screen()).cursor(cursor);
         terminal
             .draw(|f| {
-                f.render_widget(pseudo_term, f.size());
+                f.render_widget(pseudo_term, f.area());
             })
             .unwrap();
         let view = format!("{:?}", terminal.backend().buffer());
@@ -387,7 +387,7 @@ mod tests {
         let pseudo_term = PseudoTerminal::new(parser.screen()).cursor(cursor);
         terminal
             .draw(|f| {
-                f.render_widget(pseudo_term, f.size());
+                f.render_widget(pseudo_term, f.area());
             })
             .unwrap();
         let view = format!("{:?}", terminal.backend().buffer());
@@ -404,7 +404,7 @@ mod tests {
         let pseudo_term = PseudoTerminal::new(parser.screen()).cursor(cursor);
         terminal
             .draw(|f| {
-                f.render_widget(pseudo_term, f.size());
+                f.render_widget(pseudo_term, f.area());
             })
             .unwrap();
         let view = format!("{:?}", terminal.backend().buffer());
@@ -422,7 +422,7 @@ mod tests {
         let pseudo_term = PseudoTerminal::new(parser.screen()).cursor(cursor);
         terminal
             .draw(|f| {
-                f.render_widget(pseudo_term, f.size());
+                f.render_widget(pseudo_term, f.area());
             })
             .unwrap();
         let view = format!("{:?}", terminal.backend().buffer());
@@ -446,7 +446,7 @@ mod tests {
         let pseudo_term = PseudoTerminal::new(parser.screen()).cursor(cursor);
         terminal
             .draw(|f| {
-                f.render_widget(pseudo_term, f.size());
+                f.render_widget(pseudo_term, f.area());
             })
             .unwrap();
         let view = format!("{:?}", terminal.backend().buffer());
@@ -463,7 +463,7 @@ mod tests {
         let pseudo_term = PseudoTerminal::new(parser.screen()).block(block);
         terminal
             .draw(|f| {
-                f.render_widget(pseudo_term, f.size());
+                f.render_widget(pseudo_term, f.area());
             })
             .unwrap();
         let view = format!("{:?}", terminal.backend().buffer());
@@ -483,7 +483,7 @@ mod tests {
         let pseudo_term = PseudoTerminal::new(parser.screen()).block(block);
         terminal
             .draw(|f| {
-                f.render_widget(pseudo_term, f.size());
+                f.render_widget(pseudo_term, f.area());
             })
             .unwrap();
         let view = format!("{:?}", terminal.backend().buffer());
