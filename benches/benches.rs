@@ -123,7 +123,7 @@ fn render_typescript(screen: &Screen) {
     let pseudo_term = PseudoTerminal::new(screen);
     terminal
         .draw(|f| {
-            f.render_widget(pseudo_term, f.size());
+            f.render_widget(pseudo_term, f.area());
         })
         .unwrap();
     let _view = terminal.backend().to_string();

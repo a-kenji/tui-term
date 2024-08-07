@@ -65,7 +65,7 @@ fn ui(f: &mut Frame, screen: &Screen) {
             ]
             .as_ref(),
         )
-        .split(f.size());
+        .split(f.area());
     let title = Line::from("[ Running: ls ]");
     let block = Block::default()
         .borders(Borders::ALL)

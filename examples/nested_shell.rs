@@ -197,7 +197,7 @@ fn ui(f: &mut Frame, screen: &Screen) {
             ]
             .as_ref(),
         )
-        .split(f.size());
+        .split(f.area());
     let block = Block::default()
         .borders(Borders::ALL)
         .style(Style::default().add_modifier(Modifier::BOLD));
