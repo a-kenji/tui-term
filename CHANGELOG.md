@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.1.11] - 2024-06-25
+## [0.1.12] - 2024-06-25
 
 Compatible with `ratatui`: `v0.27.0`.
 
