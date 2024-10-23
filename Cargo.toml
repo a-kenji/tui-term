@@ -11,6 +11,7 @@ include = [
   "LICENSE",
   "README.md",
   "CHANGELOG.md",
+  "test/*",
 ]
 license = "MIT"
 
