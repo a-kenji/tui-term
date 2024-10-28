@@ -44,7 +44,7 @@ divan = "0.1.14"
 #TODO: go back to release version, once it is fixed
 # iai = "0.1.1"
 iai = { git = "https://github.com/sigaloid/iai", rev = "6c83e942" }
-insta = "1.40.0"
+insta = "1.41.0"
 once_cell = "1.20.2"
 
 # for examples
