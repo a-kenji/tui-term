@@ -18,7 +18,7 @@ use ratatui::{
     Frame, Terminal,
 };
 use tui_term::widget::PseudoTerminal;
-use vt100::Screen;
+use vt100_ctt::Screen;
 
 fn main() -> std::io::Result<()> {
     let (mut terminal, size) = setup_terminal().unwrap();
@@ -41,7 +41,7 @@ fn main() -> std::io::Result<()> {
 
     let (tx, rx) = channel();
     let mut reader = pair.master.try_clone_reader().unwrap();
-    let mut parser = vt100::Parser::new(size.rows - 1, size.cols - 1, 0);
+    let mut parser = vt100_ctt::Parser::new(size.rows - 1, size.cols - 1, 0);
 
     std::thread::spawn(move || {
         // Consume the output from the child

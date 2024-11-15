@@ -24,9 +24,9 @@
 //!     widgets::{Block, Borders},
 //! };
 //! use tui_term::widget::PseudoTerminal;
-//! use vt100::Parser;
+//! use vt100_ctt::Parser;
 //!
-//! let mut parser = vt100::Parser::new(24, 80, 0);
+//! let mut parser = vt100_ctt::Parser::new(24, 80, 0);
 //! let pseudo_term = PseudoTerminal::new(parser.screen())
 //!     .block(Block::default().title("Terminal").borders(Borders::ALL))
 //!     .style(
@@ -41,11 +41,11 @@
 //!
 //! # Features
 //!
-//! - Support for parsing and processing terminal control sequences using the `vt100` crate.
+//! - Support for parsing and processing terminal control sequences using the `vt100_ctt` crate.
 //!
 //! # Limitations
 //!
-//! - The `vt100` crate is currently the only supported backend for parsing terminal control
+//! - The `vt100_ctt` crate is currently the only supported backend for parsing terminal control
 //!   sequences, but future versions may introduce support for alternative backends.
 
 mod state;
@@ -56,6 +56,6 @@ pub mod widget;
 #[cfg(feature = "unstable")]
 pub mod controller;
 
-/// Reexport of the vt100 crate to ensure correct version compatibility
+/// Reexport of the vt100_ctt crate to ensure correct version compatibility
 #[cfg(feature = "vt100")]
-pub use vt100;
+pub use vt100_ctt;

@@ -18,7 +18,7 @@ use std::{
 };
 
 use portable_pty::{CommandBuilder, ExitStatus, PtySystem};
-use vt100::{Parser, Screen};
+use vt100_ctt::{Parser, Screen};
 
 /// Controller, in charge of command dispatch
 pub struct Controller {
@@ -45,7 +45,7 @@ impl Controller {
         let mut child = pair.slave.spawn_command(self.cmd.clone()).unwrap();
         drop(pair.slave);
         let mut reader = pair.master.try_clone_reader().unwrap();
-        let parser = Arc::new(RwLock::new(vt100::Parser::new(
+        let parser = Arc::new(RwLock::new(vt100_ctt::Parser::new(
             self.size.rows,
             self.size.cols,
             0,

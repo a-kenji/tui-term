@@ -9,7 +9,7 @@ use crate::state;
 
 /// A trait representing a pseudo-terminal screen.
 ///
-/// Implementing this trait allows for backends other than `vt100` to be used
+/// Implementing this trait allows for backends other than `vt100_ctt` to be used
 /// with the `PseudoTerminal` widget.
 pub trait Screen {
     /// The type of cell this screen contains
@@ -39,8 +39,8 @@ pub trait Cell {
 /// which is typically populated with text and control sequences from a terminal emulator.
 /// It provides a visual representation of the terminal output within a TUI application.
 ///
-/// The contents of the pseudo-terminal screen are represented by a `vt100::Screen` object.
-/// The `vt100` library provides functionality for parsing and processing terminal control sequences
+/// The contents of the pseudo-terminal screen are represented by a `vt100_ctt::Screen` object.
+/// The `vt100_ctt` library provides functionality for parsing and processing terminal control sequences
 /// and handling terminal state, allowing the `PseudoTerminal` widget to accurately render the
 /// terminal output.
 ///
@@ -52,9 +52,9 @@ pub trait Cell {
 ///     widgets::{Block, Borders},
 /// };
 /// use tui_term::widget::PseudoTerminal;
-/// use vt100::Parser;
+/// use vt100_ctt::Parser;
 ///
-/// let mut parser = vt100::Parser::new(24, 80, 0);
+/// let mut parser = vt100_ctt::Parser::new(24, 80, 0);
 /// let pseudo_term = PseudoTerminal::new(parser.screen())
 ///     .block(Block::default().title("Terminal").borders(Borders::ALL))
 ///     .style(
@@ -190,9 +190,9 @@ impl<'a, S: Screen> PseudoTerminal<'a, S> {
     ///
     /// ```
     /// use tui_term::widget::PseudoTerminal;
-    /// use vt100::Parser;
+    /// use vt100_ctt::Parser;
     ///
-    /// let mut parser = vt100::Parser::new(24, 80, 0);
+    /// let mut parser = vt100_ctt::Parser::new(24, 80, 0);
     /// let pseudo_term = PseudoTerminal::new(parser.screen());
     /// ```
     #[inline]
@@ -217,9 +217,9 @@ impl<'a, S: Screen> PseudoTerminal<'a, S> {
     /// ```
     /// use ratatui::widgets::Block;
     /// use tui_term::widget::PseudoTerminal;
-    /// use vt100::Parser;
+    /// use vt100_ctt::Parser;
     ///
-    /// let mut parser = vt100::Parser::new(24, 80, 0);
+    /// let mut parser = vt100_ctt::Parser::new(24, 80, 0);
     /// let block = Block::default();
     /// let pseudo_term = PseudoTerminal::new(parser.screen()).block(block);
     /// ```
@@ -245,7 +245,7 @@ impl<'a, S: Screen> PseudoTerminal<'a, S> {
     /// use ratatui::style::Style;
     /// use tui_term::widget::{Cursor, PseudoTerminal};
     ///
-    /// let mut parser = vt100::Parser::new(24, 80, 0);
+    /// let mut parser = vt100_ctt::Parser::new(24, 80, 0);
     /// let cursor = Cursor::default().symbol("|").style(Style::default());
     /// let pseudo_term = PseudoTerminal::new(parser.screen()).cursor(cursor);
     /// ```
@@ -268,7 +268,7 @@ impl<'a, S: Screen> PseudoTerminal<'a, S> {
     /// use ratatui::style::Style;
     /// use tui_term::widget::PseudoTerminal;
     ///
-    /// let mut parser = vt100::Parser::new(24, 80, 0);
+    /// let mut parser = vt100_ctt::Parser::new(24, 80, 0);
     /// let style = Style::default();
     /// let pseudo_term = PseudoTerminal::new(parser.screen()).style(style);
     /// ```
@@ -308,7 +308,7 @@ mod tests {
     fn snapshot_typescript(stream: &[u8]) -> String {
         let backend = TestBackend::new(80, 24);
         let mut terminal = Terminal::new(backend).unwrap();
-        let mut parser = vt100::Parser::new(24, 80, 0);
+        let mut parser = vt100_ctt::Parser::new(24, 80, 0);
         parser.process(stream);
         let pseudo_term = PseudoTerminal::new(parser.screen());
         terminal
@@ -323,7 +323,7 @@ mod tests {
     fn empty_actions() {
         let backend = TestBackend::new(80, 24);
         let mut terminal = Terminal::new(backend).unwrap();
-        let mut parser = vt100::Parser::new(24, 80, 0);
+        let mut parser = vt100_ctt::Parser::new(24, 80, 0);
         parser.process(b" ");
         let pseudo_term = PseudoTerminal::new(parser.screen());
         terminal
@@ -340,7 +340,7 @@ mod tests {
         // Make the backend on purpose much smaller
         let backend = TestBackend::new(80, 4);
         let mut terminal = Terminal::new(backend).unwrap();
-        let mut parser = vt100::Parser::new(24, 80, 0);
+        let mut parser = vt100_ctt::Parser::new(24, 80, 0);
         parser.process(stream);
         let pseudo_term = PseudoTerminal::new(parser.screen());
         terminal
@@ -363,7 +363,7 @@ mod tests {
         let stream = include_bytes!("../test/typescript/simple_ls.typescript");
         let backend = TestBackend::new(80, 24);
         let mut terminal = Terminal::new(backend).unwrap();
-        let mut parser = vt100::Parser::new(24, 80, 0);
+        let mut parser = vt100_ctt::Parser::new(24, 80, 0);
         let cursor = Cursor::default().symbol("|");
         parser.process(stream);
         let pseudo_term = PseudoTerminal::new(parser.screen()).cursor(cursor);
@@ -380,7 +380,7 @@ mod tests {
         let stream = include_bytes!("../test/typescript/simple_ls.typescript");
         let backend = TestBackend::new(80, 24);
         let mut terminal = Terminal::new(backend).unwrap();
-        let mut parser = vt100::Parser::new(24, 80, 0);
+        let mut parser = vt100_ctt::Parser::new(24, 80, 0);
         let style = Style::default().bg(Color::Cyan).fg(Color::LightRed);
         let cursor = Cursor::default().symbol("|").style(style);
         parser.process(stream);
@@ -398,7 +398,7 @@ mod tests {
         let stream = include_bytes!("../test/typescript/simple_ls.typescript");
         let backend = TestBackend::new(80, 24);
         let mut terminal = Terminal::new(backend).unwrap();
-        let mut parser = vt100::Parser::new(24, 80, 0);
+        let mut parser = vt100_ctt::Parser::new(24, 80, 0);
         let cursor = Cursor::default().visibility(false);
         parser.process(stream);
         let pseudo_term = PseudoTerminal::new(parser.screen()).cursor(cursor);
@@ -415,7 +415,7 @@ mod tests {
         let stream = include_bytes!("../test/typescript/simple_ls.typescript");
         let backend = TestBackend::new(80, 24);
         let mut terminal = Terminal::new(backend).unwrap();
-        let mut parser = vt100::Parser::new(24, 80, 0);
+        let mut parser = vt100_ctt::Parser::new(24, 80, 0);
         let mut cursor = Cursor::default();
         cursor.hide();
         parser.process(stream);
@@ -439,7 +439,7 @@ mod tests {
         let stream = include_bytes!("../test/typescript/overlapping_cursor.typescript");
         let backend = TestBackend::new(80, 24);
         let mut terminal = Terminal::new(backend).unwrap();
-        let mut parser = vt100::Parser::new(24, 80, 0);
+        let mut parser = vt100_ctt::Parser::new(24, 80, 0);
         let style = Style::default().bg(Color::Cyan).fg(Color::LightRed);
         let cursor = Cursor::default().overlay_style(style);
         parser.process(stream);
@@ -457,7 +457,7 @@ mod tests {
         let stream = include_bytes!("../test/typescript/simple_ls.typescript");
         let backend = TestBackend::new(100, 24);
         let mut terminal = Terminal::new(backend).unwrap();
-        let mut parser = vt100::Parser::new(24, 80, 0);
+        let mut parser = vt100_ctt::Parser::new(24, 80, 0);
         parser.process(stream);
         let block = Block::default().borders(Borders::ALL).title("ls");
         let pseudo_term = PseudoTerminal::new(parser.screen()).block(block);
@@ -474,7 +474,7 @@ mod tests {
         let stream = include_bytes!("../test/typescript/simple_ls.typescript");
         let backend = TestBackend::new(100, 24);
         let mut terminal = Terminal::new(backend).unwrap();
-        let mut parser = vt100::Parser::new(24, 80, 0);
+        let mut parser = vt100_ctt::Parser::new(24, 80, 0);
         parser.process(stream);
         let block = Block::default()
             .borders(Borders::ALL)

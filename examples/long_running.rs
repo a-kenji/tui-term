@@ -20,7 +20,7 @@ use ratatui::{
     Frame, Terminal,
 };
 use tui_term::widget::PseudoTerminal;
-use vt100::Screen;
+use vt100_ctt::Screen;
 
 fn main() -> std::io::Result<()> {
     let mut stdout = io::stdout();
@@ -52,7 +52,7 @@ fn main() -> std::io::Result<()> {
     });
 
     let mut reader = pair.master.try_clone_reader().unwrap();
-    let parser = Arc::new(RwLock::new(vt100::Parser::new(24, 80, 0)));
+    let parser = Arc::new(RwLock::new(vt100_ctt::Parser::new(24, 80, 0)));
 
     {
         let parser = parser.clone();
@@ -99,7 +99,7 @@ fn main() -> std::io::Result<()> {
 
 fn run<B: Backend>(
     terminal: &mut Terminal<B>,
-    parser: Arc<RwLock<vt100::Parser>>,
+    parser: Arc<RwLock<vt100_ctt::Parser>>,
 ) -> io::Result<()> {
     loop {
         terminal.draw(|f| ui(f, parser.read().unwrap().screen()))?;

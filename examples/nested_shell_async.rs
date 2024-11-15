@@ -24,7 +24,7 @@ use tokio::{
     task,
 };
 use tui_term::widget::PseudoTerminal;
-use vt100::Screen;
+use vt100_ctt::Screen;
 
 #[derive(Debug)]
 struct Size {
@@ -68,7 +68,7 @@ async fn main() -> io::Result<()> {
     });
 
     let mut reader = pair.master.try_clone_reader().unwrap();
-    let parser = Arc::new(RwLock::new(vt100::Parser::new(size.rows, size.cols, 0)));
+    let parser = Arc::new(RwLock::new(vt100_ctt::Parser::new(size.rows, size.cols, 0)));
 
     {
         let parser = parser.clone();
@@ -119,7 +119,7 @@ async fn main() -> io::Result<()> {
 
 async fn run<B: Backend>(
     terminal: &mut Terminal<B>,
-    parser: Arc<RwLock<vt100::Parser>>,
+    parser: Arc<RwLock<vt100_ctt::Parser>>,
     sender: Sender<Bytes>,
 ) -> io::Result<()> {
     loop {
@@ -182,7 +182,7 @@ async fn run<B: Backend>(
                 Event::Mouse(_) => {}
                 Event::Paste(_) => todo!(),
                 Event::Resize(cols, rows) => {
-                    parser.write().unwrap().set_size(rows, cols);
+                    parser.write().unwrap().screen_mut().set_size(rows, cols);
                 }
             }
         }

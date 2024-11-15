@@ -164,7 +164,7 @@ fn resize_all_panes(panes: &mut Vec<PtyPane>, size: Size) {
 }
 
 struct PtyPane {
-    parser: Arc<RwLock<vt100::Parser>>,
+    parser: Arc<RwLock<vt100_ctt::Parser>>,
     sender: Sender<Bytes>,
     master_pty: Box<dyn MasterPty>,
 }
@@ -180,7 +180,7 @@ impl PtyPane {
                 pixel_height: 0,
             })
             .unwrap();
-        let parser = Arc::new(RwLock::new(vt100::Parser::new(
+        let parser = Arc::new(RwLock::new(vt100_ctt::Parser::new(
             size.rows - 4,
             size.cols - 4,
             0,
@@ -238,6 +238,7 @@ impl PtyPane {
         self.parser
             .write()
             .unwrap()
+            .screen_mut()
             .set_size(size.rows - 4, size.cols - 4);
         self.master_pty
             .resize(PtySize {

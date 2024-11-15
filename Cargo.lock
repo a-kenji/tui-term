@@ -1258,7 +1258,7 @@ dependencies = [
  "tokio",
  "tracing",
  "tracing-subscriber",
- "vt100",
+ "vt100-ctt",
 ]
 
 [[package]]
@@ -1314,10 +1314,10 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "49874b5167b65d7193b8aba1567f5c7d93d001cafc34600cee003eda787e483f"
 
 [[package]]
-name = "vt100"
-version = "0.15.2"
+name = "vt100-ctt"
+version = "0.15.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "84cd863bf0db7e392ba3bd04994be3473491b31e66340672af5d11943c6274de"
+checksum = "bb16a4afd5cab1ab1efbf1e50ccaaefc2f47e0c12fb1bb14fe1bf9f29b0f5fff"
 dependencies = [
  "itoa",
  "log",

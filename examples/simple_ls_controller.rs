@@ -15,7 +15,7 @@ use ratatui::{
     Frame, Terminal,
 };
 use tui_term::{controller::Controller, widget::PseudoTerminal};
-use vt100::Screen;
+use vt100_ctt::Screen;
 
 fn main() -> std::io::Result<()> {
     let (mut terminal, size) = setup_terminal().unwrap();
@@ -38,7 +38,7 @@ fn main() -> std::io::Result<()> {
     Ok(())
 }
 
-fn run<B: Backend>(terminal: &mut Terminal<B>, screen: Option<vt100::Screen>) -> io::Result<()> {
+fn run<B: Backend>(terminal: &mut Terminal<B>, screen: Option<vt100_ctt::Screen>) -> io::Result<()> {
     loop {
         if let Some(ref screen) = screen {
             terminal.draw(|f| ui(f, &screen))?;

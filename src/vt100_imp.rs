@@ -2,8 +2,8 @@ use ratatui::style::{Modifier, Style};
 
 use crate::widget::{Cell, Screen};
 
-impl Screen for vt100::Screen {
-    type C = vt100::Cell;
+impl Screen for vt100_ctt::Screen {
+    type C = vt100_ctt::Cell;
 
     #[inline]
     fn cell(&self, row: u16, col: u16) -> Option<&Self::C> {
@@ -21,7 +21,7 @@ impl Screen for vt100::Screen {
     }
 }
 
-impl Cell for vt100::Cell {
+impl Cell for vt100_ctt::Cell {
     #[inline]
     fn has_contents(&self) -> bool {
         self.has_contents()
@@ -34,7 +34,7 @@ impl Cell for vt100::Cell {
 }
 
 #[inline]
-fn fill_buf_cell(screen_cell: &vt100::Cell, buf_cell: &mut ratatui::buffer::Cell) {
+fn fill_buf_cell(screen_cell: &vt100_ctt::Cell, buf_cell: &mut ratatui::buffer::Cell) {
     let fg = screen_cell.fgcolor();
     let bg = screen_cell.bgcolor();
     if screen_cell.has_contents() {
@@ -62,7 +62,7 @@ fn fill_buf_cell(screen_cell: &vt100::Cell, buf_cell: &mut ratatui::buffer::Cell
 
 /// Represents a foreground or background color for cells.
 /// Intermediate translation layer between
-/// [`vt100::Screen`] and [`ratatui::style::Color`]
+/// [`vt100_ctt::Screen`] and [`ratatui::style::Color`]
 #[allow(dead_code)]
 enum Color {
     Reset,
@@ -86,18 +86,18 @@ enum Color {
     Indexed(u8),
 }
 
-impl From<vt100::Color> for Color {
+impl From<vt100_ctt::Color> for Color {
     #[inline]
-    fn from(value: vt100::Color) -> Self {
+    fn from(value: vt100_ctt::Color) -> Self {
         match value {
-            vt100::Color::Default => Self::Reset,
-            vt100::Color::Idx(i) => Self::Indexed(i),
-            vt100::Color::Rgb(r, g, b) => Self::Rgb(r, g, b),
+            vt100_ctt::Color::Default => Self::Reset,
+            vt100_ctt::Color::Idx(i) => Self::Indexed(i),
+            vt100_ctt::Color::Rgb(r, g, b) => Self::Rgb(r, g, b),
         }
     }
 }
 
-impl From<Color> for vt100::Color {
+impl From<Color> for vt100_ctt::Color {
     #[inline]
     fn from(value: Color) -> Self {
         match value {

@@ -2,116 +2,116 @@ use criterion::{criterion_group, criterion_main, Criterion};
 use once_cell::sync::Lazy;
 use ratatui::{backend::TestBackend, Terminal};
 use tui_term::widget::PseudoTerminal;
-use vt100::Screen;
+use vt100_ctt::Screen;
 
 static SIMPLE_LS_ACTIONS: Lazy<Screen> = Lazy::new(|| {
     let stream = include_bytes!("../test/typescript/simple_ls.typescript");
-    let mut parser = vt100::Parser::new(24, 80, 0);
+    let mut parser = vt100_ctt::Parser::new(24, 80, 0);
     parser.process(stream);
     parser.screen().clone()
 });
 
 static VTTEST_02_01: Lazy<Screen> = Lazy::new(|| {
     let stream = include_bytes!("../test/typescript/vttest_02_01.typescript");
-    let mut parser = vt100::Parser::new(24, 80, 0);
+    let mut parser = vt100_ctt::Parser::new(24, 80, 0);
     parser.process(stream);
     parser.screen().clone()
 });
 
 static VTTEST_02_02: Lazy<Screen> = Lazy::new(|| {
     let stream = include_bytes!("../test/typescript/vttest_02_02.typescript");
-    let mut parser = vt100::Parser::new(24, 80, 0);
+    let mut parser = vt100_ctt::Parser::new(24, 80, 0);
     parser.process(stream);
     parser.screen().clone()
 });
 
 static VTTEST_02_03: Lazy<Screen> = Lazy::new(|| {
     let stream = include_bytes!("../test/typescript/vttest_02_03.typescript");
-    let mut parser = vt100::Parser::new(24, 80, 0);
+    let mut parser = vt100_ctt::Parser::new(24, 80, 0);
     parser.process(stream);
     parser.screen().clone()
 });
 
 static VTTEST_02_04: Lazy<Screen> = Lazy::new(|| {
     let stream = include_bytes!("../test/typescript/vttest_02_04.typescript");
-    let mut parser = vt100::Parser::new(24, 80, 0);
+    let mut parser = vt100_ctt::Parser::new(24, 80, 0);
     parser.process(stream);
     parser.screen().clone()
 });
 
 static VTTEST_02_05: Lazy<Screen> = Lazy::new(|| {
     let stream = include_bytes!("../test/typescript/vttest_02_05.typescript");
-    let mut parser = vt100::Parser::new(24, 80, 0);
+    let mut parser = vt100_ctt::Parser::new(24, 80, 0);
     parser.process(stream);
     parser.screen().clone()
 });
 
 static VTTEST_02_06: Lazy<Screen> = Lazy::new(|| {
     let stream = include_bytes!("../test/typescript/vttest_02_06.typescript");
-    let mut parser = vt100::Parser::new(24, 80, 0);
+    let mut parser = vt100_ctt::Parser::new(24, 80, 0);
     parser.process(stream);
     parser.screen().clone()
 });
 
 static VTTEST_02_07: Lazy<Screen> = Lazy::new(|| {
     let stream = include_bytes!("../test/typescript/vttest_02_07.typescript");
-    let mut parser = vt100::Parser::new(24, 80, 0);
+    let mut parser = vt100_ctt::Parser::new(24, 80, 0);
     parser.process(stream);
     parser.screen().clone()
 });
 
 static VTTEST_02_08: Lazy<Screen> = Lazy::new(|| {
     let stream = include_bytes!("../test/typescript/vttest_02_08.typescript");
-    let mut parser = vt100::Parser::new(24, 80, 0);
+    let mut parser = vt100_ctt::Parser::new(24, 80, 0);
     parser.process(stream);
     parser.screen().clone()
 });
 
 static VTTEST_02_09: Lazy<Screen> = Lazy::new(|| {
     let stream = include_bytes!("../test/typescript/vttest_02_09.typescript");
-    let mut parser = vt100::Parser::new(24, 80, 0);
+    let mut parser = vt100_ctt::Parser::new(24, 80, 0);
     parser.process(stream);
     parser.screen().clone()
 });
 
 static VTTEST_02_10: Lazy<Screen> = Lazy::new(|| {
     let stream = include_bytes!("../test/typescript/vttest_02_10.typescript");
-    let mut parser = vt100::Parser::new(24, 80, 0);
+    let mut parser = vt100_ctt::Parser::new(24, 80, 0);
     parser.process(stream);
     parser.screen().clone()
 });
 
 static VTTEST_02_11: Lazy<Screen> = Lazy::new(|| {
     let stream = include_bytes!("../test/typescript/vttest_02_11.typescript");
-    let mut parser = vt100::Parser::new(24, 80, 0);
+    let mut parser = vt100_ctt::Parser::new(24, 80, 0);
     parser.process(stream);
     parser.screen().clone()
 });
 
 static VTTEST_02_12: Lazy<Screen> = Lazy::new(|| {
     let stream = include_bytes!("../test/typescript/vttest_02_12.typescript");
-    let mut parser = vt100::Parser::new(24, 80, 0);
+    let mut parser = vt100_ctt::Parser::new(24, 80, 0);
     parser.process(stream);
     parser.screen().clone()
 });
 
 static VTTEST_02_13: Lazy<Screen> = Lazy::new(|| {
     let stream = include_bytes!("../test/typescript/vttest_02_13.typescript");
-    let mut parser = vt100::Parser::new(24, 80, 0);
+    let mut parser = vt100_ctt::Parser::new(24, 80, 0);
     parser.process(stream);
     parser.screen().clone()
 });
 
 static VTTEST_02_14: Lazy<Screen> = Lazy::new(|| {
     let stream = include_bytes!("../test/typescript/vttest_02_14.typescript");
-    let mut parser = vt100::Parser::new(24, 80, 0);
+    let mut parser = vt100_ctt::Parser::new(24, 80, 0);
     parser.process(stream);
     parser.screen().clone()
 });
 
 static VTTEST_02_15: Lazy<Screen> = Lazy::new(|| {
     let stream = include_bytes!("../test/typescript/vttest_02_15.typescript");
-    let mut parser = vt100::Parser::new(24, 80, 0);
+    let mut parser = vt100_ctt::Parser::new(24, 80, 0);
     parser.process(stream);
     parser.screen().clone()
 });
