@@ -2,6 +2,62 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.0] - 2024-10-26
+
+### Testing
+
+- Add tests to crate so that they can be run on build systems
+
+### Miscellaneous Tasks
+
+- *(deps)* Bump bytes from 1.7.2 to 1.8.0
+- *(deps)* Bump once_cell from 1.20.1 to 1.20.2
+- *(deps)* Bump cachix/install-nix-action from V27 to 28
+- *(deps)* Bump insta from 1.39.0 to 1.40.0
+- *(deps)* Bump ratatui from 0.28.0 to 0.28.1
+- *(deps)* Bump ratatui from 0.28.1 to 0.29.0
+
+## [0.1.13] - 2024-08-07
+
+### Bug Fixes
+
+- *(uncategorized)* Changelog entry
+
+### Refactor
+
+- *(uncategorized)* Remove deprecated `buf.get_mut()` function
+- *(uncategorized)* Prefer `area()` to `size()`
+
+### Miscellaneous Tasks
+
+- *(deps)* Bump bytes from 1.6.0 to 1.7.1
+- *(deps)* Bump tokio from 1.38.0 to 1.39.2
+- *(deps)* Bump DeterminateSystems/update-flake-lock from 22 to 23
+- *(uncategorized)* Update release version
+- *(uncategorized)* Update ratatui and crossterm
+- *(uncategorized)* Update rust-toolchain -> `1.80.0`
+- *(uncategorized)* Format `.deny.toml`
+- *(uncategorized)* Move treefmt.toml until upstream fix is in
+- *(uncategorized)* Fix typo in a comment
+
+### Continuous Integration
+
+- *(uncategorized)* Remove now obsolete audit check action
+- *(uncategorized)* Update darwin runners
+
+### Flake
+
+- *(uncategorized)* Remove now obsolete rust-overlay.flake-utils follows
+
+### Flake.lock
+
+- *(uncategorized)* Update
+- *(uncategorized)* Update
+
+### Tools
+
+- *(uncategorized)* Update cargo deny configuration to v2
+
 ## [0.1.13] - 2024-08-07
 
 Compatible with `ratatui`: `v0.28.0`.
