@@ -9,3 +9,4 @@ Releases will attempt to track upstream `ratatui` releases.
 1. Update the changelog.
 1. Commit and push the changes.
 1. Create and push the new version tag.
+1. Branch off to release branch
