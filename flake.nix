@@ -10,7 +10,6 @@
 
   inputs.crane = {
     url = "github:ipetkov/crane";
-    inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = {
