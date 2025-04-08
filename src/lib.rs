@@ -48,6 +48,10 @@
 //! - The `vt100` crate is currently the only supported backend for parsing terminal control
 //!   sequences, but future versions may introduce support for alternative backends.
 
+#![warn(clippy::std_instead_of_core)]
+#![warn(clippy::std_instead_of_alloc)]
+#![warn(clippy::alloc_instead_of_core)]
+
 mod state;
 #[cfg(feature = "vt100")]
 mod vt100_imp;
