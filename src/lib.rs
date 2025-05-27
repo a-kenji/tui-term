@@ -37,7 +37,7 @@
 //!     );
 //! ```
 //!
-//! For more examples, please look at the [examples](https://github.com/a-kenji/tui-term/tree/main/examples) in the repository.
+//! For more examples, please look at the [examples](https://github.com/a-kenji/tui-term/tree/release/examples) in the repository.
 //!
 //! # Features
 //!
