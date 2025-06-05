@@ -25,7 +25,7 @@ If you want to set the environment manually, the rust-toolchain version
 that will be assumed is referenced inside `rust-toolchain.toml`.
 
 ## Steps
-There is a lint target in the `justfile`, that can be run with:
+There is a lint target in the `justfile` (.justfile), that can be run with:
 ```
 just lint
 ```
