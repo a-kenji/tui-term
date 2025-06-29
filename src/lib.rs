@@ -7,7 +7,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! tui-term = "0.1.11"
+//! tui-term = "0.2.0"
 //! ```
 //!
 //! or use `cargo add`:
