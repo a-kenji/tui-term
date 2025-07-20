@@ -2,7 +2,10 @@ use std::{
     fmt, fs,
     io::{self, BufWriter, Read, Write},
     path::PathBuf,
-    sync::{Arc, Mutex, RwLock},
+    sync::{
+        atomic::{AtomicBool, Ordering},
+        Arc, Mutex, RwLock,
+    },
     time::Duration,
 };
 
@@ -46,7 +49,6 @@ async fn main() -> io::Result<()> {
     let mut panes: Vec<PtyPane> = Vec::new();
     let mut active_pane: Option<usize> = None;
 
-    // Add a default pane
     let pane_size = calc_pane_size(size, 1);
     open_new_pane(&mut panes, &mut active_pane, &cmd, pane_size)?;
 
@@ -148,6 +150,39 @@ async fn main() -> io::Result<()> {
                 _ => {}
             }
         }
+
+        cleanup_exited_panes(&mut panes, &mut active_pane);
+
+        if panes.is_empty() {
+            cleanup_terminal(&mut terminal)?;
+            return Ok(());
+        }
+    }
+}
+
+fn cleanup_exited_panes(panes: &mut Vec<PtyPane>, active_pane: &mut Option<usize>) {
+    let mut i = 0;
+    while i < panes.len() {
+        if !panes[i].is_alive() {
+            let _removed_pane = panes.remove(i);
+            if let Some(active) = active_pane {
+                match (*active).cmp(&i) {
+                    std::cmp::Ordering::Greater => {
+                        *active = active.saturating_sub(1);
+                    }
+                    std::cmp::Ordering::Equal => {
+                        if panes.is_empty() {
+                            *active_pane = None;
+                        } else if i >= panes.len() {
+                            *active_pane = Some(panes.len() - 1);
+                        }
+                    }
+                    std::cmp::Ordering::Less => {}
+                }
+            }
+        } else {
+            i += 1;
+        }
     }
 }
 
@@ -157,7 +192,7 @@ fn calc_pane_size(mut size: Size, nr_panes: usize) -> Size {
     size
 }
 
-fn resize_all_panes(panes: &mut Vec<PtyPane>, size: Size) {
+fn resize_all_panes(panes: &mut [PtyPane], size: Size) {
     for pane in panes.iter() {
         pane.resize(size);
     }
@@ -167,6 +202,7 @@ struct PtyPane {
     parser: Arc<RwLock<vt100::Parser>>,
     sender: Sender<Bytes>,
     master_pty: Box<dyn MasterPty>,
+    exited: Arc<AtomicBool>,
 }
 
 impl PtyPane {
@@ -185,12 +221,17 @@ impl PtyPane {
             size.cols - 4,
             0,
         )));
+        let exited = Arc::new(AtomicBool::new(false));
 
-        spawn_blocking(move || {
-            let mut child = pty_pair.slave.spawn_command(cmd).unwrap();
-            let _ = child.wait();
-            drop(pty_pair.slave);
-        });
+        {
+            let exited_clone = exited.clone();
+            spawn_blocking(move || {
+                let mut child = pty_pair.slave.spawn_command(cmd).unwrap();
+                let _ = child.wait();
+                exited_clone.store(true, Ordering::Relaxed);
+                drop(pty_pair.slave);
+            });
+        }
 
         {
             let mut reader = pty_pair.master.try_clone_reader().unwrap();
@@ -231,6 +272,7 @@ impl PtyPane {
             parser,
             sender: tx,
             master_pty: pty_pair.master,
+            exited,
         })
     }
 
@@ -247,6 +289,10 @@ impl PtyPane {
                 pixel_height: 0,
             })
             .unwrap();
+    }
+
+    fn is_alive(&self) -> bool {
+        !self.exited.load(Ordering::Relaxed)
     }
 }
 
