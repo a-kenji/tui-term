@@ -1,36 +1,29 @@
 use std::{
-    io,
+    io::{self, Read},
     sync::{Arc, RwLock},
     time::Duration,
 };
 
-use crossterm::{
-    event::{self, DisableMouseCapture, EnableMouseCapture, Event, KeyCode, KeyEventKind},
-    execute,
-    style::ResetColor,
-    terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
-};
+use crossterm::event::{self, Event, KeyCode, KeyEventKind};
 use portable_pty::{CommandBuilder, NativePtySystem, PtySize, PtySystem};
 use ratatui::{
-    backend::{Backend, CrosstermBackend},
     layout::Alignment,
     style::{Modifier, Style},
     text::Line,
     widgets::{Block, Borders, Paragraph},
-    Frame, Terminal,
+    DefaultTerminal, Frame,
 };
 use tui_term::widget::PseudoTerminal;
 use vt100::Screen;
 
 fn main() -> std::io::Result<()> {
-    let mut stdout = io::stdout();
-    execute!(stdout, ResetColor)?;
-    enable_raw_mode()?;
-    let mut stdout = io::stdout();
-    execute!(stdout, EnterAlternateScreen, EnableMouseCapture)?;
-    let backend = CrosstermBackend::new(stdout);
-    let mut terminal = Terminal::new(backend)?;
+    let mut terminal = ratatui::init();
+    let result = run_app(&mut terminal);
+    ratatui::restore();
+    result
+}
 
+fn run_app(terminal: &mut DefaultTerminal) -> std::io::Result<()> {
     let pty_system = NativePtySystem::default();
     let cwd = std::env::current_dir().unwrap();
     let mut cmd = CommandBuilder::new("top");
@@ -84,23 +77,10 @@ fn main() -> std::io::Result<()> {
     }
     drop(pair.master);
 
-    run(&mut terminal, parser)?;
-
-    // restore terminal
-    disable_raw_mode()?;
-    execute!(
-        terminal.backend_mut(),
-        LeaveAlternateScreen,
-        DisableMouseCapture
-    )?;
-    terminal.show_cursor()?;
-    Ok(())
+    run(terminal, parser)
 }
 
-fn run<B: Backend>(
-    terminal: &mut Terminal<B>,
-    parser: Arc<RwLock<vt100::Parser>>,
-) -> io::Result<()> {
+fn run(terminal: &mut DefaultTerminal, parser: Arc<RwLock<vt100::Parser>>) -> io::Result<()> {
     loop {
         terminal.draw(|f| ui(f, parser.read().unwrap().screen()))?;
 

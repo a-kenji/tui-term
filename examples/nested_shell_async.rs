@@ -5,19 +5,13 @@ use std::{
 };
 
 use bytes::Bytes;
-use crossterm::{
-    event::{self, Event, KeyCode, KeyEventKind},
-    execute,
-    style::ResetColor,
-    terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
-};
+use crossterm::event::{self, Event, KeyCode, KeyEventKind};
 use portable_pty::{CommandBuilder, NativePtySystem, PtySize, PtySystem};
 use ratatui::{
-    backend::{Backend, CrosstermBackend},
     layout::Alignment,
     style::{Modifier, Style},
     widgets::{Block, Borders, Paragraph},
-    Frame, Terminal,
+    DefaultTerminal, Frame,
 };
 use tokio::{
     sync::mpsc::{channel, Sender},
@@ -34,14 +28,13 @@ struct Size {
 
 #[tokio::main]
 async fn main() -> io::Result<()> {
-    let mut stdout = io::stdout();
-    execute!(stdout, ResetColor)?;
-    enable_raw_mode()?;
-    let mut stdout = io::stdout();
-    execute!(stdout, EnterAlternateScreen)?;
-    let backend = CrosstermBackend::new(stdout);
-    let mut terminal = Terminal::new(backend)?;
+    let mut terminal = ratatui::init();
+    let result = run_app(&mut terminal).await;
+    ratatui::restore();
+    result
+}
 
+async fn run_app(terminal: &mut DefaultTerminal) -> io::Result<()> {
     let pty_system = NativePtySystem::default();
     let cwd = std::env::current_dir().unwrap();
     let mut cmd = CommandBuilder::new_default_prog();
@@ -107,18 +100,13 @@ async fn main() -> io::Result<()> {
         drop(pair.master);
     });
 
-    run(&mut terminal, parser, tx).await?;
-
-    // restore terminal
-    disable_raw_mode()?;
-    execute!(terminal.backend_mut(), LeaveAlternateScreen,)?;
-    terminal.show_cursor()?;
+    let result = run(terminal, parser, tx).await;
     println!("{size:?}");
-    Ok(())
+    result
 }
 
-async fn run<B: Backend>(
-    terminal: &mut Terminal<B>,
+async fn run(
+    terminal: &mut DefaultTerminal,
     parser: Arc<RwLock<vt100::Parser>>,
     sender: Sender<Bytes>,
 ) -> io::Result<()> {
