@@ -10,18 +10,13 @@ use std::{
 };
 
 use bytes::Bytes;
-use crossterm::{
-    event::{self, Event, KeyCode, KeyEvent, KeyModifiers},
-    execute,
-    terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
-};
+use crossterm::event::{self, Event, KeyCode, KeyEvent, KeyModifiers};
 use portable_pty::{native_pty_system, CommandBuilder, MasterPty, PtySize};
 use ratatui::{
-    backend::CrosstermBackend,
     layout::{Alignment, Constraint, Direction, Layout, Rect},
     style::{Color, Modifier, Style},
     widgets::{Block, Borders, Paragraph},
-    Terminal,
+    DefaultTerminal,
 };
 use tokio::{
     sync::mpsc::{channel, Sender},
@@ -40,7 +35,17 @@ struct Size {
 #[tokio::main]
 async fn main() -> io::Result<()> {
     init_panic_hook();
-    let (mut terminal, mut size) = setup_terminal().unwrap();
+    let mut terminal = ratatui::init();
+    let result = run_smux(&mut terminal).await;
+    ratatui::restore();
+    result
+}
+
+async fn run_smux(terminal: &mut DefaultTerminal) -> io::Result<()> {
+    let mut size = Size {
+        rows: terminal.size()?.height,
+        cols: terminal.size()?.width,
+    };
 
     let cwd = std::env::current_dir().unwrap();
     let mut cmd = CommandBuilder::new_default_prog();
@@ -107,7 +112,6 @@ async fn main() -> io::Result<()> {
             match event::read()? {
                 Event::Key(key) => match key.code {
                     KeyCode::Char('q') if key.modifiers.contains(KeyModifiers::CONTROL) => {
-                        cleanup_terminal(&mut terminal).unwrap();
                         return Ok(());
                     }
                     KeyCode::Char('n') if key.modifiers.contains(KeyModifiers::CONTROL) => {
@@ -154,7 +158,6 @@ async fn main() -> io::Result<()> {
         cleanup_exited_panes(&mut panes, &mut active_pane);
 
         if panes.is_empty() {
-            cleanup_terminal(&mut terminal)?;
             return Ok(());
         }
     }
@@ -386,30 +389,6 @@ async fn close_active_pane(
     Ok(())
 }
 
-fn setup_terminal() -> io::Result<(Terminal<CrosstermBackend<BufWriter<io::Stdout>>>, Size)> {
-    enable_raw_mode()?;
-    let stdout = io::stdout();
-    let backend = CrosstermBackend::new(BufWriter::new(stdout));
-    let mut terminal = Terminal::new(backend)?;
-    let initial_size = terminal.size()?;
-    let size = Size {
-        rows: initial_size.height,
-        cols: initial_size.width,
-    };
-    execute!(terminal.backend_mut(), EnterAlternateScreen)?;
-    Ok((terminal, size))
-}
-
-fn cleanup_terminal(
-    terminal: &mut Terminal<CrosstermBackend<BufWriter<io::Stdout>>>,
-) -> io::Result<()> {
-    execute!(terminal.backend_mut(), LeaveAlternateScreen)?;
-    disable_raw_mode()?;
-    terminal.show_cursor()?;
-    terminal.clear()?;
-    Ok(())
-}
-
 fn init_panic_hook() {
     let log_file = Some(PathBuf::from("/tmp/tui-term/smux.log"));
     let log_file = match log_file {
@@ -438,9 +417,7 @@ fn init_panic_hook() {
     std::panic::set_hook(Box::new(|panic| {
         let original_hook = std::panic::take_hook();
         tracing::error!("Panic Error: {}", panic);
-        crossterm::terminal::disable_raw_mode().expect("Could not disable raw mode");
-        crossterm::execute!(std::io::stdout(), crossterm::terminal::LeaveAlternateScreen)
-            .expect("Could not leave the alternate screen");
+        ratatui::restore();
 
         original_hook(panic);
     }));

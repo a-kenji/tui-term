@@ -1,23 +1,17 @@
 use std::{
-    io,
+    io::{self, Read, Write},
     sync::{mpsc::Sender, Arc, RwLock},
     time::Duration,
 };
 
 use bytes::Bytes;
-use crossterm::{
-    event::{self, Event, KeyCode, KeyEventKind},
-    execute,
-    style::ResetColor,
-    terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
-};
+use crossterm::event::{self, Event, KeyCode, KeyEventKind};
 use portable_pty::{CommandBuilder, NativePtySystem, PtySize, PtySystem};
 use ratatui::{
-    backend::{Backend, CrosstermBackend},
     layout::Alignment,
     style::{Modifier, Style},
     widgets::{Block, Borders, Paragraph},
-    Frame, Terminal,
+    DefaultTerminal, Frame,
 };
 use tui_term::widget::PseudoTerminal;
 use vt100::Screen;
@@ -29,23 +23,22 @@ struct Size {
 }
 
 fn main() -> std::io::Result<()> {
-    let mut stdout = io::stdout();
-    execute!(stdout, ResetColor)?;
-    enable_raw_mode()?;
-    let mut stdout = io::stdout();
-    execute!(stdout, EnterAlternateScreen)?;
-    let backend = CrosstermBackend::new(stdout);
-    let mut terminal = Terminal::new(backend)?;
+    let mut terminal = ratatui::init();
+    let result = run_app(&mut terminal);
+    ratatui::restore();
+    result
+}
+
+fn run_app(terminal: &mut DefaultTerminal) -> std::io::Result<()> {
+    let size = Size {
+        rows: terminal.size()?.height,
+        cols: terminal.size()?.width,
+    };
 
     let pty_system = NativePtySystem::default();
     let cwd = std::env::current_dir().unwrap();
     let mut cmd = CommandBuilder::new_default_prog();
     cmd.cwd(cwd);
-
-    let size = Size {
-        rows: terminal.size()?.height,
-        cols: terminal.size()?.width,
-    };
 
     let pair = pty_system
         .openpty(PtySize {
@@ -100,18 +93,13 @@ fn main() -> std::io::Result<()> {
         drop(pair.master);
     });
 
-    run(&mut terminal, parser, tx)?;
-
-    // restore terminal
-    disable_raw_mode()?;
-    execute!(terminal.backend_mut(), LeaveAlternateScreen,)?;
-    terminal.show_cursor()?;
+    let result = run(terminal, parser, tx);
     println!("{size:?}");
-    Ok(())
+    result
 }
 
-fn run<B: Backend>(
-    terminal: &mut Terminal<B>,
+fn run(
+    terminal: &mut DefaultTerminal,
     parser: Arc<RwLock<vt100::Parser>>,
     sender: Sender<Bytes>,
 ) -> io::Result<()> {

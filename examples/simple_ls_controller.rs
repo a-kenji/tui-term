@@ -1,24 +1,30 @@
-use std::io::{self, BufWriter};
+use std::io;
 
-use crossterm::{
-    event::{self, Event, KeyCode, KeyEventKind},
-    execute,
-    terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
-};
+use crossterm::event::{self, Event, KeyCode, KeyEventKind};
 use portable_pty::CommandBuilder;
 use ratatui::{
-    backend::{Backend, CrosstermBackend},
     layout::Alignment,
     style::{Modifier, Style},
     text::Line,
     widgets::{Block, Borders, Paragraph},
-    Frame, Terminal,
+    DefaultTerminal, Frame,
 };
 use tui_term::{controller::Controller, widget::PseudoTerminal};
 use vt100::Screen;
 
 fn main() -> std::io::Result<()> {
-    let (mut terminal, size) = setup_terminal().unwrap();
+    let mut terminal = ratatui::init();
+    let result = run_app(&mut terminal);
+    ratatui::restore();
+    result
+}
+
+fn run_app(terminal: &mut DefaultTerminal) -> std::io::Result<()> {
+    let terminal_size = terminal.size()?;
+    let size = Size {
+        rows: terminal_size.height,
+        cols: terminal_size.width,
+    };
 
     // Subtract the borders from the size
     let size = tui_term::controller::Size::new(size.cols - 2, size.rows, 0, 0);
@@ -32,13 +38,10 @@ fn main() -> std::io::Result<()> {
     controller.run();
     let screen = controller.screen();
 
-    run(&mut terminal, screen)?;
-
-    cleanup_terminal(&mut terminal).unwrap();
-    Ok(())
+    run(terminal, screen)
 }
 
-fn run<B: Backend>(terminal: &mut Terminal<B>, screen: Option<vt100::Screen>) -> io::Result<()> {
+fn run(terminal: &mut DefaultTerminal, screen: Option<vt100::Screen>) -> io::Result<()> {
     loop {
         if let Some(ref screen) = screen {
             terminal.draw(|f| ui(f, &screen))?;
@@ -80,30 +83,6 @@ fn ui(f: &mut Frame, screen: &Screen) {
         .style(Style::default().add_modifier(Modifier::BOLD | Modifier::REVERSED))
         .alignment(Alignment::Center);
     f.render_widget(explanation, chunks[1]);
-}
-
-fn setup_terminal() -> io::Result<(Terminal<CrosstermBackend<BufWriter<io::Stdout>>>, Size)> {
-    enable_raw_mode()?;
-    let stdout = io::stdout();
-    let backend = CrosstermBackend::new(BufWriter::new(stdout));
-    let mut terminal = Terminal::new(backend)?;
-    let initial_size = terminal.size()?;
-    let size = Size {
-        rows: initial_size.height,
-        cols: initial_size.width,
-    };
-    execute!(terminal.backend_mut(), EnterAlternateScreen)?;
-    Ok((terminal, size))
-}
-
-fn cleanup_terminal(
-    terminal: &mut Terminal<CrosstermBackend<BufWriter<io::Stdout>>>,
-) -> io::Result<()> {
-    execute!(terminal.backend_mut(), LeaveAlternateScreen)?;
-    disable_raw_mode()?;
-    terminal.show_cursor()?;
-    terminal.clear()?;
-    Ok(())
 }
 
 #[derive(Debug, Clone)]
