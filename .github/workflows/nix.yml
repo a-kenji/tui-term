@@ -16,7 +16,7 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
       with:
         fetch-depth: 0 # Nix Flakes doesn't work on shallow clones
     - uses: cachix/install-nix-action@v31
@@ -33,7 +33,7 @@ jobs:
   clippy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
       with:
         fetch-depth: 0 # Nix Flakes doesn't work on shallow clones
     - uses: cachix/install-nix-action@v31
@@ -51,7 +51,7 @@ jobs:
   cargo-deny:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - uses: cachix/install-nix-action@v31
       with:
         extra_nix_config: |
@@ -67,7 +67,7 @@ jobs:
   cargo-udeps:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - uses: cachix/install-nix-action@v31
       with:
         extra_nix_config: |
@@ -83,7 +83,7 @@ jobs:
   treefmt:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - uses: cachix/install-nix-action@v31
       with:
         extra_nix_config: |
@@ -99,7 +99,7 @@ jobs:
   documentation:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - uses: cachix/install-nix-action@v31
       with:
         extra_nix_config: |
@@ -117,7 +117,7 @@ jobs:
   dependencies:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - uses: cachix/install-nix-action@v31
       with:
         extra_nix_config: |
@@ -133,7 +133,7 @@ jobs:
   dependencies-msrv:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - uses: cachix/install-nix-action@v31
       with:
         extra_nix_config: |
@@ -150,7 +150,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: dependencies
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - uses: cachix/install-nix-action@v31
       with:
         extra_nix_config: |
@@ -172,7 +172,7 @@ jobs:
   cargo-test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - uses: cachix/install-nix-action@v31
       with:
         extra_nix_config: |
@@ -190,7 +190,7 @@ jobs:
   cargo-doc:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - uses: cachix/install-nix-action@v31
       with:
         extra_nix_config: |
@@ -206,7 +206,7 @@ jobs:
   typos:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - uses: cachix/install-nix-action@v31
       with:
         extra_nix_config: |
