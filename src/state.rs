@@ -1,4 +1,4 @@
-use ratatui::{buffer::Buffer, layout::Rect};
+use ratatui_core::{buffer::Buffer, layout::Rect};
 
 use crate::widget::{Cell, PseudoTerminal, Screen};
 

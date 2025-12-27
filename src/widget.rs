@@ -1,9 +1,10 @@
-use ratatui::{
+use ratatui_core::{
     buffer::Buffer,
     layout::Rect,
     style::{Color, Modifier, Style},
-    widgets::{Block, Clear, Widget},
+    widgets::Widget,
 };
+use ratatui_widgets::{block::Block, clear::Clear};
 
 use crate::state;
 
@@ -30,7 +31,7 @@ pub trait Cell {
     /// Whether the cell has any contents that could be rendered to the screen.
     fn has_contents(&self) -> bool;
     /// Apply the contents and styling of this cell to the provided buffer cell.
-    fn apply(&self, cell: &mut ratatui::buffer::Cell);
+    fn apply(&self, cell: &mut ratatui_core::buffer::Cell);
 }
 
 /// A widget representing a pseudo-terminal screen.
@@ -47,10 +48,8 @@ pub trait Cell {
 /// # Examples
 ///
 /// ```rust
-/// use ratatui::{
-///     style::{Color, Modifier, Style},
-///     widgets::{Block, Borders},
-/// };
+/// use ratatui_core::style::{Color, Modifier, Style};
+/// use ratatui_widgets::{block::Block, borders::Borders};
 /// use tui_term::widget::PseudoTerminal;
 /// use vt100::Parser;
 ///
@@ -90,7 +89,7 @@ impl Cursor {
     /// # Example
     ///
     /// ```
-    /// use ratatui::style::Style;
+    /// use ratatui_core::style::Style;
     /// use tui_term::widget::Cursor;
     ///
     /// let cursor = Cursor::default().symbol("|");
@@ -111,7 +110,7 @@ impl Cursor {
     /// # Example
     ///
     /// ```
-    /// use ratatui::style::Style;
+    /// use ratatui_core::style::Style;
     /// use tui_term::widget::Cursor;
     ///
     /// let cursor = Cursor::default().style(Style::default());
@@ -134,7 +133,7 @@ impl Cursor {
     /// # Example
     ///
     /// ```
-    /// use ratatui::style::Style;
+    /// use ratatui_core::style::Style;
     /// use tui_term::widget::Cursor;
     ///
     /// let cursor = Cursor::default().overlay_style(Style::default());
@@ -215,7 +214,7 @@ impl<'a, S: Screen> PseudoTerminal<'a, S> {
     /// # Example
     ///
     /// ```
-    /// use ratatui::widgets::Block;
+    /// use ratatui_widgets::block::Block;
     /// use tui_term::widget::PseudoTerminal;
     /// use vt100::Parser;
     ///
@@ -242,7 +241,7 @@ impl<'a, S: Screen> PseudoTerminal<'a, S> {
     /// # Example
     ///
     /// ```rust
-    /// use ratatui::style::Style;
+    /// use ratatui_core::style::Style;
     /// use tui_term::widget::{Cursor, PseudoTerminal};
     ///
     /// let mut parser = vt100::Parser::new(24, 80, 0);
@@ -265,7 +264,7 @@ impl<'a, S: Screen> PseudoTerminal<'a, S> {
     /// # Example
     ///
     /// ```
-    /// use ratatui::style::Style;
+    /// use ratatui_core::style::Style;
     /// use tui_term::widget::PseudoTerminal;
     ///
     /// let mut parser = vt100::Parser::new(24, 80, 0);
@@ -301,7 +300,9 @@ impl<S: Screen> Widget for PseudoTerminal<'_, S> {
 
 #[cfg(all(test, feature = "vt100"))]
 mod tests {
-    use ratatui::{backend::TestBackend, widgets::Borders, Terminal};
+    use ratatui::Terminal;
+    use ratatui_core::backend::TestBackend;
+    use ratatui_widgets::borders::Borders;
 
     use super::*;
 
