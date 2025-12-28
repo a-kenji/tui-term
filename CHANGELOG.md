@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.0]
+
+Compatible with `ratatui`: `v0.30.0`.
+
+### Miscellaneous Tasks
+
+- *(deps)* Bump ratatui from 0.29.0 to 0.30.0
+-  Bump MSRV `1.74.0` -> `1.86.0` [**breaking**]
+
+
 ## [0.2.0] - 2024-10-26
 
 ### Testing

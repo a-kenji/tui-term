@@ -19,10 +19,8 @@
 //! # Examples
 //!
 //! ```rust
-//! use ratatui::{
-//!     style::{Color, Modifier, Style},
-//!     widgets::{Block, Borders},
-//! };
+//! use ratatui_core::style::{Color, Modifier, Style};
+//! use ratatui_widgets::{block::Block, borders::Borders};
 //! use tui_term::widget::PseudoTerminal;
 //! use vt100::Parser;
 //!

@@ -1,4 +1,4 @@
-use ratatui::style::{Modifier, Style};
+use ratatui_core::style::{Modifier, Style};
 
 use crate::widget::{Cell, Screen};
 
@@ -28,13 +28,13 @@ impl Cell for vt100::Cell {
     }
 
     #[inline]
-    fn apply(&self, cell: &mut ratatui::buffer::Cell) {
+    fn apply(&self, cell: &mut ratatui_core::buffer::Cell) {
         fill_buf_cell(self, cell)
     }
 }
 
 #[inline]
-fn fill_buf_cell(screen_cell: &vt100::Cell, buf_cell: &mut ratatui::buffer::Cell) {
+fn fill_buf_cell(screen_cell: &vt100::Cell, buf_cell: &mut ratatui_core::buffer::Cell) {
     let fg = screen_cell.fgcolor();
     let bg = screen_cell.bgcolor();
     if screen_cell.has_contents() {
@@ -62,7 +62,7 @@ fn fill_buf_cell(screen_cell: &vt100::Cell, buf_cell: &mut ratatui::buffer::Cell
 
 /// Represents a foreground or background color for cells.
 /// Intermediate translation layer between
-/// [`vt100::Screen`] and [`ratatui::style::Color`]
+/// [`vt100::Screen`] and [`ratatui_core::style::Color`]
 #[allow(dead_code)]
 enum Color {
     Reset,
@@ -124,7 +124,7 @@ impl From<Color> for vt100::Color {
     }
 }
 
-impl From<Color> for ratatui::style::Color {
+impl From<Color> for ratatui_core::style::Color {
     #[inline]
     fn from(value: Color) -> Self {
         match value {
