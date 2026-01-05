@@ -40,7 +40,7 @@ lint:
     nix develop .#lintShell --command cargo deny check licenses sources
     nix develop .#lintShell --command typos
     nix develop .#lintShell --command lychee *.md
-    nix develop .#fmtShell --command treefmt --fail-on-change
+    nix fmt -- --fail-on-change
     nix develop .#lintShell --command cargo udeps
     nix develop .#lintShell --command cargo machete
     nix develop .#lintShell --command cargo outdated

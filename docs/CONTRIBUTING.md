@@ -30,7 +30,6 @@ There is a lint target in the `justfile`, that can be run with:
 just lint
 ```
 
-The `rustfmt` version is referenced inside the `.rustfmt-toolchain.toml`.
 The `clippy` version is referenced inside `rust-toolchain.toml`, only lints targeting that version will be merged.
 
 ## How to record `script` tests

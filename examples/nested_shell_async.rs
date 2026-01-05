@@ -8,13 +8,13 @@ use bytes::Bytes;
 use crossterm::event::{self, Event, KeyCode, KeyEventKind};
 use portable_pty::{CommandBuilder, NativePtySystem, PtySize, PtySystem};
 use ratatui::{
+    DefaultTerminal, Frame,
     layout::Alignment,
     style::{Modifier, Style},
     widgets::{Block, Borders, Paragraph},
-    DefaultTerminal, Frame,
 };
 use tokio::{
-    sync::mpsc::{channel, Sender},
+    sync::mpsc::{Sender, channel},
     task,
 };
 use tui_term::widget::PseudoTerminal;

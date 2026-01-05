@@ -1,6 +1,6 @@
 use std::{
     io::{self, Read, Write},
-    sync::{mpsc::Sender, Arc, RwLock},
+    sync::{Arc, RwLock, mpsc::Sender},
     time::Duration,
 };
 
@@ -8,10 +8,10 @@ use bytes::Bytes;
 use crossterm::event::{self, Event, KeyCode, KeyEventKind};
 use portable_pty::{CommandBuilder, NativePtySystem, PtySize, PtySystem};
 use ratatui::{
+    DefaultTerminal, Frame,
     layout::Alignment,
     style::{Modifier, Style},
     widgets::{Block, Borders, Paragraph},
-    DefaultTerminal, Frame,
 };
 use tui_term::widget::PseudoTerminal;
 use vt100::Screen;
