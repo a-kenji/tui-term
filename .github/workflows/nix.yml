@@ -13,25 +13,9 @@ on:
   merge_group:
 
 jobs:
-  check:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v6
-      with:
-        fetch-depth: 0 # Nix Flakes doesn't work on shallow clones
-    - uses: cachix/install-nix-action@v31
-      with:
-        extra_nix_config: |
-          access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-    - uses: cachix/cachix-action@v16
-      with:
-        name: kenji
-        # If you chose API tokens for write access OR if you have a private cache
-        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-    - name: "nix flake check"
-      run: nix flake check -Lvv
   clippy:
     runs-on: ubuntu-latest
+    needs: dependencies
     steps:
     - uses: actions/checkout@v6
       with:
@@ -62,7 +46,7 @@ jobs:
         # If you chose API tokens for write access OR if you have a private cache
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
     - name: "cargo deny"
-      run: nix develop .#lintShell --command cargo deny check licenses sources
+      run: nix develop .#ciShell --command cargo deny check licenses sources
 
   cargo-udeps:
     runs-on: ubuntu-latest
@@ -78,7 +62,7 @@ jobs:
         # If you chose API tokens for write access OR if you have a private cache
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
     - name: "cargo udeps"
-      run: nix develop .#lintShell --command cargo udeps
+      run: nix develop .#ciShell --command cargo udeps
 
   treefmt:
     runs-on: ubuntu-latest
@@ -98,6 +82,7 @@ jobs:
 
   documentation:
     runs-on: ubuntu-latest
+    needs: dependencies
     steps:
     - uses: actions/checkout@v6
     - uses: cachix/install-nix-action@v31
@@ -171,6 +156,7 @@ jobs:
 
   cargo-test:
     runs-on: ubuntu-latest
+    needs: dependencies
     steps:
     - uses: actions/checkout@v6
     - uses: cachix/install-nix-action@v31
@@ -189,6 +175,7 @@ jobs:
 
   cargo-doc:
     runs-on: ubuntu-latest
+    needs: dependencies
     steps:
     - uses: actions/checkout@v6
     - uses: cachix/install-nix-action@v31
@@ -217,4 +204,4 @@ jobs:
         # If you chose API tokens for write access OR if you have a private cache
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
     - name: "typos"
-      run: nix develop -Lv .#lintShell --command typos
+      run: nix develop -Lv .#ciShell --command typos

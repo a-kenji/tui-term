@@ -25,7 +25,7 @@ jobs:
         # If you chose API tokens for write access OR if you have a private cache
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
     - name: "install editorconfig-checker"
-      run: nix develop .#editorConfigShell
+      run: nix develop .#ciShell
     - name: Checking EditorConfig
       run: |
         cat "$HOME/changed_files" | xargs -r editorconfig-checker -disable-indent-size
@@ -48,4 +48,4 @@ jobs:
         # If you chose API tokens for write access OR if you have a private cache
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
     - name: "lychee"
-      run: nix develop .#lintShell --command lychee -- *.md
+      run: nix develop .#ciShell --command lychee -- *.md

@@ -42,4 +42,4 @@ jobs:
     - name: "ldd version"
       run: nix develop -Lvv --command ldd --version
     - name: "lint shell ldd version"
-      run: nix develop .#lintShell -Lvv --command ldd --version
+      run: nix develop .#ciShell -Lvv --command ldd --version
