@@ -128,7 +128,7 @@ jobs:
         # If you chose API tokens for write access OR if you have a private cache
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
     - name: "build dependencies"
-      run: nix build -Lvv .#cargoArtifacts
+      run: nix build -Lvv .#checks.x86_64-linux.cargoArtifacts
 
   dependencies-msrv:
     runs-on: ubuntu-latest
@@ -144,7 +144,7 @@ jobs:
         # If you chose API tokens for write access OR if you have a private cache
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
     - name: "build dependencies msrv"
-      run: nix build -Lvv .#cargoArtifactsMSRV
+      run: nix build -Lvv .#checks.x86_64-linux.cargoArtifactsMSRV
 
   build-examples:
     runs-on: ubuntu-latest
@@ -162,12 +162,12 @@ jobs:
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
     - name: "build examples"
       run: |
-        nix build -Lvv .#simple_ls_chan
-        nix build -Lvv .#simple_ls_rw
-        nix build -Lvv .#smux
-        nix build -Lvv .#nested_shell
-        nix build -Lvv .#nested_shell_async
-        nix build -Lvv .#long_running
+        nix build -Lvv .#checks.x86_64-linux.simple_ls_chan
+        nix build -Lvv .#checks.x86_64-linux.simple_ls_rw
+        nix build -Lvv .#checks.x86_64-linux.smux
+        nix build -Lvv .#checks.x86_64-linux.nested_shell
+        nix build -Lvv .#checks.x86_64-linux.nested_shell_async
+        nix build -Lvv .#checks.x86_64-linux.long_running
 
   cargo-test:
     runs-on: ubuntu-latest
@@ -185,7 +185,7 @@ jobs:
     - name: "cargo test"
       run: |
         echo "This runs cargo-nextest"
-        nix build -Lvv .#cargoNextest
+        nix build -Lvv .#checks.x86_64-linux.cargoNextest
 
   cargo-doc:
     runs-on: ubuntu-latest
@@ -201,7 +201,7 @@ jobs:
         # If you chose API tokens for write access OR if you have a private cache
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
     - name: "cargo doc"
-      run: nix build -Lvv .#cargoDoc
+      run: nix build -Lvv .#checks.x86_64-linux.cargoDoc
 
   typos:
     runs-on: ubuntu-latest
