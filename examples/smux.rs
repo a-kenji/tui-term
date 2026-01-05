@@ -3,23 +3,23 @@ use std::{
     io::{self, BufWriter, Read, Write},
     path::PathBuf,
     sync::{
-        atomic::{AtomicBool, Ordering},
         Arc, Mutex, RwLock,
+        atomic::{AtomicBool, Ordering},
     },
     time::Duration,
 };
 
 use bytes::Bytes;
 use crossterm::event::{self, Event, KeyCode, KeyEvent, KeyModifiers};
-use portable_pty::{native_pty_system, CommandBuilder, MasterPty, PtySize};
+use portable_pty::{CommandBuilder, MasterPty, PtySize, native_pty_system};
 use ratatui::{
+    DefaultTerminal,
     layout::{Alignment, Constraint, Direction, Layout, Rect},
     style::{Color, Modifier, Style},
     widgets::{Block, Borders, Paragraph},
-    DefaultTerminal,
 };
 use tokio::{
-    sync::mpsc::{channel, Sender},
+    sync::mpsc::{Sender, channel},
     task::spawn_blocking,
 };
 use tracing::Level;

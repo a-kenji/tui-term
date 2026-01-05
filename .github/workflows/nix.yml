@@ -94,7 +94,7 @@ jobs:
         # If you chose API tokens for write access OR if you have a private cache
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
     - name: "treefmt"
-      run: nix develop .#fmtShell --command treefmt --fail-on-change
+      run: nix build -Lvv .#checks.x86_64-linux.treefmt
 
   documentation:
     runs-on: ubuntu-latest

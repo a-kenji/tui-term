@@ -7,11 +7,11 @@ use std::{
 use crossterm::event::{self, Event, KeyCode, KeyEventKind};
 use portable_pty::{CommandBuilder, NativePtySystem, PtySize, PtySystem};
 use ratatui::{
+    DefaultTerminal, Frame,
     layout::Alignment,
     style::{Modifier, Style},
     text::Line,
     widgets::{Block, Borders, Paragraph},
-    DefaultTerminal, Frame,
 };
 use tui_term::widget::PseudoTerminal;
 use vt100::Screen;
