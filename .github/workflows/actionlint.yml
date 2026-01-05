@@ -27,4 +27,4 @@ jobs:
         # If you chose API tokens for write access OR if you have a private cache
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
     - name: "actionlint"
-      run: nix develop .#actionlintShell --command actionlint --ignore SC2002
+      run: nix develop .#ciShell --command actionlint --ignore SC2002
