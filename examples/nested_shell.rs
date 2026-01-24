@@ -167,7 +167,7 @@ fn run(
                 Event::Mouse(_) => {}
                 Event::Paste(_) => todo!(),
                 Event::Resize(cols, rows) => {
-                    parser.write().unwrap().set_size(rows, cols);
+                    parser.write().unwrap().screen_mut().set_size(rows, cols);
                 }
             }
         }
