@@ -283,6 +283,7 @@ impl PtyPane {
         self.parser
             .write()
             .unwrap()
+            .screen_mut()
             .set_size(size.rows - 4, size.cols - 4);
         self.master_pty
             .resize(PtySize {
@@ -429,10 +430,6 @@ impl fmt::Debug for PtyPane {
         let parser = self.parser.read().unwrap();
         let screen = parser.screen();
 
-        f.debug_struct("PtyPane")
-            .field("screen", screen)
-            .field("title:", &screen.title())
-            .field("icon_name:", &screen.icon_name())
-            .finish()
+        f.debug_struct("PtyPane").field("screen", screen).finish()
     }
 }
