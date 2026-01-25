@@ -2,7 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.3.0]
+## [0.3.1] - 2026-01-25
+
+Compatible with `ratatui`: `v0.30.0`.
+
+### Miscellaneous Tasks
+
+- *(deps)* Update vt100 to `0.16.2`
+
+### Build
+
+-  Move to flake-parts
+
+### Continuous Integration
+
+-  Simplify ci setup
+
+## [0.3.0] - 2026-01-05
 
 Compatible with `ratatui`: `v0.30.0`.
 
