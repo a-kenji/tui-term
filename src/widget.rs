@@ -675,4 +675,102 @@ mod tests {
         let view = snapshot_typescript(stream);
         insta::assert_snapshot!(view);
     }
+
+    #[test]
+    fn vttest_08_01() {
+        let stream = include_bytes!("../test/typescript/vttest_08_01.typescript");
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
+
+    #[test]
+    fn vttest_08_02() {
+        let stream = include_bytes!("../test/typescript/vttest_08_02.typescript");
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
+
+    #[test]
+    fn vttest_08_03() {
+        let stream = include_bytes!("../test/typescript/vttest_08_03.typescript");
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
+
+    #[test]
+    fn vttest_08_04() {
+        let stream = include_bytes!("../test/typescript/vttest_08_04.typescript");
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
+
+    #[test]
+    fn vttest_08_05() {
+        let stream = include_bytes!("../test/typescript/vttest_08_05.typescript");
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
+
+    #[test]
+    fn vttest_08_06() {
+        let stream = include_bytes!("../test/typescript/vttest_08_06.typescript");
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
+
+    #[test]
+    fn vttest_08_07() {
+        let stream = include_bytes!("../test/typescript/vttest_08_07.typescript");
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
+
+    #[test]
+    fn vttest_08_08() {
+        let stream = include_bytes!("../test/typescript/vttest_08_08.typescript");
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
+
+    #[test]
+    fn vttest_08_09() {
+        let stream = include_bytes!("../test/typescript/vttest_08_09.typescript");
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
+
+    #[test]
+    fn vttest_08_10() {
+        let stream = include_bytes!("../test/typescript/vttest_08_10.typescript");
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
+
+    #[test]
+    fn vttest_08_11() {
+        let stream = include_bytes!("../test/typescript/vttest_08_11.typescript");
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
+
+    #[test]
+    fn vttest_08_12() {
+        let stream = include_bytes!("../test/typescript/vttest_08_12.typescript");
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
+
+    #[test]
+    fn vttest_08_13() {
+        let stream = include_bytes!("../test/typescript/vttest_08_13.typescript");
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
+
+    #[test]
+    fn vttest_08_14() {
+        let stream = include_bytes!("../test/typescript/vttest_08_14.typescript");
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
 }

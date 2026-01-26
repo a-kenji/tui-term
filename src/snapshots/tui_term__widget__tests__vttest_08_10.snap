@@ -1,0 +1,38 @@
+---
+source: src/widget.rs
+expression: view
+---
+Buffer {
+    area: Rect { x: 0, y: 0, width: 80, height: 24 },
+    content: [
+        "B*******************************************************************************",
+        "***************************************************                             ",
+        "                                                                                ",
+        "Test of 'Insert Mode'. The top line should be 'A*** ... ***B'. Push <RETURN>█   ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+    ],
+    styles: [
+        x: 0, y: 0, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+        x: 76, y: 3, fg: Gray, bg: Reset, underline: Reset, modifier: NONE,
+        x: 77, y: 3, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+    ]
+}
