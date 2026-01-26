@@ -1,0 +1,7 @@
+[2J[?5h[?3hTest VT100 'Toggle origin mode, forget rest' bug, part 1.
+The screen should be in reverse, 132 column mode.
+Push <RETURN>
+[2J[?6;5;3lTest VT100 'Toggle origin mode, forget rest' bug, part 2.
+
+The screen should be in non-reverse, 80 column mode.
+Push <RETURN>

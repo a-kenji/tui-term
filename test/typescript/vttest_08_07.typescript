@@ -1,0 +1,7 @@
+
+[2J[1;1HIf your terminal has the ANSI 'Insert Character' function
+(the VT102 does not), then you should see a line like this
+  A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+below:
+
+Z[2@Y[2@X[2@W[2@V[2@U[2@T[2@S[2@R[2@Q[2@P[2@O[2@N[2@M[2@L[2@K[2@J[2@I[2@H[2@G[2@F[2@E[2@D[2@C[2@B[2@A[2@[10;1HPush <RETURN>

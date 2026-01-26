@@ -1,0 +1,12 @@
+[2J[1;1HTest SGR-0 color reset
+
+ECMA-48 states that SGR 0 "cancels the effect of any preceding occurrence
+of SGR in the data stream regardless of the setting of the graphic rendition
+combination mode (GRCM)".
+
+
+[0;40;37;39;49m[0mYou should see only black:[30;40mSGR 30 and SGR 40 don't work[0;40;37;39;49m[0m:up to here
+[0;40;37;39;49m[0mYou should see only white:[37;47mSGR 37 and SGR 47 don't work[0;40;37;39;49m[0m:up to here
+[0;40;37;39;49m[0mYou should see text here: [30;40m[0mSGR 0 reset works (explicit 0)
+[0;40;37;39;49m[0m................and here: [37;47m[mSGR 0 reset works (default param)
+[0;40;37;39;49m[0mPush <RETURN>

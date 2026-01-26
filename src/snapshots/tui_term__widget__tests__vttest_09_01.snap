@@ -1,0 +1,38 @@
+---
+source: src/widget.rs
+expression: view
+---
+Buffer {
+    area: Rect { x: 0, y: 0, width: 80, height: 24 },
+    content: [
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "Softscroll bug test, line 1.  Push <RETURN>                                     ",
+        "Softscroll bug test, line 2.  Push <RETURN>                                     ",
+        "Softscroll bug test, line 3.  Push <RETURN>                                     ",
+        "Softscroll bug test, line 4.  Push <RETURN>                                     ",
+        "Softscroll bug test, line 5.  Push <RETURN>                                     ",
+        "Softscroll bug test, line 6.  Push <RETURN>                                     ",
+        "Softscroll bug test, line 7.  Push <RETURN>                                     ",
+        "Softscroll bug test, line 8.  Push <RETURN>                                     ",
+        "Softscroll bug test, line 9.  Push <RETURN>                                     ",
+        "Softscroll bug test, line 10.  Push <RETURN>                                    ",
+        "That should have been enough to show the bug, if present.                       ",
+        "Push <RETURN>                                                                   ",
+        "█                                                                               ",
+    ],
+    styles: [
+        x: 0, y: 0, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+        x: 0, y: 23, fg: Gray, bg: Reset, underline: Reset, modifier: NONE,
+        x: 1, y: 23, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+    ]
+}

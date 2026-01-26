@@ -1,0 +1,38 @@
+---
+source: src/widget.rs
+expression: view
+---
+Buffer {
+    area: Rect { x: 0, y: 0, width: 80, height: 24 },
+    content: [
+        "B                                                                               ",
+        "***************************************************                             ",
+        "                                                                                ",
+        "Test of 'Delete Character'. The top line should be 'AB'. Push <RETURN>█         ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+    ],
+    styles: [
+        x: 0, y: 0, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+        x: 70, y: 3, fg: Gray, bg: Reset, underline: Reset, modifier: NONE,
+        x: 71, y: 3, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+    ]
+}

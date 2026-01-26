@@ -1,0 +1,48 @@
+---
+source: src/widget.rs
+expression: view
+---
+Buffer {
+    area: Rect { x: 0, y: 0, width: 80, height: 24 },
+    content: [
+        "         Selected as G0 (with SI)              Selected as G1 (with SO)         ",
+        "                                                                                ",
+        "Character set B (US ASCII)                                                      ",
+        "          !"#$%&'()*+,-./0123456789:;<=>?       !"#$%&'()*+,-./0123456789:;<=>? ",
+        "         @ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_      @ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_ ",
+        "         `abcdefghijklmnopqrstuvwxyz{|}~       `abcdefghijklmnopqrstuvwxyz{|}~  ",
+        "Character set A (British)                                                       ",
+        "          !"#$%&'()*+,-./0123456789:;<=>?       !"#$%&'()*+,-./0123456789:;<=>? ",
+        "         @ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_      @ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_ ",
+        "         `abcdefghijklmnopqrstuvwxyz{|}~       `abcdefghijklmnopqrstuvwxyz{|}~  ",
+        "Character set 0 (DEC Special graphics and line drawing)                         ",
+        "          !"#$%&'()*+,-./0123456789:;<=>?       !"#$%&'()*+,-./0123456789:;<=>? ",
+        "         @ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_      @ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_ ",
+        "         `abcdefghijklmnopqrstuvwxyz{|}~       `abcdefghijklmnopqrstuvwxyz{|}~  ",
+        "Character set 1 (DEC Alternate character ROM standard characters)               ",
+        "          !"#$%&'()*+,-./0123456789:;<=>?       !"#$%&'()*+,-./0123456789:;<=>? ",
+        "         @ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_      @ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_ ",
+        "         `abcdefghijklmnopqrstuvwxyz{|}~       `abcdefghijklmnopqrstuvwxyz{|}~  ",
+        "Character set 2 (DEC Alternate character ROM special graphics)                  ",
+        "          !"#$%&'()*+,-./0123456789:;<=>?       !"#$%&'()*+,-./0123456789:;<=>? ",
+        "         @ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_      @ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_ ",
+        "         `abcdefghijklmnopqrstuvwxyz{|}~       `abcdefghijklmnopqrstuvwxyz{|}~  ",
+        "                                                                                ",
+        "These are the installed character sets. Push <RETURN>█                          ",
+    ],
+    styles: [
+        x: 0, y: 0, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+        x: 0, y: 2, fg: Reset, bg: Reset, underline: Reset, modifier: BOLD,
+        x: 26, y: 2, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+        x: 0, y: 6, fg: Reset, bg: Reset, underline: Reset, modifier: BOLD,
+        x: 25, y: 6, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+        x: 0, y: 10, fg: Reset, bg: Reset, underline: Reset, modifier: BOLD,
+        x: 55, y: 10, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+        x: 0, y: 14, fg: Reset, bg: Reset, underline: Reset, modifier: BOLD,
+        x: 65, y: 14, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+        x: 0, y: 18, fg: Reset, bg: Reset, underline: Reset, modifier: BOLD,
+        x: 62, y: 18, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+        x: 53, y: 23, fg: Gray, bg: Reset, underline: Reset, modifier: NONE,
+        x: 54, y: 23, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+    ]
+}

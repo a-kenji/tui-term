@@ -1,0 +1,19 @@
+[2J#8[1;1H[0KLine 11 should be double-wide, line 12 should be cleared.[2;1H[0KThen, the letters A-P should be written at the beginning[3;1H[0Kof lines 12-24, and the empty line and A-E are scrolled away.[4;1H[0KIf the bug is present, some lines are confused, look at K-P.[11;1H#6[12;24r[12;1H[0KHere we go... Push <RETURN>
+[12;1HMA
+B
+C
+D
+E
+F
+G
+H
+I
+J
+K
+L
+M
+N
+O
+P
+Push <RETURN>
+[r

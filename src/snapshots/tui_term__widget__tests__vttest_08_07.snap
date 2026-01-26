@@ -1,0 +1,38 @@
+---
+source: src/widget.rs
+expression: view
+---
+Buffer {
+    area: Rect { x: 0, y: 0, width: 80, height: 24 },
+    content: [
+        "If your terminal has the ANSI 'Insert Character' function                       ",
+        "(the VT102 does not), then you should see a line like this                      ",
+        "  A B C D E F G H I J K L M N O P Q R S T U V W X Y Z                           ",
+        "below:                                                                          ",
+        "                                                                                ",
+        "  A B C D E F G H I J K L M N O P Q R S T U V W X Y Z                           ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "Push <RETURN>█                                                                  ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+    ],
+    styles: [
+        x: 0, y: 0, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+        x: 13, y: 9, fg: Gray, bg: Reset, underline: Reset, modifier: NONE,
+        x: 14, y: 9, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+    ]
+}

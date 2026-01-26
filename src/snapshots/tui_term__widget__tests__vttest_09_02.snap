@@ -1,0 +1,37 @@
+---
+source: src/widget.rs
+expression: view
+---
+Buffer {
+    area: Rect { x: 0, y: 0, width: 80, height: 24 },
+    content: [
+        "Line 11 should be double-wide, line 12 should be cleared.                       ",
+        "Then, the letters A-P should be written at the beginning                        ",
+        "of lines 12-24, and the empty line and A-E are scrolled away.                   ",
+        "If the bug is present, some lines are confused, look at K-P.                    ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "F                                                                               ",
+        "G                                                                               ",
+        "H                                                                               ",
+        "I                                                                               ",
+        "J                                                                               ",
+        "K                                                                               ",
+        "L                                                                               ",
+        "M                                                                               ",
+        "N                                                                               ",
+        "O                                                                               ",
+        "P                                                                               ",
+        "Push <RETURN>                                                                   ",
+        "                                                                                ",
+    ],
+    styles: [
+        x: 0, y: 0, fg: Reset, bg: Reset, underline: Reset, modifier: REVERSED,
+        x: 1, y: 0, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+    ]
+}

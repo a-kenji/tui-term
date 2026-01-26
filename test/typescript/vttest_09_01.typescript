@@ -1,0 +1,51 @@
+[2J[10;1HThis is a test of the VT100 'Scroll while toggle softscroll'
+bug.  The cursor may disappear, or move UP the screen, or
+multiple copies of some lines may appear.
+Push <RETURN>
+[24H[?4l
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[?4h
+
+
+
+
+
+
+
+
+
+[?4l
+
+
+
+
+[?4hE[?4lESoftscroll bug test, line 1.  Push <RETURN>
+Softscroll bug test, line 2.  Push <RETURN>
+Softscroll bug test, line 3.  Push <RETURN>
+Softscroll bug test, line 4.  Push <RETURN>
+Softscroll bug test, line 5.  Push <RETURN>
+Softscroll bug test, line 6.  Push <RETURN>
+Softscroll bug test, line 7.  Push <RETURN>
+Softscroll bug test, line 8.  Push <RETURN>
+Softscroll bug test, line 9.  Push <RETURN>
+Softscroll bug test, line 10.  Push <RETURN>
+That should have been enough to show the bug, if present.
+Push <RETURN>

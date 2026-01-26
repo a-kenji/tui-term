@@ -1,0 +1,38 @@
+---
+source: src/widget.rs
+expression: view
+---
+Buffer {
+    area: Rect { x: 0, y: 0, width: 80, height: 24 },
+    content: [
+        "This is the same test in 132 column mode.                                       ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "Now the line below should contain 132 characters in single width.               ",
+        "Push <RETURN>                                                                   ",
+        "                                                                                ",
+        "Now the line below should contain 66 characters in double width.                ",
+        "Push <RETURN>                                                                   ",
+        "                                                                                ",
+        "Now the line below should contain 132 characters in single width.               ",
+        "Push <RETURN>                                                                   ",
+        "█                                                                               ",
+        "                                                                                ",
+        "This-is-a-long-line-This-is-a-long-line-This-is-a-long-line-This-is-a-long-line-",
+        "This-is-a-long-line-This-is-a-long-line-ending-here-                            ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+    ],
+    styles: [
+        x: 0, y: 0, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+        x: 0, y: 12, fg: Gray, bg: Reset, underline: Reset, modifier: NONE,
+        x: 1, y: 12, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+    ]
+}
