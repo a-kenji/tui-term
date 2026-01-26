@@ -801,4 +801,67 @@ mod tests {
         let view = snapshot_typescript(stream);
         insta::assert_snapshot!(view);
     }
+
+    #[test]
+    fn vttest_09_01() {
+        let stream = include_bytes!("../test/typescript/vttest_09_01.typescript");
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
+
+    #[test]
+    fn vttest_09_02() {
+        let stream = include_bytes!("../test/typescript/vttest_09_02.typescript");
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
+
+    #[test]
+    fn vttest_09_03() {
+        let stream = include_bytes!("../test/typescript/vttest_09_03.typescript");
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
+
+    #[test]
+    fn vttest_09_04() {
+        let stream = include_bytes!("../test/typescript/vttest_09_04.typescript");
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
+
+    #[test]
+    fn vttest_09_05() {
+        let stream = include_bytes!("../test/typescript/vttest_09_05.typescript");
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
+
+    #[test]
+    fn vttest_09_06() {
+        let stream = include_bytes!("../test/typescript/vttest_09_06.typescript");
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
+
+    #[test]
+    fn vttest_09_07() {
+        let stream = include_bytes!("../test/typescript/vttest_09_07.typescript");
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
+
+    #[test]
+    fn vttest_09_08() {
+        let stream = include_bytes!("../test/typescript/vttest_09_08.typescript");
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
+
+    #[test]
+    fn vttest_09_09() {
+        let stream = include_bytes!("../test/typescript/vttest_09_09.typescript");
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
 }

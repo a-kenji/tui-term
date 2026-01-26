@@ -1,0 +1,40 @@
+---
+source: src/widget.rs
+expression: view
+---
+Buffer {
+    area: Rect { x: 0, y: 0, width: 80, height: 24 },
+    content: [
+        "        You should see blinking text at the bottom line.                        ",
+        "                                                                                ",
+        "        Enter 0 to exit, 1 to try to invoke the bug again.                      ",
+        "        █                                                                       ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "        If you can see this then the bug did not appear.                        ",
+    ],
+    styles: [
+        x: 0, y: 0, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+        x: 8, y: 3, fg: Gray, bg: Reset, underline: Reset, modifier: NONE,
+        x: 9, y: 3, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+        x: 8, y: 23, fg: Reset, bg: Reset, underline: Reset, modifier: BOLD | REVERSED,
+        x: 56, y: 23, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+    ]
+}

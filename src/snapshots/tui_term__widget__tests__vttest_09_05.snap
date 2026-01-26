@@ -1,0 +1,38 @@
+---
+source: src/widget.rs
+expression: view
+---
+Buffer {
+    area: Rect { x: 0, y: 0, width: 80, height: 24 },
+    content: [
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "If the bug is present, this should make things much worse!                      ",
+        "If the bug is present, this should make things much worse!                      ",
+        "If the bug is present, this should make things much worse!                      ",
+        "If the bug is present, this should make things much worse!                      ",
+        "If the bug is present, this should make things much worse!                      ",
+        "Push <RETURN>                                                                   ",
+        "█                                                                               ",
+    ],
+    styles: [
+        x: 0, y: 0, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+        x: 0, y: 23, fg: Gray, bg: Reset, underline: Reset, modifier: NONE,
+        x: 1, y: 23, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+    ]
+}

@@ -1,0 +1,7 @@
+[2J[16;1H   This illustrates the "wrap around bug" which exists on a
+   standard VT100. At the top of the screen there should be
+   a row of +'s, and the rightmost column should be filled
+   with *'s. But if the bug is present, some of the *'s may
+   be placed in other places, e.g. in the leftmost column,
+   and the top line of +'s may be scrolled away.
+[1;1H+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++[1;80f*[2;80f*[3;80f*[4;80f*[5;80f*[6;80f*[7;80f*[8;80f*[9;80f*[10;80f*[11;80f*[12;80f*[13;80f*[14;80f*[15;80f*[16;80f*[17;80f*[18;80f*[19;80f*[20;80f*[21;80f*[22;80f*[23;80f*[24;80f*[24;1HPush <RETURN>

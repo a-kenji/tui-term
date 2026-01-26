@@ -1,0 +1,16 @@
+[2J[15;1HThis-is-a-long-line-This-is-a-long-line-This-is-a-long-line-This-is-a-long-line-[1;1HThis is a test of what happens to the right half of double-width lines.
+A common misfeature is that the right half does not come back when a long
+single-width line is set to double-width and then reset to single-width.
+[5;1HNow the line below should contain 80 characters in single width.
+Push <RETURN>
+[15;1H#6[8;1HNow the line below should contain 40 characters in double width.
+Push <RETURN>
+[15;1H#5[11;1HNow the line below should contain 80 characters in single width.
+Push <RETURN>
+[?3h[2J[15;1HThis-is-a-long-line-This-is-a-long-line-This-is-a-long-line-This-is-a-long-line-This-is-a-long-line-This-is-a-long-line-ending-here-[1;1HThis is the same test in 132 column mode.[5;1HNow the line below should contain 132 characters in single width.
+Push <RETURN>
+[15;1H#6[8;1HNow the line below should contain 66 characters in double width.
+Push <RETURN>
+[15;1H#5[11;1HNow the line below should contain 132 characters in single width.
+Push <RETURN>
+[?3l
