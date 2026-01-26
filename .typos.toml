@@ -1,4 +1,7 @@
 # configuration for https://github.com/crate-ci/typos
 
+[files]
+extend-exclude = ["src/snapshots/*.snap"]
+
 [default.extend-words]
 ratatui = "ratatui"
