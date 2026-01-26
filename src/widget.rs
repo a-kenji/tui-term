@@ -516,9 +516,22 @@ mod tests {
         insta::assert_snapshot!(view);
     }
     #[test]
+    fn dim_text() {
+        let stream =
+            b"\x1b[2mThis line will be displayed dim/faint.\x1b[0m This should have no style.";
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
+    #[test]
     fn combined_modifier_text() {
         let stream =
             b"[4m[3mThis line will be displayed in italic and underlined.[0m This should have no style.";
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
+    #[test]
+    fn dim_bold_text() {
+        let stream = b"\x1b[2m\x1b[1mThis is dim and bold. Bold takes precedence.\x1b[0m Normal.";
         let view = snapshot_typescript(stream);
         insta::assert_snapshot!(view);
     }
