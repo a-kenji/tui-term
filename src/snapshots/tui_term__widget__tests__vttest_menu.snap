@@ -1,0 +1,38 @@
+---
+source: src/widget.rs
+expression: view
+---
+Buffer {
+    area: Rect { x: 0, y: 0, width: 80, height: 24 },
+    content: [
+        "                                                                                ",
+        "                                                                                ",
+        "         VT100 test program, version 2.7 (20241208)                             ",
+        "         Line speed 38400bd                                                     ",
+        "         Choose test type:                                                      ",
+        "                                                                                ",
+        "          0. Exit                                                               ",
+        "          1. Test of cursor movements                                           ",
+        "          2. Test of screen features                                            ",
+        "          3. Test of character sets                                             ",
+        "          4. Test of double-sized characters                                    ",
+        "          5. Test of keyboard                                                   ",
+        "          6. Test of terminal reports                                           ",
+        "          7. Test of VT52 mode                                                  ",
+        "          8. Test of VT102 features (Insert/Delete Char/Line)                   ",
+        "          9. Test of known bugs                                                 ",
+        "          10. Test of reset and self-test                                       ",
+        "          11. Test non-VT100 (e.g., VT220, XTERM) terminals                     ",
+        "          12. Modify test-parameters                                            ",
+        "                                                                                ",
+        "          Enter choice number (0 - 12): █                                       ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+    ],
+    styles: [
+        x: 0, y: 0, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+        x: 40, y: 20, fg: Gray, bg: Reset, underline: Reset, modifier: NONE,
+        x: 41, y: 20, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+    ]
+}

@@ -1,0 +1,38 @@
+---
+source: src/widget.rs
+expression: view
+---
+Buffer {
+    area: Rect { x: 0, y: 0, width: 80, height: 24 },
+    content: [
+        "                                                                                ",
+        "*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*",
+        "                                                                      *       +*",
+        "                                                                      *       +*",
+        "                                                                      *       +*",
+        "                                                                      *       +*",
+        "                                                                      *       +*",
+        "                                                                      *       +*",
+        "                                                                      *       +*",
+        "                                                                              +*",
+        "*           The screen should be cleared,  and have an unbroken bor-          +*",
+        "*           der of *'s and +'s around the edge,   and exactly in the          +*",
+        "*           middle  there should be a frame of E's around this  text          +*",
+        "*           with  one (1) free position around it.    Push <RETURN>           +*",
+        "*                                                                             +*",
+        "*                                                                             +*",
+        "*                            *************************************************+*",
+        "******************************************************************************+*",
+        "*****************************                                                 +*",
+        "*                                                                             +*",
+        "*                                                                             +*",
+        "*                                                                             +*",
+        "* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*",
+        "                                                                                ",
+    ],
+    styles: [
+        x: 0, y: 0, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+        x: 67, y: 13, fg: Reset, bg: Reset, underline: Reset, modifier: REVERSED,
+        x: 68, y: 13, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+    ]
+}

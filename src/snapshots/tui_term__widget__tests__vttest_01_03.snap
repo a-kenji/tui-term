@@ -1,0 +1,38 @@
+---
+source: src/widget.rs
+expression: view
+---
+Buffer {
+    area: Rect { x: 0, y: 0, width: 80, height: 24 },
+    content: [
+        "                                                                                ",
+        "*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*",
+        "M                                                                              m",
+        "N                                                                               ",
+        "n                                                                               ",
+        "O                                                                              o",
+        "P                                                                              p",
+        "Q                                                                              q",
+        "R                                                                               ",
+        "r                                                                               ",
+        "S                                                                              s",
+        "T                                                                              t",
+        "U                                                                              u",
+        "V                                                                               ",
+        "v                                                                               ",
+        "W                                                                              w",
+        "X                                                                              x",
+        "Y                                                                              y",
+        "Z                                                                               ",
+        "z                                                                               ",
+        "                                                                                ",
+        "Push <RETURN>█                                                                 *",
+        "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ *",
+        "                                                                                ",
+    ],
+    styles: [
+        x: 0, y: 0, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+        x: 13, y: 21, fg: Gray, bg: Reset, underline: Reset, modifier: NONE,
+        x: 14, y: 21, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+    ]
+}
