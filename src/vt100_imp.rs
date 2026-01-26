@@ -55,6 +55,9 @@ fn fill_buf_cell(screen_cell: &vt100::Cell, buf_cell: &mut ratatui_core::buffer:
     if screen_cell.inverse() {
         style = style.add_modifier(Modifier::REVERSED);
     }
+    if screen_cell.dim() {
+        style = style.add_modifier(Modifier::DIM);
+    }
     buf_cell.set_style(style);
     buf_cell.set_fg(fg.into());
     buf_cell.set_bg(bg.into());

@@ -1,0 +1,39 @@
+---
+source: src/widget.rs
+expression: view
+---
+Buffer {
+    area: Rect { x: 0, y: 0, width: 80, height: 24 },
+    content: [
+        "This line will be displayed dim/faint. This should have no style.█              ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+    ],
+    styles: [
+        x: 0, y: 0, fg: Reset, bg: Reset, underline: Reset, modifier: DIM,
+        x: 38, y: 0, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+        x: 65, y: 0, fg: Gray, bg: Reset, underline: Reset, modifier: NONE,
+        x: 66, y: 0, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+    ]
+}
