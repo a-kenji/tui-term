@@ -773,4 +773,32 @@ mod tests {
         let view = snapshot_typescript(stream);
         insta::assert_snapshot!(view);
     }
+
+    #[test]
+    fn vttest_11_06_02() {
+        let stream = include_bytes!("../test/typescript/vttest_11_06_02.typescript");
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
+
+    #[test]
+    fn vttest_11_06_03() {
+        let stream = include_bytes!("../test/typescript/vttest_11_06_03.typescript");
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
+
+    #[test]
+    fn vttest_11_06_04() {
+        let stream = include_bytes!("../test/typescript/vttest_11_06_04.typescript");
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
+
+    #[test]
+    fn vttest_11_06_05() {
+        let stream = include_bytes!("../test/typescript/vttest_11_06_05.typescript");
+        let view = snapshot_typescript(stream);
+        insta::assert_snapshot!(view);
+    }
 }

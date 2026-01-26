@@ -1,0 +1,42 @@
+---
+source: src/widget.rs
+expression: view
+---
+Buffer {
+    area: Rect { x: 0, y: 0, width: 80, height: 24 },
+    content: [
+        "Test SGR-0 color reset                                                          ",
+        "                                                                                ",
+        "ECMA-48 states that SGR 0 "cancels the effect of any preceding occurrence       ",
+        "of SGR in the data stream regardless of the setting of the graphic rendition    ",
+        "combination mode (GRCM)".                                                       ",
+        "                                                                                ",
+        "                                                                                ",
+        "You should see only black:SGR 30 and SGR 40 don't work:up to here               ",
+        "You should see only white:SGR 37 and SGR 47 don't work:up to here               ",
+        "You should see text here: SGR 0 reset works (explicit 0)                        ",
+        "................and here: SGR 0 reset works (default param)                     ",
+        "Push <RETURN>                                                                   ",
+        "█                                                                               ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+    ],
+    styles: [
+        x: 0, y: 0, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+        x: 26, y: 7, fg: Indexed(0), bg: Indexed(0), underline: Reset, modifier: NONE,
+        x: 54, y: 7, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+        x: 26, y: 8, fg: Indexed(7), bg: Indexed(7), underline: Reset, modifier: NONE,
+        x: 54, y: 8, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+        x: 0, y: 12, fg: Gray, bg: Reset, underline: Reset, modifier: NONE,
+        x: 1, y: 12, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+    ]
+}
