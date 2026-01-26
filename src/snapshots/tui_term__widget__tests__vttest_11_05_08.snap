@@ -1,0 +1,38 @@
+---
+source: src/widget.rs
+expression: view
+---
+Buffer {
+    area: Rect { x: 0, y: 0, width: 80, height: 24 },
+    content: [
+        "1.                                                                              ",
+        "2.                                                                              ",
+        "3.                                                                              ",
+        "4.                                                                              ",
+        "5.                                                                              ",
+        "6.                                                                              ",
+        "7.                                                                              ",
+        "8.                                                                              ",
+        "9.                                                                              ",
+        "10.                                                                             ",
+        "11.                                                                             ",
+        "12.                                                                             ",
+        "13.                                                                             ",
+        "14.                                                                             ",
+        "15.                                                                             ",
+        "16.                                                                             ",
+        "17.                                                                             ",
+        "18.                                                                             ",
+        "19.                                                                             ",
+        "20.                                                                             ",
+        "Test Previous-Line (CPL)                                                        ",
+        "The lines above this should be numbered in sequence, from 1.                    ",
+        "Push <RETURN>                                                                   ",
+        "█                                                                               ",
+    ],
+    styles: [
+        x: 0, y: 0, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+        x: 0, y: 23, fg: Gray, bg: Reset, underline: Reset, modifier: NONE,
+        x: 1, y: 23, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+    ]
+}

@@ -1,0 +1,38 @@
+---
+source: src/widget.rs
+expression: view
+---
+Buffer {
+    area: Rect { x: 0, y: 0, width: 80, height: 24 },
+    content: [
+        "0                                                                              1",
+        "0                                                                              1",
+        "0                                                                              1",
+        "0                                                                              1",
+        "0                                                                              1",
+        "0                                                                              1",
+        "0                                                                              1",
+        "0                                                                              1",
+        "0                                                                              1",
+        "0                                                                              1",
+        "0                                                                              1",
+        "0                                                                              1",
+        "0                                                                              1",
+        "0                                                                              1",
+        "0                                                                              1",
+        "0                                                                              1",
+        "0                                                                              1",
+        "0                                                                              1",
+        "0                                                                              1",
+        "----+----1----+----2----+----3----+----4----+----5----+----6----+----7----+----8",
+        "Test Cursor-Back-Tab (CBT)                                                      ",
+        "The tab-stops should be numbered consecutively starting at 1 in screen.         ",
+        "Push <RETURN>                                                                   ",
+        "█                                                                               ",
+    ],
+    styles: [
+        x: 0, y: 0, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+        x: 0, y: 23, fg: Gray, bg: Reset, underline: Reset, modifier: NONE,
+        x: 1, y: 23, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+    ]
+}
