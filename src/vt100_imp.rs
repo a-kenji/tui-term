@@ -38,7 +38,7 @@ fn fill_buf_cell(screen_cell: &vt100::Cell, buf_cell: &mut ratatui_core::buffer:
     let fg = screen_cell.fgcolor();
     let bg = screen_cell.bgcolor();
     if screen_cell.has_contents() {
-        buf_cell.set_symbol(&screen_cell.contents());
+        buf_cell.set_symbol(screen_cell.contents());
     }
     let fg: Color = fg.into();
     let bg: Color = bg.into();
