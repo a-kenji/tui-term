@@ -1,3 +1,5 @@
+use std::borrow::Cow;
+
 use ratatui_core::{
     buffer::Buffer,
     layout::Rect,
@@ -74,7 +76,7 @@ pub struct PseudoTerminal<'a, S> {
 #[non_exhaustive]
 pub struct Cursor {
     pub(crate) show: bool,
-    pub(crate) symbol: String,
+    pub(crate) symbol: Cow<'static, str>,
     pub(crate) style: Style,
     pub(crate) overlay_style: Style,
 }
@@ -96,7 +98,7 @@ impl Cursor {
     /// ```
     #[inline]
     #[must_use]
-    pub fn symbol(mut self, symbol: &str) -> Self {
+    pub fn symbol(mut self, symbol: impl Into<Cow<'static, str>>) -> Self {
         self.symbol = symbol.into();
         self
     }
@@ -171,7 +173,7 @@ impl Default for Cursor {
     fn default() -> Self {
         Self {
             show: true,
-            symbol: "\u{2588}".into(), //"█".
+            symbol: Cow::Borrowed("\u{2588}"), //"█".
             style: Style::default().fg(Color::Gray),
             overlay_style: Style::default().add_modifier(Modifier::REVERSED),
         }
