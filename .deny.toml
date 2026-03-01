@@ -91,7 +91,7 @@ ignore = [
 allow = [
   "Apache-2.0",
   "MIT",
-  "Unicode-DFS-2016",
+  "Unicode-3.0",
   "Zlib",
   #"Apache-2.0 WITH LLVM-exception",
 ]
