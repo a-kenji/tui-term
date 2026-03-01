@@ -285,7 +285,7 @@ impl<'a, S: Screen> PseudoTerminal<'a, S> {
     }
 }
 
-impl<S: Screen> Widget for PseudoTerminal<'_, S> {
+impl<S: Screen> Widget for &PseudoTerminal<'_, S> {
     #[inline]
     fn render(self, area: Rect, buf: &mut Buffer) {
         Clear.render(area, buf);
@@ -294,7 +294,14 @@ impl<S: Screen> Widget for PseudoTerminal<'_, S> {
             b.clone().render(area, buf);
             inner_area
         });
-        state::handle(&self, area, buf);
+        state::handle(self, area, buf);
+    }
+}
+
+impl<S: Screen> Widget for PseudoTerminal<'_, S> {
+    #[inline]
+    fn render(self, area: Rect, buf: &mut Buffer) {
+        (&self).render(area, buf);
     }
 }
 
