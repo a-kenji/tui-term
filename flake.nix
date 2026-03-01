@@ -17,7 +17,9 @@
     };
 
     crane = {
-      url = "github:ipetkov/crane";
+      # Pin before https://github.com/ipetkov/crane/pull/976 which requires
+      # unstable cargo flag --exclude-lockfile
+      url = "github:ipetkov/crane/v0.23.0";
     };
   };
 
