@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.2] - 2026-03-03
+
+Compatible with `ratatui`: `v0.30.0`.
+
+### Testing
+
+- *(dim)* Init tests for dim/fain text (SGR2)
+- Init vttest 11_07_02 Protected Areas (SPA/EPA)
+- Init vttest 11.05 (ISO-6429 cursor movement)
+- Init vttest 09 (known VT100 bugs)
+- Init vttest 11.06 (ISO-6429 colors)
+- Init vttest 08 (VT102 insert/delete)
+- Add vttest 03 (character sets)
+- Init vttest 01 (cursor movements)
+
+### Cursor
+
+- *(uncategorized)* Avoid heap allocation for Cursor.symbol [**breaking**]
+
+### Vt100_imp
+
+- *(uncategorized)* Set fg/bg on Style before applying cell
+
+### Widget
+
+- *(uncategorized)* Implement `Widget` for `&PseudoTerminal` [**breaking**]
+
 ## [0.3.1] - 2026-01-25
 
 Compatible with `ratatui`: `v0.30.0`.
