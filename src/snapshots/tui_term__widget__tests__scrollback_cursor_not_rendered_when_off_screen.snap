@@ -1,0 +1,16 @@
+---
+source: src/widget.rs
+expression: view
+---
+Buffer {
+    area: Rect { x: 0, y: 0, width: 40, height: 4 },
+    content: [
+        "[scrollback line 3]                     ",
+        "[scrollback line 4]                     ",
+        "[scrollback line 5]                     ",
+        "[scrollback line 6]                     ",
+    ],
+    styles: [
+        x: 0, y: 0, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+    ]
+}

@@ -17,7 +17,9 @@ impl Screen for vt100::Screen {
 
     #[inline]
     fn cursor_position(&self) -> (u16, u16) {
-        self.cursor_position()
+        let (row, col) = self.cursor_position();
+        let scrollback = u16::try_from(self.scrollback()).unwrap_or(u16::MAX);
+        (row.saturating_add(scrollback), col)
     }
 }
 
@@ -122,6 +124,55 @@ impl From<Color> for vt100::Color {
             Color::Rgb(r, g, b) => Self::Rgb(r, g, b),
             Color::Indexed(i) => Self::Idx(i),
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::widget::Screen;
+
+    #[test]
+    fn cursor_position_offset_by_scrollback() {
+        let mut parser = vt100::Parser::new(6, 80, 20);
+        for i in 0..9 {
+            parser.process(format!("line {i}\r\n").as_bytes());
+        }
+        let (drawing_row, drawing_col) = parser.screen().cursor_position();
+
+        parser.screen_mut().set_scrollback(2);
+        let visible_pos = Screen::cursor_position(parser.screen());
+        assert_eq!(visible_pos, (drawing_row + 2, drawing_col));
+    }
+
+    #[test]
+    fn cursor_position_offset_preserves_col() {
+        let mut parser = vt100::Parser::new(6, 80, 20);
+        for i in 0..9 {
+            parser.process(format!("line {i}\r\n").as_bytes());
+        }
+        parser.process(b"partial");
+        let (drawing_row, drawing_col) = parser.screen().cursor_position();
+        assert_eq!(drawing_col, 7);
+
+        parser.screen_mut().set_scrollback(2);
+        let (visible_row, visible_col) = Screen::cursor_position(parser.screen());
+        assert_eq!(visible_row, drawing_row + 2);
+        assert_eq!(visible_col, 7, "scrollback should not affect column");
+    }
+
+    #[test]
+    fn cursor_position_off_screen_with_full_scrollback() {
+        let mut parser = vt100::Parser::new(4, 80, 20);
+        for i in 0..10 {
+            parser.process(format!("line {i}\r\n").as_bytes());
+        }
+
+        parser.screen_mut().set_scrollback(4);
+        let (visible_row, _) = Screen::cursor_position(parser.screen());
+        assert!(
+            visible_row >= 4,
+            "cursor at visible row {visible_row} should be off-screen (>= 4 rows)"
+        );
     }
 }
 

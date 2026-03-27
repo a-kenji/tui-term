@@ -33,7 +33,9 @@ pub fn handle<S: Screen>(term: &PseudoTerminal<S>, area: Rect, buf: &mut Buffer)
 
     if !screen.hide_cursor() && term.cursor.show {
         let (c_row, c_col) = screen.cursor_position();
-        if (c_row + row_start) < area_rows && (c_col + col_start) < area_cols {
+        if c_row.saturating_add(row_start) < area_rows
+            && c_col.saturating_add(col_start) < area_cols
+        {
             let c_cell = &mut buf[(c_col + col_start, c_row + row_start)];
             if let Some(cell) = screen.cell(c_row, c_col) {
                 if cell.has_contents() {
