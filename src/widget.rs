@@ -14,17 +14,32 @@ use crate::state;
 ///
 /// Implementing this trait allows for backends other than `vt100` to be used
 /// with the `PseudoTerminal` widget.
+///
+/// All row coordinates use a visible coordinate system where row 0 is the
+/// topmost row currently displayed. When scrollback is active, this may
+/// differ from the underlying terminal buffer's row numbering. Implementors
+/// must ensure that [`cell`](Self::cell) and [`cursor_position`](Self::cursor_position)
+/// use the same coordinate space.
 pub trait Screen {
     /// The type of cell this screen contains
     type C: Cell;
 
-    /// Returns the cell at the given location if it exists.
-    fn cell(&self, row: u16, col: u16) -> Option<&Self::C>;
-    /// Returns whether the terminal should be hidden
-    fn hide_cursor(&self) -> bool;
-    /// Returns cursor position of screen.
+    /// Returns the cell at the given location in visible coordinates.
     ///
-    /// The return value is expected to be (row, column)
+    /// Row 0 is the topmost visible row, accounting for any scrollback offset.
+    fn cell(&self, row: u16, col: u16) -> Option<&Self::C>;
+    /// Returns whether the cursor should be hidden.
+    fn hide_cursor(&self) -> bool;
+    /// Returns the cursor position in visible coordinates.
+    ///
+    /// The return value is (row, column), where row 0 is the topmost visible
+    /// row. This must use the same coordinate space as [`cell`](Self::cell).
+    /// When scrollback is active, the cursor row must be shifted down by the
+    /// number of scrollback rows visible above the active screen content.
+    ///
+    /// If the cursor is not within the visible area (e.g., scrolled
+    /// off-screen), the returned row may exceed the screen dimensions.
+    /// The rendering layer handles bounds checking.
     fn cursor_position(&self) -> (u16, u16);
 }
 
@@ -327,6 +342,156 @@ mod tests {
             })
             .unwrap();
         format!("{:?}", terminal.backend().buffer())
+    }
+
+    #[test]
+    fn scrollback_cursor_not_rendered_when_off_screen() {
+        let backend = TestBackend::new(40, 4);
+        let mut terminal = Terminal::new(backend).unwrap();
+        let mut parser = vt100::Parser::new(4, 40, 20);
+
+        // 10 lines on 4 rows: 6 scroll off. With set_scrollback(4) all
+        // visible rows are scrollback. Cursor maps to visible row 7, off-screen.
+        for i in 0..10 {
+            parser.process(format!("[scrollback line {i}]\r\n").as_bytes());
+        }
+        parser.screen_mut().set_scrollback(4);
+
+        let pseudo_term = PseudoTerminal::new(parser.screen());
+        terminal
+            .draw(|f| {
+                f.render_widget(pseudo_term, f.area());
+            })
+            .unwrap();
+
+        let buf = terminal.backend().buffer();
+        for row in 0..4 {
+            for col in 0..40 {
+                let cell = &buf[(col, row)];
+                assert!(
+                    !cell.modifier.contains(Modifier::REVERSED),
+                    "REVERSED cursor style should not appear at ({col}, {row}) \
+                     when cursor is off-screen due to scrollback"
+                );
+            }
+        }
+        let view = format!("{:?}", terminal.backend().buffer());
+        insta::assert_snapshot!(view);
+    }
+
+    #[test]
+    fn scrollback_partial_cursor_visible_at_adjusted_row() {
+        let backend = TestBackend::new(40, 6);
+        let mut terminal = Terminal::new(backend).unwrap();
+        let mut parser = vt100::Parser::new(6, 40, 20);
+
+        // 8 lines on 6 rows: 3 scroll off into scrollback.
+        // \x1b[H moves cursor to drawing row 0.
+        parser.process(b"[scrollback: hidden 1]\r\n");
+        parser.process(b"[scrollback: hidden 2]\r\n");
+        parser.process(b"[scrollback: shown at row 0]\r\n");
+        parser.process(b"[draw-0: cursor row]\r\n");
+        parser.process(b"[draw-1]\r\n");
+        parser.process(b"[draw-2]\r\n");
+        parser.process(b"[draw-3]\r\n");
+        parser.process(b"[draw-4]\r\n");
+        parser.process(b"\x1b[H");
+
+        // With scrollback=1, drawing row 0 shifts to visible row 1.
+        // Visible row 0 becomes the last scrollback line.
+        parser.screen_mut().set_scrollback(1);
+
+        let pseudo_term = PseudoTerminal::new(parser.screen());
+        terminal
+            .draw(|f| {
+                f.render_widget(pseudo_term, f.area());
+            })
+            .unwrap();
+
+        let buf = terminal.backend().buffer();
+        for col in 0..40 {
+            let cell = &buf[(col, 0)];
+            assert!(
+                !cell.modifier.contains(Modifier::REVERSED),
+                "scrollback row 0 at col {col} should not have cursor styling"
+            );
+        }
+        let cursor_cell = &buf[(0, 1)];
+        assert!(
+            cursor_cell.modifier.contains(Modifier::REVERSED),
+            "cursor should render at visible row 1 (adjusted from drawing row 0)"
+        );
+        let view = format!("{:?}", terminal.backend().buffer());
+        insta::assert_snapshot!(view);
+    }
+
+    #[test]
+    fn scrollback_hide_cursor_suppresses_rendering() {
+        let backend = TestBackend::new(40, 6);
+        let mut terminal = Terminal::new(backend).unwrap();
+        let mut parser = vt100::Parser::new(6, 40, 20);
+
+        for i in 0..8 {
+            parser.process(format!("line {i}\r\n").as_bytes());
+        }
+        parser.process(b"\x1b[H");
+        // Hide cursor via escape sequence
+        parser.process(b"\x1b[?25l");
+        parser.screen_mut().set_scrollback(1);
+
+        let pseudo_term = PseudoTerminal::new(parser.screen());
+        terminal
+            .draw(|f| {
+                f.render_widget(pseudo_term, f.area());
+            })
+            .unwrap();
+
+        let buf = terminal.backend().buffer();
+        for row in 0..6 {
+            for col in 0..40 {
+                let cell = &buf[(col, row)];
+                assert!(
+                    !cell.modifier.contains(Modifier::REVERSED),
+                    "hidden cursor should not style ({col}, {row}) even with scrollback"
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn scrollback_cursor_with_block() {
+        let backend = TestBackend::new(42, 8);
+        let mut terminal = Terminal::new(backend).unwrap();
+        let mut parser = vt100::Parser::new(6, 40, 20);
+
+        for i in 0..8 {
+            parser.process(format!("line {i}\r\n").as_bytes());
+        }
+        parser.process(b"\x1b[H");
+        parser.screen_mut().set_scrollback(1);
+
+        let block = Block::default().borders(Borders::ALL).title("pty");
+        let pseudo_term = PseudoTerminal::new(parser.screen()).block(block);
+        terminal
+            .draw(|f| {
+                f.render_widget(pseudo_term, f.area());
+            })
+            .unwrap();
+
+        // Border takes 1 row/col on each side, so inner area starts at (1,1).
+        // Visible row 0 is scrollback (inner buf row 1), no cursor.
+        // Cursor at drawing row 0 + scrollback 1 = visible row 1 (inner buf row 2).
+        let buf = terminal.backend().buffer();
+        let scrollback_cell = &buf[(1, 1)];
+        assert!(
+            !scrollback_cell.modifier.contains(Modifier::REVERSED),
+            "scrollback row inside block should not have cursor styling"
+        );
+        let cursor_cell = &buf[(1, 2)];
+        assert!(
+            cursor_cell.modifier.contains(Modifier::REVERSED),
+            "cursor should render at inner row 1 (buf row 2) with block border"
+        );
     }
 
     #[test]
