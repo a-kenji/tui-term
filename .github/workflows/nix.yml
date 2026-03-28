@@ -205,3 +205,37 @@ jobs:
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
     - name: "typos"
       run: nix develop -Lv .#ciShell --command typos
+
+  all:
+    name: All checks passed
+    if: always()
+    runs-on: ubuntu-latest
+    needs:
+      - clippy
+      - cargo-deny
+      - cargo-udeps
+      - treefmt
+      - documentation
+      - dependencies
+      - dependencies-msrv
+      - build-examples
+      - cargo-test
+      - cargo-doc
+      - typos
+    steps:
+      - name: "verify all jobs passed"
+        run: |
+          if [[ "${{ needs.clippy.result }}" != "success" ]] || \
+             [[ "${{ needs.cargo-deny.result }}" != "success" ]] || \
+             [[ "${{ needs.cargo-udeps.result }}" != "success" ]] || \
+             [[ "${{ needs.treefmt.result }}" != "success" ]] || \
+             [[ "${{ needs.documentation.result }}" != "success" ]] || \
+             [[ "${{ needs.dependencies.result }}" != "success" ]] || \
+             [[ "${{ needs.dependencies-msrv.result }}" != "success" ]] || \
+             [[ "${{ needs.build-examples.result }}" != "success" ]] || \
+             [[ "${{ needs.cargo-test.result }}" != "success" ]] || \
+             [[ "${{ needs.cargo-doc.result }}" != "success" ]] || \
+             [[ "${{ needs.typos.result }}" != "success" ]]; then
+            echo "Some checks failed"
+            exit 1
+          fi
