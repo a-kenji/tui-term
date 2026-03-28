@@ -5,8 +5,10 @@ Releases will attempt to track upstream `ratatui` releases.
 ## Creating a Release
 
 1. Adjust `docs/assets/demo.tape`, and regenerate if necessary.
-1. Bump the version in `Cargo.toml`.
 1. Update the changelog.
-1. Commit and push the changes.
-1. Create and push the new version tag.
-1. Branch off to release branch
+1. Run the release script: `./docs/assets/bin/create-release.sh <version>`
+1. Publish to crates.io: `cargo publish`
+
+The script handles version bumping (Cargo.toml, README.md, Cargo.lock),
+PR creation, merging into the release branch, tagging, and drafting a
+GitHub release.
