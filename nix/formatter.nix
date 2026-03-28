@@ -5,6 +5,7 @@
   perSystem = _: {
     treefmt = {
       projectRootFile = ".git/config";
+      programs.actionlint.enable = true;
       programs.nixfmt.enable = true;
       programs.shellcheck.enable = true;
       programs.shfmt.enable = true;
