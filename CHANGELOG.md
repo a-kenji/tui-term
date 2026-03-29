@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+## [0.3.3] - 2026-03-29
+
+### Bug Fixes
+
+- Adjust cursor position with scrollback
+
+### Miscellaneous Tasks
+
+-  Create a release script
+
+### Formatter
+
+- Init [flake-edit](https://github.com/a-kenji/flake-edit) a flake formatter
+- Init [sizelint](https://github.com/a-kenji/sizelint) a repo size linter
+
 ## [0.3.2] - 2026-03-03
 
 Compatible with `ratatui`: `v0.30.0`.
