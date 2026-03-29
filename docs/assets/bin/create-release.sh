@@ -66,7 +66,7 @@ fi
 sed -i -e "s/^version = \".*\"/version = \"${version}\"/" Cargo.toml
 sed -i -e "s/tui-term = \"[0-9]*\.[0-9]*\.[0-9]*\"/tui-term = \"${version}\"/" README.md
 
-cargo generate-lockfile
+cargo check
 
 git add Cargo.toml Cargo.lock README.md CHANGELOG.md
 git branch -D "release-${version}" 2>/dev/null || true
