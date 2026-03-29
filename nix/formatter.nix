@@ -11,6 +11,7 @@
       programs.rustfmt.enable = true;
       programs.shellcheck.enable = true;
       programs.shfmt.enable = true;
+      programs.sizelint.enable = true;
       programs.taplo.enable = true;
 
       settings.formatter.rustfmt.options = [
