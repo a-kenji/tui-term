@@ -41,6 +41,15 @@ pub trait Screen {
     /// off-screen), the returned row may exceed the screen dimensions.
     /// The rendering layer handles bounds checking.
     fn cursor_position(&self) -> (u16, u16);
+
+    /// Returns the preferred shape of the cursor.
+    ///
+    /// The default implementation returns [`CursorShape::Default`], which
+    /// preserves the widget's configured cursor symbol. Backends that can
+    /// report the terminal's preferred cursor shape should override this.
+    fn cursor_shape(&self) -> CursorShape {
+        CursorShape::Default
+    }
 }
 
 /// A trait for representing a single cell on a screen.
@@ -49,6 +58,27 @@ pub trait Cell {
     fn has_contents(&self) -> bool;
     /// Apply the contents and styling of this cell to the provided buffer cell.
     fn apply(&self, cell: &mut ratatui_core::buffer::Cell);
+}
+
+/// Represents the shape of the cursor following DECSCUSR (CSI Ps SP q).
+#[derive(Copy, Clone, Debug, Default, Eq, PartialEq)]
+#[non_exhaustive]
+pub enum CursorShape {
+    /// Fall back to the widget-configured cursor symbol (DECSCUSR 0, terminal default).
+    #[default]
+    Default,
+    /// A blinking block cursor (DECSCUSR 1).
+    BlinkingBlock,
+    /// A steady block cursor (DECSCUSR 2).
+    SteadyBlock,
+    /// A blinking underline cursor (DECSCUSR 3).
+    BlinkingUnderline,
+    /// A steady underline cursor (DECSCUSR 4).
+    SteadyUnderline,
+    /// A blinking bar cursor (DECSCUSR 5).
+    BlinkingBar,
+    /// A steady bar cursor (DECSCUSR 6).
+    SteadyBar,
 }
 
 /// A widget representing a pseudo-terminal screen.
@@ -525,6 +555,67 @@ mod tests {
             .unwrap();
         let view = format!("{:?}", terminal.backend().buffer());
         insta::assert_snapshot!(view);
+    }
+
+    struct MockShapeScreen {
+        shape: CursorShape,
+        c_row: u16,
+        c_col: u16,
+    }
+    struct MockCell;
+    impl Cell for MockCell {
+        fn has_contents(&self) -> bool {
+            false
+        }
+        fn apply(&self, _cell: &mut ratatui_core::buffer::Cell) {}
+    }
+    impl Screen for MockShapeScreen {
+        type C = MockCell;
+        fn cell(&self, _row: u16, _col: u16) -> Option<&Self::C> {
+            Some(&MockCell)
+        }
+        fn hide_cursor(&self) -> bool {
+            false
+        }
+        fn cursor_position(&self) -> (u16, u16) {
+            (self.c_row, self.c_col)
+        }
+        fn cursor_shape(&self) -> CursorShape {
+            self.shape
+        }
+    }
+
+    fn assert_cursor_shape(shape: CursorShape, expected_symbol: &str) {
+        let backend = TestBackend::new(5, 5);
+        let mut terminal = Terminal::new(backend).unwrap();
+        let screen = MockShapeScreen {
+            shape,
+            c_row: 1,
+            c_col: 1,
+        };
+        let pseudo_term = PseudoTerminal::new(&screen);
+        terminal
+            .draw(|f| {
+                f.render_widget(pseudo_term, f.area());
+            })
+            .unwrap();
+        let buf = terminal.backend().buffer();
+        assert_eq!(buf[(1, 1)].symbol(), expected_symbol);
+    }
+
+    #[test]
+    fn cursor_shape_block() {
+        assert_cursor_shape(CursorShape::BlinkingBlock, "█");
+    }
+
+    #[test]
+    fn cursor_shape_underline() {
+        assert_cursor_shape(CursorShape::BlinkingUnderline, "▁");
+    }
+
+    #[test]
+    fn cursor_shape_bar() {
+        assert_cursor_shape(CursorShape::BlinkingBar, "▏");
     }
 
     #[test]

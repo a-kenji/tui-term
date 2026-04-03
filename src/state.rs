@@ -1,6 +1,6 @@
 use ratatui_core::{buffer::Buffer, layout::Rect};
 
-use crate::widget::{Cell, PseudoTerminal, Screen};
+use crate::widget::{Cell, CursorShape, PseudoTerminal, Screen};
 
 /// Draw the [`Screen`] to the [`Buffer`],
 /// area is the designated area that the consumer provides
@@ -42,7 +42,13 @@ pub fn handle<S: Screen>(term: &PseudoTerminal<S>, area: Rect, buf: &mut Buffer)
                     let style = term.cursor.overlay_style;
                     c_cell.set_style(style);
                 } else {
-                    let symbol = &term.cursor.symbol;
+                    let shape = screen.cursor_shape();
+                    let symbol = match shape {
+                        CursorShape::Default => &term.cursor.symbol,
+                        CursorShape::BlinkingBlock | CursorShape::SteadyBlock => "█",
+                        CursorShape::BlinkingUnderline | CursorShape::SteadyUnderline => "▁",
+                        CursorShape::BlinkingBar | CursorShape::SteadyBar => "▏",
+                    };
                     let style = term.cursor.style;
                     c_cell.set_symbol(symbol);
                     c_cell.set_style(style);
