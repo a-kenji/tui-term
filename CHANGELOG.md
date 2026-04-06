@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 ## [unreleased]
 
+## [0.3.4] - 2026-04-06
+
+### Vt100
+
+- Simplify color mapping
+
+### Widget
+
+- Add `CursorShape` to `Screen` trait, this has a default implementation. 
+
 ## [0.3.3] - 2026-03-29
 
 ### Bug Fixes
