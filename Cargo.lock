@@ -1923,7 +1923,7 @@ dependencies = [
 
 [[package]]
 name = "tui-term"
-version = "0.3.3"
+version = "0.3.4"
 dependencies = [
  "bytes",
  "criterion",
