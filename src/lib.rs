@@ -50,6 +50,8 @@
 #![warn(clippy::std_instead_of_alloc)]
 #![warn(clippy::alloc_instead_of_core)]
 
+extern crate alloc;
+
 mod state;
 #[cfg(feature = "vt100")]
 mod vt100_imp;

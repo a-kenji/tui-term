@@ -12,10 +12,8 @@
 //! Commands like `htop`, that are persistent still need to be handled manually,
 //! please look at the examples for a better overview.
 
-use std::{
-    io::Result as IoResult,
-    sync::{Arc, RwLock},
-};
+use alloc::sync::Arc;
+use std::{io::Result as IoResult, sync::RwLock};
 
 use portable_pty::{CommandBuilder, ExitStatus, PtySystem};
 use vt100::{Parser, Screen};
