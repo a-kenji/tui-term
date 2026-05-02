@@ -44,7 +44,7 @@ fn run_app(terminal: &mut DefaultTerminal) -> std::io::Result<()> {
 fn run(terminal: &mut DefaultTerminal, screen: Option<vt100::Screen>) -> io::Result<()> {
     loop {
         if let Some(ref screen) = screen {
-            terminal.draw(|f| ui(f, &screen))?;
+            terminal.draw(|f| ui(f, screen))?;
         }
 
         if let Event::Key(key) = event::read()? {

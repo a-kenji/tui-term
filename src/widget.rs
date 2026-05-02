@@ -1,4 +1,4 @@
-use std::borrow::Cow;
+use alloc::borrow::Cow;
 
 use ratatui_core::{
     buffer::Buffer,
