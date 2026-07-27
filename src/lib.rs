@@ -39,12 +39,15 @@
 //!
 //! # Features
 //!
-//! - Support for parsing and processing terminal control sequences using the `vt100` crate.
+//! - Support for parsing and processing terminal control sequences via pluggable backends:
+//!   the default `vt100` crate, or the `rio-vt` crate behind the `rio` feature (a full
+//!   terminal engine with scrollback, selection, search, and image protocols).
 //!
-//! # Limitations
+//! # Backends
 //!
-//! - The `vt100` crate is currently the only supported backend for parsing terminal control
-//!   sequences, but future versions may introduce support for alternative backends.
+//! Both backends implement the [`widget::Screen`] trait. With `vt100` you render
+//! `parser.screen()` directly; with the `rio` feature you build a [`RioScreen`] snapshot
+//! from a `rio_vt::crosswords::Crosswords` and render that.
 
 #![warn(clippy::std_instead_of_core)]
 #![warn(clippy::std_instead_of_alloc)]
@@ -55,6 +58,8 @@ extern crate alloc;
 mod state;
 #[cfg(feature = "vt100")]
 mod vt100_imp;
+#[cfg(feature = "rio")]
+mod rio_impl;
 pub mod widget;
 
 #[cfg(feature = "unstable")]
@@ -63,3 +68,11 @@ pub mod controller;
 /// Reexport of the vt100 crate to ensure correct version compatibility
 #[cfg(feature = "vt100")]
 pub use vt100;
+
+/// Reexport of the rio-vt crate to ensure correct version compatibility
+#[cfg(feature = "rio")]
+pub use rio_vt;
+
+/// rio-vt backend adapters implementing [`widget::Screen`].
+#[cfg(feature = "rio")]
+pub use rio_impl::{RioCell, RioScreen};
